@@ -1,0 +1,227 @@
+/*
+Theme Name: Team Rosters
+Theme URI: http://shoalsummitsolutions.com
+Author: Mark O'Donnell
+Author URI: http://shoalsummitsolutions.com
+Description: Sample WordPress Twentyeleven Child Theme for testing the Team Rosters Plugin.
+Template: twentyeleven
+Version: 0.1
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+*/
+
+/*-------------------------------------------------------	
+ *	Custom post type "player" single page styles 
+ *------------------------------------------------------*/
+ 
+/* player-header contains player photo and information */
+header#player-header {
+	/* admin settings will override these first two colors */
+	/*background-color: #ffc831; 			/*MC Football - yellow */
+	/*color: #b8202e; 						/*MC Football - red */
+	/*background-color: #5899E6; 			/*MCS Athletics - carolina blue */
+	/*color: #00004f; 						/*MCS Athletics - navy blue */
+	background-color: #4e81db;				/*MS default */
+	color: #fff;							/*MS default */
+	
+	width: 100%;
+	height: 162px;
+	font-size: 12px;
+	padding: 10px 0;
+}
+
+h1.player-head-title {
+	/*color: #b8202e; 					/*MC Football - red */
+	color: #5899E6; 					/*MCS Athletics - carolina blue */
+	color: #000;						/*MS default */
+	font-size: 24px;
+	font-weight: bold;
+}
+
+/* player-photo is coming from the featured image */
+#player-photo {
+	float: left;
+	padding-left: 20px;
+	/* display: inline; */
+	line-height: 0;
+}
+
+#player-photo img {
+	border: 1px solid #bbb;
+	padding: 5px;
+	background-color: #eee;
+}
+
+#player-name-nbr {
+	float: left;
+	position: absolute;
+	padding: 18px 0 20px 20px;
+	display: inline;
+}
+
+#player-name-nbr #number {
+	float: left;
+	font-size: 72px;
+	line-height: 1em;
+	display: inline;
+}
+
+#player-name-nbr #player-name {
+	float: left;
+	font-size: 24px;
+	line-height: 36px;
+	padding-left: 10px;
+	display: inline;
+}
+			
+#player-info {
+	float: left;
+	font-size: 14px;
+	line-height: 16px;
+	border-left: 1px solid #fff;
+}
+
+#player-info p {
+	margin-bottom: 0px;
+}
+
+table#player-info {
+	font-size: 16px;
+	padding-left: 10px;
+	margin-left: 20px;
+}
+
+table#player-info td {
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+td.lf-col {
+	text-align: right;
+	font-weight: bold; 
+}
+	
+td.rt-col {
+	text-align: left;
+	padding-left: 6px;
+}
+
+/* 	
+ *	player-bio contains whatever is in the post content 
+ *	bio, stats, etc.
+ */			
+#player-bio {
+	clear: both;
+	border-style: solid;
+	border-width: 2px;
+	/*border-color: #ffc831; 			/*MC Football - yellow */
+	/*border-color: #5899E6; 			/*MCS Athletics - carolina blue */
+	border-color: #4e81db; 				/*MS Default - lt blue */
+}
+
+#player-bio h1 {
+	padding: 0 15px;
+	font-size: 18px;
+	font-weight: bold;
+	/*color: #b8202e; 					/*MC Football - red */
+	/*color: #5899E6; 					/*MCS Athletics - carolina blue */
+	color: #000;						/*MS Default - black */
+}
+
+#player-bio h2 {
+	padding: 0 15px;
+	font-size: 15px;
+	/*color: #b8202e; 					/*MC Football - red */
+	/*color: #5899E6; 					/*MCS Athletics - carolina blue */
+	color: #000;						/*MS Default - black */
+}
+
+#player-bio h3 {
+	padding: 0 15px;
+	font-size: 13px;
+	text-transform: uppercase;
+	/*color: #b8202e; 					/*MC Football - red */
+	/*color: #5899E6; 					/*MCS Athletics - carolina blue */
+	color: #000;						/*MS Default - black */
+}
+
+#player-bio p {
+	padding: 0 15px;
+	font-size: 12px;
+	margin-bottom: 1.0em;
+}
+
+/*-------------------------------------------------------	
+ *	Roster table settings
+ *------------------------------------------------------*/
+
+h1.mstw_tr_roster_title {
+	/*color: #b8202e;				/*MC Football - red */ 
+	/*color: #5899e6;				/*MCS Athletics - carolina blue */
+	color: inherit;
+	font-size: 24px;
+}
+ 
+table.mstw-tr-table {
+	/* for last line of table in some styles */
+	border-bottom: #95b3d7 solid 1px;  		/* MS default */
+	/*border: #000 solid 1px;				/*MC Football - sample */
+	/*border: #00004f solid 1px;			/*MCS Athletics - sample */
+}
+
+tr.mstw-tr-table-head { 				/* Can be overridden by settings in UI */
+	background-color: #4e81db;		/*MS default */
+	/*background-color: #000;		/*MC Football - black */
+	color: #fff; 					/*MS default */
+	/*color: #fff;					/*MC Football - white */
+	}
+ 
+ tr.mstw-tr-table-head th {
+	/*Padding is pretty important and should match the table body setings below */
+	padding-left: 5px;  
+	/* got to grow your own border styles in the header */
+	/*border: #000 solid 1px;				/*MC Football - sample */
+	/*border: #00004f solid 1px;			/*MCS Athletics - sample */
+}
+
+th.mstw-tr-table-head {
+	background-color: inherit; 
+	color: inherit;
+	}
+
+tr.mstw-tr-odd {
+	background-color: #dce6f1;		/*MS default */
+	/*background-color: #ffc831;	/*MC Football - sample */
+	color: #000;					/*MS default */
+	/*color: #000;					/*MC Football - sample */
+}
+
+tr.mstw-tr-even {
+	background-color: fff; 			/*MS default */
+	/* background-color: #b8202e;	/*MC Football - sample */
+	/*background-color: #B7DEF7; 	/*MCS-sample lt blue*/
+	color: 000; 					/*MS default */
+	/*color: #fff;					/*MC Football - sample */
+	/*color: #00004f; 				/*MCS-sample dk blue */
+}
+
+tr.mstw-tr-odd a {	/* you have finer control here than you do with the admin settings */
+	/*color: #00f; 					/* MS default */
+	color: #1982d1; 				/*Twentyeleven default blue */
+	/*color: #666;					/*MC Football - sample */
+}
+
+tr.mstw-tr-even a {	/* you can set different link colors for even and odd rows */
+	/*color: #00f; 					/* MS default */
+	color: #1982d1; 				/*Twentyeleven default blue */
+	/*color: #bbb;					/*MC Football - sample */
+}
+	
+tr.mstw-tr-odd td, tr.mstw-tr-even td {
+	padding-left: 5px;
+	/* this is needed down this low in the stack to override twentyeleven defaults */
+	border-top: #95b3d7 solid 1px;  		/* MS default */
+	/*border: #000 solid 1px;				/*MC Football - sample */
+	/*border: #00004f solid 1px;				/*MCS Athletics - sample */
+}
+
