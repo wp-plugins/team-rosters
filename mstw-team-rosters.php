@@ -472,7 +472,9 @@ function mstw_tr_build_roster( $team, $roster_type, $show_title ) {
 					$player_html .= 'style="color:' . $options['tr_table_links_color'] . ';"';
 				}
 				$player_html .= '>' . $player_name . '</a>';
-				
+			}
+			else {
+				$player_html = $player_name;
 			}
 			$row_string =  $row_string . $row_td . $player_html . '</td>';
 			
