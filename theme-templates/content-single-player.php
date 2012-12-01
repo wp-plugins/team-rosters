@@ -48,7 +48,7 @@
 				// image should be tied to the category with a cat-default name -->
 				// if this file is not there, then load a default from the plugin -->
 				echo( '<img src=' . plugins_url( ) . 
-						'/mstw-team-rosters/images/default-photo.jpg alt="Default Player Photo" width="150px" height="150" />' );
+						'/team-rosters/images/default-photo.jpg alt="Default Player Photo" width="150px" height="150" />' );
 			}
 			?>
 		</div> <!-- #player-photo -->
