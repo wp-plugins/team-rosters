@@ -3,7 +3,7 @@
 Plugin Name: Team Rosters
 Plugin URI: http://wordpress.org/extend/plugins/
 Description: The Team Rosters Plugin defines a custom type - Player - for use in the MySportTeamWebite framework. It generates a roster table view and player bio view.
-Version: 1.0
+Version: 1.1
 Author: Mark O'Donnell
 Author URI: http://shoalsummitsolutions.com
 */
@@ -121,7 +121,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 		
 		/* Find the full path to the css file */
 		$mstw_tr_style_url = plugins_url( '/css/mstw-tr-style.css', __FILE__ );
-		$mstw_tr_style_file = WP_PLUGIN_DIR . '/mstw-team-rosters/css/mstw-tr-style.css';
+		//$mstw_tr_style_file = WP_PLUGIN_DIR . '/mstw-team-rosters/css/mstw-tr-style.css';
+		$mstw_tr_style_file = dirname( __FILE__ ) . '/css/mstw-tr-style.css';
 		
 		wp_register_style( 'mstw_tr_style', plugins_url( '/css/mstw-tr-style.css', __FILE__ ) );
 		
