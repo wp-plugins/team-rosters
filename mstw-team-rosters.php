@@ -3,7 +3,7 @@
 Plugin Name: Team Rosters
 Plugin URI: http://wordpress.org/extend/plugins/
 Description: The Team Rosters Plugin defines a custom type - Player - for use in the MySportTeamWebite framework. It generates a roster table view and player bio view.
-Version: 1.0
+Version: 1.1
 Author: Mark O'Donnell
 Author URI: http://shoalsummitsolutions.com
 */
@@ -29,6 +29,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 /* ------------------------------------------------------------------------
  * CHANGE LOG:
+ * 20121208-MAO: 
+ *	Added code to pre_get_posts() to sort alphabetically by last name or
+ *	numerically	by number based on the admin setting.	
  * ------------------------------------------------------------------------*/
 
 /* ------------------------------------------------------------------------
@@ -70,12 +73,37 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 	add_filter( 'pre_get_posts', 'my_get_posts' );
 
 	function my_get_posts( $query ) {
-
+		// Need to check the need for this first conditional ... someday
 		if ( is_category() && $query->is_main_query() )
-			$query->set( 'post_type', array( 'post', 'player' ) );
-
-		return $query;
-	}
+			$query->set( 'post_type', array( 'post', 'player' ) ); 
+  
+		if ( is_tax( 'teams' ) && $query->is_main_query() ) {
+			// We are on the player gallery page ...
+			// So set the sort order based on the admin settings
+			$options = get_option( 'mstw_tr_options' );
+			
+			// Need the team slug to set query
+			$uri_array = explode( '/', $_SERVER['REQUEST_URI'] );	
+			$team_slug = $uri_array[sizeof( $uri_array )-2];
+			
+			if ( $options['tr_pg_sort_order'] == 'numeric' ) {
+				// sort by number ascending
+				$query->set( 'post_type', 'player' );
+				$query->set( 'teams' , $team_slug );
+				$query->set( 'orderby', 'meta_value_num' );    
+				$query->set( 'meta_key', '_mstw_tr_number' );     
+				$query->set( 'order', 'ASC' );
+			}
+			else {   //$options['tr_pg_sort_order'] == 'alpha'
+				// sort alphabetically by last name ascending 
+				$query->set( 'post_type', 'player' );
+				$query->set( 'teams' , $team_slug );
+				$query->set( 'orderby', 'meta_value' );  
+				$query->set( 'meta_key', '_mstw_tr_last_name' );   
+				$query->set( 'order', 'ASC' );
+			}  
+		}		
+	}  
 	
 // ----------------------------------------------------------------
 // Add the custom Teams taxonomy ... will act like tags	
@@ -169,7 +197,7 @@ function mstw_tr_register_post_types() {
 		'delete_with_user'    => false,
 		'hierarchical'        => false,
 		'has_archive'         => 'players',
-		'query_var'           => 'player_item',
+		'query_var'           => 'true',
 		'capability_type'     => 'post',
 		//'map_meta_cap'        => true,
 
@@ -254,10 +282,11 @@ function mstw_tr_shortcode_handler( $atts ){
 	
 	extract( shortcode_atts( array(	'team' => 'no-team', 
 									'roster_type' => 'default',
-									'show_title' => true), 
+									'show_title' => true,
+									'sort_order' => ''), 
 									$atts ) );
 		
-	$mstw_tr_roster = mstw_tr_build_roster( $team, $roster_type, $show_title );
+	$mstw_tr_roster = mstw_tr_build_roster( $team, $roster_type, $show_title, $sort_order );
 	
 	return $mstw_tr_roster;
 }
@@ -268,7 +297,7 @@ function mstw_tr_shortcode_handler( $atts ){
 // Loops through the Player Custom posts in the "team" category and formats them 
 // into a pretty table.
 // --------------------------------------------------------------------------------------
-function mstw_tr_build_roster( $team, $roster_type, $show_title ) {
+function mstw_tr_build_roster( $team, $roster_type, $show_title, $sort_order ) {
 	
 	// These will come from plugin options someday 
 	// Add the colors and stuff
@@ -306,19 +335,33 @@ function mstw_tr_build_roster( $team, $roster_type, $show_title ) {
 		$output .= $title_h1 . $team_name . ' Roster' . '</h1>';
 	}
 	
-	// Get the games posts
+	// Set the sort order. If an argument is passed through the [shortcode] handler,
+	// use it. Otherwise, use the setting from the admin page.
+	if ($sort_order == '') {
+		if ( $options['tr_table_sort_order'] == 'numeric' ) {
+			$sort_key = '_mstw_tr_number';
+			$order_by = 'meta_value_num';
+		}
+		else {   //This is the default if no shortcode arg is passed in.   
+			$sort_key = '_mstw_tr_last_name'; 
+			$order_by = 'meta_value';
+		}
+	}
+	else if ( $sort_order == 'numeric' ) {
+		$sort_key = '_mstw_tr_number';
+		$order_by = 'meta_value_num';
+	}
+	else { // This is the default is a shortcode arg is passed in.
+		$sort_key = '_mstw_tr_last_name';
+		$order_by = 'meta_value';
+	}
+	
+	// Get the team roster		
 	$posts = get_posts(array( 'numberposts' => -1,
 							  'post_type' => 'player',
 							  'teams' => $team, 
-							  /*'meta_query' => array(
-												array(
-													'key' => '_mstw_tr_sched_id',
-													'value' => $team,
-													'compare' => '='
-												) 
-											),*/
-							  'orderby' => 'meta_value', 
-							  'meta_key' => '_mstw_tr_last_name',
+							  'orderby' => $order_by, 
+							  'meta_key' => $sort_key,
 							  'order' => 'ASC' 
 							));						
 	
@@ -326,7 +369,7 @@ function mstw_tr_build_roster( $team, $roster_type, $show_title ) {
 		// Make table of posts
 		// Start with the table header
 		// We need to switch based on a setting 'high-school', 'college', 'pro'
-	
+
         $output .= '<table class="mstw-tr-table">';
 		
 		// leave this open and check on styles from the admin settings
