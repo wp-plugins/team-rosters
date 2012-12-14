@@ -7,6 +7,15 @@
  * @subpackage Twenty_Eleven
  * @since Twenty Eleven 1.0
  */
+/*----------------------------------------------------------------------
+ * CHANGE LOG
+ *----------------------------------------------------------------------
+ * 20121211-MAO:
+ *	(1) Added option to change content title (e.g., "Player Bio") based on
+ *		the admin setting.
+ *	(2) Updated pro and college player info display.
+ *
+ -----------------------------------------------------------------------*/
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
@@ -22,17 +31,22 @@
 	$experience = get_post_meta($post->ID, '_mstw_tr_experience', true );
 	$last_school = get_post_meta($post->ID, '_mstw_tr_last_school', true );
 	$home_town = get_post_meta($post->ID, '_mstw_tr_home_town', true );
+	$country = get_post_meta($post->ID, '_mstw_tr_country', true );
+	$age = get_post_meta($post->ID, '_mstw_tr_age', true );
 
 	$options = get_option( 'mstw_tr_options' );
 	$sp_main_text_color = $options['sp_main_text_color'];
 	$sp_main_bkgd_color = $options['sp_main_bkgd_color'];
+	$sp_content_title = $options['sp_content_title'];
 	
 	// Single Player Page title
 	$player_teams = wp_get_object_terms($post->ID, 'teams');
 	if( !empty( $player_teams ) ) {
 		if( !is_wp_error( $player_teams ) ) {
 			foreach( $player_teams as $team ) {
-				echo '<h1 class="player-head-title" style="color:' . $sp_main_text_color . ';">' . $team->name. '</h1>'; 
+				$team_name = $team->name;
+				$team_slug = $team->slug;
+				echo '<h1 class="player-head-title" style="color:' . $sp_main_text_color . ';">' . $team_name. '</h1>'; 
 			}
 		}
 	}
@@ -45,10 +59,17 @@
 			 if ( has_post_thumbnail() ) { 
 				the_post_thumbnail( 'full' );
 			} else {
-				// image should be tied to the category with a cat-default name -->
-				// if this file is not there, then load a default from the plugin -->
-				echo( '<img src=' . plugins_url( ) . 
-						'/team-rosters/images/default-photo.jpg alt="Default Player Photo" width="150px" height="150" />' );
+				// Default image is tied to the team taxonomy. Try to load default-photo-team-slug.jpg -->
+				// If it does not exst, then load default-photo.jpg from the plugin -->
+				$photo_file = WP_PLUGIN_DIR . '/team-rosters/images/default-photo' . '-' . $team_slug . '.jpg';
+				//echo '<h3>' . plugin_dir_path( 'team-rosters' ) . '</h3>';
+				if ( file_exists( $photo_file ) ) {
+					$photo_file_url = plugins_url() . '/team-rosters/images/default-photo' . '-' . $team_slug . '.jpg';
+				}
+				else {
+					$photo_file_url = plugins_url() . '/team-rosters/images/default-photo' . '.jpg';
+				}
+				echo( '<img src=' . $photo_file_url . ' alt="Default Player Photo" width="150px" height="150" />' );
 			}
 			?>
 		</div> <!-- #player-photo -->
@@ -76,11 +97,11 @@
 					echo $row_start . __('Hometown', 'mstw-loc-domain') . $new_cell . $home_town . $row_end;
 					echo $row_start . __('Last School', 'mstw-loc-domain') . $new_cell . $last_school . $row_end;
 					break;
-				case "pro": //Note that 'year' is dual-purposed; it's age for pros
-					echo $row_start . __('Age', 'mstw-loc-domain') . $new_cell . $year . $row_end;  
+				case "pro": 
+					echo $row_start . __('Age', 'mstw-loc-domain') . $new_cell . $age . $row_end;  
 					echo $row_start . __('Experience', 'mstw-loc-domain') . $new_cell . $experience . $row_end;
 					echo $row_start . __('Last School', 'mstw-loc-domain') . $new_cell . $last_school . $row_end;
-					echo $row_start . __('Country', 'mstw-loc-domain') . $new_cell . $home_town . $row_end;
+					echo $row_start . __('Country', 'mstw-loc-domain') . $new_cell . $country . $row_end;
 					break;
 			default: // default to high-school, the lowest common demononator
 				echo $row_start . __('Year', 'mstw-loc-domain') . $new_cell . $year . $row_end;
@@ -108,13 +129,23 @@
 		
 		// great the header for the bio
 		$html = '<h1 ';
+		
 		if ( $sp_main_text_color != '' ) {
 			//add the style attribute
 			$html .= 'style="color:' . $sp_main_text_color . ';" ';
 		}
-		$html .= '>Player Bio</h1>';
+		if ( $sp_content_title == '' ) {
+			$sp_content_title = 'Player Bio';
+		}
 		
+		$html .= '>' . $sp_content_title . '</h1>';
 		echo $html;
+		/*echo '<h3>' . $photo_file . '</h3>';
+		echo '<h3>' . $photo_file_url . '</h3>';
+		echo '<h3>' . 'ABSPATH: ' . ABSPATH . '</h3>';
+		echo '<h3>' . 'WP_CONTENT_DIR: ' . WP_CONTENT_DIR . '</h3>';
+		echo '<h3>' . 'WP_PLUGIN_DIR: ' . WP_PLUGIN_DIR . '</h3>';*/
+
 		
 		//add the bio content (format it as desired in the post)
 		the_content(); ?>
