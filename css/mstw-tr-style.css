@@ -1,11 +1,9 @@
 /*
-Theme Name: Team Rosters
+CSS File for Team Rosters Plug
 Theme URI: http://shoalsummitsolutions.com
 Author: Mark O'Donnell
 Author URI: http://shoalsummitsolutions.com
-Description: Sample WordPress Twentyeleven Child Theme for testing the Team Rosters Plugin.
-Template: twentyeleven
-Version: 0.1
+Description: Styles required for the Team Rosters Plugin.
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
@@ -21,9 +19,8 @@ header#player-header {
 	/*color: #b8202e; 						/*MC Football - red */
 	/*background-color: #5899E6; 			/*MCS Athletics - carolina blue */
 	/*color: #00004f; 						/*MCS Athletics - navy blue */
-	background-color: #4e81db;				/*MS default */
-	color: #fff;							/*MS default */
-	
+	background-color: #dce6f1; 				/*MS default - very light blue*/
+	color: #000;							/*MS default - black*/
 	width: 100%;
 	height: 162px;
 	font-size: 12px;
@@ -116,7 +113,7 @@ td.rt-col {
 	border-width: 2px;
 	/*border-color: #ffc831; 			/*MC Football - yellow */
 	/*border-color: #5899E6; 			/*MCS Athletics - carolina blue */
-	border-color: #4e81db; 				/*MS Default - lt blue */
+	border-color: #1982d1; 				/*Twentyeleven Default - lt blue */
 }
 
 #player-bio h1 {
@@ -125,7 +122,8 @@ td.rt-col {
 	font-weight: bold;
 	/*color: #b8202e; 					/*MC Football - red */
 	/*color: #5899E6; 					/*MCS Athletics - carolina blue */
-	color: #000;						/*MS Default - black */
+	/*color: #000;						/*MS Default - black */
+	color: #1982d1;						/*Twentyeleven Default - lt blue */
 }
 
 #player-bio h2 {
@@ -222,6 +220,62 @@ tr.mstw-tr-odd td, tr.mstw-tr-even td {
 	/* this is needed down this low in the stack to override twentyeleven defaults */
 	border-top: #95b3d7 solid 1px;  		/* MS default */
 	/*border: #000 solid 1px;				/*MC Football - sample */
-	/*border: #00004f solid 1px;				/*MCS Athletics - sample */
+	/*border: #00004f solid 1px;			/*MCS Athletics - sample */
 }
+
+/*-------------------------------------------------------	
+ *	"Teams/team-slug" taxonomy page - creates 'gallery page' 
+ *------------------------------------------------------*/
+ 
+ #content-player-gallery {
+	margin: 0 7.6% 0 7.6%;
+	width: 84.8%;
+}
+
+h1#team-head-title {
+	font-size: 28px;
+	color: #5899E6;						/*MCS Athletics - sample */
+}
+
+.player-tile {
+	float: left;
+	margin: 15px;
+	width: 230px;
+	/*color: #00004F; 					/*MCS Athletics - sample */
+	color: #000;						/*MS default - black*/
+	/* background-color: #5899E6;		/*MCS Athletics - sample */
+	background-color: #dce6f1; 			/*MS default - very light blue*/
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+}
+ 
+.player-tile img {
+	border: 1px solid #bbb;
+	padding: 5px;
+	background-color: #eee;
+	margin-top: 10px;
+	margin-left: 10px;
+}
+ 
+.player-name-number {
+	font-size: 16px;
+	font-weight: bold;
+	color: #00004f;
+}
+
+.play-name-number a {
+	color: #1982d1;
+}
+ 
+.player-info-container table.player-info {
+	padding: 0 5px 5px 5px;
+	layout: fixed;
+	width: 100%;
+	font-size: 12px;
+}
+ 
+.player-info-container .player-name-number {
+	padding: 0 5px 5px 5px;
+}
+
 
