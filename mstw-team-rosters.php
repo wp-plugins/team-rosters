@@ -3,7 +3,7 @@
 Plugin Name: Team Rosters
 Plugin URI: http://wordpress.org/extend/plugins/
 Description: The Team Rosters Plugin defines a custom type - Player - for use in the MySportTeamWebite framework. It generates a roster table view and player bio view.
-Version: 1.1
+Version: 2.0
 Author: Mark O'Donnell
 Author URI: http://shoalsummitsolutions.com
 */
@@ -283,10 +283,11 @@ function mstw_tr_shortcode_handler( $atts ){
 	extract( shortcode_atts( array(	'team' => 'no-team', 
 									'roster_type' => 'default',
 									'show_title' => true,
-									'sort_order' => ''), 
+									'sort_order' => '',
+									'show_weight' => 'show'), 
 									$atts ) );
 		
-	$mstw_tr_roster = mstw_tr_build_roster( $team, $roster_type, $show_title, $sort_order );
+	$mstw_tr_roster = mstw_tr_build_roster( $team, $roster_type, $show_title, $sort_order, $show_weight );
 	
 	return $mstw_tr_roster;
 }
@@ -297,7 +298,7 @@ function mstw_tr_shortcode_handler( $atts ){
 // Loops through the Player Custom posts in the "team" category and formats them 
 // into a pretty table.
 // --------------------------------------------------------------------------------------
-function mstw_tr_build_roster( $team, $roster_type, $show_title, $sort_order ) {
+function mstw_tr_build_roster( $team, $roster_type, $show_title, $sort_order, $show_weight ) {
 	
 	// These will come from plugin options someday 
 	// Add the colors and stuff
@@ -306,6 +307,14 @@ function mstw_tr_build_roster( $team, $roster_type, $show_title, $sort_order ) {
 	
 	// Settings from the admin page
 	$options = get_option( 'mstw_tr_options' );
+	
+	// show/hide player weight
+	if ( $show_weight == 'hide' or $show_weight == 'hide-weight' ) {
+		$hide_weight = 'hide-weight';
+	}
+	else {
+		$hide_weight = $options['tr_hide_weight'];
+	}
 	
 	// Set the roster table format. If default in [shortcode] atts, 
 	// then use the default setting from admin page.
@@ -365,7 +374,7 @@ function mstw_tr_build_roster( $team, $roster_type, $show_title, $sort_order ) {
 							  'order' => 'ASC' 
 							));						
 	
-    if($posts) {
+    if( $posts ) {
 		// Make table of posts
 		// Start with the table header
 		// We need to switch based on a setting 'high-school', 'college', 'pro'
@@ -396,35 +405,35 @@ function mstw_tr_build_roster( $team, $roster_type, $show_title, $sort_order ) {
 		$output .= $thead . '>';
 			
 		$th_temp = '<th class="mstw-tr-table-head" > ';
-		/* if ( $hdr_color != '' )
-			$th_temp .= 'style="color:' . $hdr_color . ';';
-		if ( $hdr_bkgd != '' )
-			$th_temp .= ' background-color:' . $hdr_bkgd . ';';
-		if ( $hdr_color != '' || $hdr_bkgd != '' ) 
-			$th_temp .= '">';
-		else
-			$th_temp .= '>';
-		*/
 			
 		$output .= $th_temp . __( 'Nbr', 'mstw-loc-domain' ) . '</th>';
 		$output .= $th_temp . __( 'Name', 'mstw-loc-domain' ) . '</th>';
 		$output .= $th_temp . __( 'Position', 'mstw-loc-domain' ) . '</th>';
+		if ( strpos( $roster_type, 'baseball' ) !== false ) {
+			$output .= $th_temp . __( 'Bat', 'mstw-loc-domain' ) . '/' .  __( 'Thw', 'mstw-loc-domain' ) . '</th>';	
+		}
 		$output .= $th_temp . __( 'Height', 'mstw-loc-domain' ) . '</th>';
-		$output .= $th_temp . __( 'Weight', 'mstw-loc-domain' ) . '</th>';
+		
+		if ( $hide_weight != "hide-weight" ) {
+			$output .= $th_temp . __( 'Weight', 'mstw-loc-domain' ) . '</th>';
+		}
 		
 		// This is where roster-type specific columns will go
 		switch( $roster_type ) {
 		case 'high-school':
+		case 'baseball-high-school':
 			$output .= $th_temp . __( 'Year', 'mstw-loc-domain' ) . '</th>';
 			break;
 			
 		case 'college':
+		case 'baseball-college':
 			$output .= $th_temp . __( 'Year', 'mstw-loc-domain' ) . '</th>';
 			$output .= $th_temp . __( 'Exp', 'mstw-loc-domain' ) . '</th>';
 			$output .= $th_temp . __( 'Hometown (Last School)', 'mstw-loc-domain' ) . '</th>';
 			break;
 			
 		case 'pro':
+		case 'baseball-pro':
 			$output .= $th_temp . __( 'Age', 'mstw-loc-domain' ) . '</th>';
 			$output .= $th_temp . __( 'Exp', 'mstw-loc-domain' ) . '</th>';
 			$output .= $th_temp . __( 'Last School (Country)', 'mstw-loc-domain' ) . '</th>';
@@ -501,7 +510,6 @@ function mstw_tr_build_roster( $team, $roster_type, $show_title, $sort_order ) {
 			$row_string = $row_string. $row_td . get_post_meta( $post->ID, '_mstw_tr_number', true ) . '</td>';
 			
 			// column 2: Add the player's name
-			$name_format = $options['tr_player_name_format'];
 			if ( $options['tr_player_name_format'] == "first-last" ) 
 				$player_name = get_post_meta( $post->ID, '_mstw_tr_first_name', true ) . " " . 
 				get_post_meta( $post->ID, '_mstw_tr_last_name', true );
@@ -524,19 +532,28 @@ function mstw_tr_build_roster( $team, $roster_type, $show_title, $sort_order ) {
 			// column 3: Add the player's postition
 			$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_position', true ) . '</td>';
 			
+			// baseball only: Add bats/throws
+			if ( strpos( $roster_type, 'baseball' ) !== false ) {
+				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_bats', true ) . '/' . get_post_meta( $post->ID, '_mstw_tr_throws', true ) . '</td>';	
+			}	
+			
 			// column 4: Add the player's height
 			$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_height', true ) . '</td>';
 			
 			// column 5: Add the player's weight
-			$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_weight', true ) . '</td>';
+			if ( $hide_weight != "hide-weight" ) {
+				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_weight', true ) . '</td>';
+			}
 			
 			switch( $roster_type ) {
 			case 'high-school':
+			case 'baseball-high-school':
 				// column 5: Add the player's year in school
 				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_year', true ) . '</td>';
 				break;
 				
 			case 'college':
+			case 'baseball-college':
 				// column 6: Add the player's year in school
 				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_year', true ) . '</td>';
 				
@@ -550,6 +567,7 @@ function mstw_tr_build_roster( $team, $roster_type, $show_title, $sort_order ) {
 				break;
 				
 			case 'pro':
+			case 'baseball-pro':
 				// column 6: Add the player's age
 				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_age', true ) . '</td>';
 				

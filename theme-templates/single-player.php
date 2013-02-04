@@ -2,6 +2,10 @@
 /**
  * MSTW Team Rosters Template for displaying all single player bios.
  *
+ * NOTE: Plugin users will probably have to modify this template to fit their 
+ * individual themes. This template has been tested in the WordPress 
+ * Twenty Eleven Theme. 
+ *
  * @package Twenty_Eleven
  * @subpackage Team_Rosters
  * @since Team Rosters 1.0
@@ -31,8 +35,6 @@ get_header(); ?>
 					</nav><!-- #nav-single -->
 
 					<?php get_template_part( 'content', 'single-player' ); ?>
-
-					<?php comments_template( '', true ); ?>
 
 				<?php endwhile; // end of the loop. ?>
 

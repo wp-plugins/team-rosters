@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Team Rosters\n"
-"POT-Creation-Date: 2012-12-17 16:09-0800\n"
-"PO-Revision-Date: 2012-12-17 16:10-0800\n"
+"POT-Creation-Date: 2012-12-22 12:44-0800\n"
+"PO-Revision-Date: 2012-12-22 12:44-0800\n"
 "Last-Translator: Mark O'Donnell <mark@shoalsummitsolutions.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -14,131 +14,132 @@ msgstr ""
 "presence\\development site\\wp-content\\plugins\\mstw-team-rosters\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPath-1: ./includes\n"
+"X-Poedit-SearchPath-2: ./theme-templates\n"
 
 #: mstw-team-rosters.php:89
 msgid "Teams"
-msgstr ""
+msgstr "Equipos"
 
 #: mstw-team-rosters.php:90
 msgid "Team"
-msgstr ""
+msgstr "Equipo"
 
 #: mstw-team-rosters.php:223 mstw-team-rosters.php:225
 #: mstw-team-rosters.php:226
 msgid "Players"
-msgstr ""
+msgstr "Jugadores"
 
 #: mstw-team-rosters.php:224 includes/mstw-team-rosters-admin.php:60
 msgid "Player"
-msgstr ""
+msgstr "Jugador"
 
 #: mstw-team-rosters.php:227 mstw-team-rosters.php:228
 msgid "Add New Player"
-msgstr ""
+msgstr "Añadir un nuevo jugador"
 
 #: mstw-team-rosters.php:229
 msgid "Edit Player"
-msgstr ""
+msgstr "Editar un jugador"
 
 #: mstw-team-rosters.php:230
 msgid "New Player"
-msgstr ""
+msgstr "Nuevo jugador"
 
 #: mstw-team-rosters.php:231
 msgid "View Player"
-msgstr ""
+msgstr "Ver jugador"
 
 #: mstw-team-rosters.php:232
 msgid "Search Players"
-msgstr ""
+msgstr "Buscar jugadores"
 
 #: mstw-team-rosters.php:233
 msgid "No player found"
-msgstr ""
+msgstr "No se ha encontrado el jugador"
 
 #: mstw-team-rosters.php:234
 msgid "No player found in trash"
-msgstr ""
+msgstr "No se ha encontrado el jugador en la papelera"
 
 #: mstw-team-rosters.php:235
 msgid "All Players"
-msgstr ""
+msgstr "Todos los jugadores"
 
 #: mstw-team-rosters.php:365
 msgid "Nbr"
-msgstr ""
+msgstr "Nro"
 
 #: mstw-team-rosters.php:366
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #: mstw-team-rosters.php:367 includes/mstw-team-rosters-admin.php:252
 #: theme-templates/content-single-player.php:69
 msgid "Position"
-msgstr ""
+msgstr "Posición"
 
 #: mstw-team-rosters.php:368 includes/mstw-team-rosters-admin.php:253
 msgid "Height"
-msgstr ""
+msgstr "Altura"
 
 #: mstw-team-rosters.php:369 includes/mstw-team-rosters-admin.php:254
 msgid "Weight"
-msgstr ""
+msgstr "Peso"
 
 #: mstw-team-rosters.php:374 mstw-team-rosters.php:378
 #: includes/mstw-team-rosters-admin.php:255
 #: theme-templates/content-single-player.php:74
 #: theme-templates/content-single-player.php:86
 msgid "Year"
-msgstr ""
+msgstr "Año"
 
 #: mstw-team-rosters.php:379 mstw-team-rosters.php:385
 msgid "Exp"
-msgstr ""
+msgstr "Exp"
 
 #: mstw-team-rosters.php:380
 msgid "Hometown (Last School)"
-msgstr ""
+msgstr "Ciudad (Última escuela)"
 
 #: mstw-team-rosters.php:384 theme-templates/content-single-player.php:80
 msgid "Age"
-msgstr ""
+msgstr "Edad"
 
 #: mstw-team-rosters.php:386
 msgid "Last School (Country)"
-msgstr ""
+msgstr "Última escuela (País)"
 
 #: mstw-team-rosters.php:530
 msgid "Sorry, No players found for team: "
-msgstr ""
+msgstr "Lo siento, no existen ningún jugador para ese equipo"
 
 #: includes/mstw-team-rosters-admin.php:111
 #: includes/mstw-team-rosters-admin.php:249
 msgid "First Name"
-msgstr ""
+msgstr "Nombre"
 
 #: includes/mstw-team-rosters-admin.php:116
 #: includes/mstw-team-rosters-admin.php:250
 msgid "Last Name"
-msgstr ""
+msgstr "Apellido"
 
 #: includes/mstw-team-rosters-admin.php:248
 msgid "Title"
-msgstr ""
+msgstr "Título"
 
 #: includes/mstw-team-rosters-admin.php:251
 msgid "Number"
-msgstr ""
+msgstr "Numero"
 
 #: includes/mstw-team-rosters-admin.php:256
 #: theme-templates/content-single-player.php:75
 #: theme-templates/content-single-player.php:81
 msgid "Experience"
-msgstr ""
+msgstr "Experiencia"
 
 #: includes/mstw-team-rosters-admin.php:500
 msgid "Enter your single player page settings. "
-msgstr ""
+msgstr "Introduce al configuración de la página del jugador"
 
 #: includes/mstw-team-rosters-admin.php:500
 #: includes/mstw-team-rosters-admin.php:505
@@ -146,39 +147,41 @@ msgid ""
 "All color values are in hex, starting with a hash(#), followed by either 3 "
 "or 6 hex digits. For example, #123abd or #1a2."
 msgstr ""
+"Todos los valores de color esta en hex, empezando con almuhadilla(#), "
+"seguido por 3 ó 6 dígitos. Por ejemplo, #123abd o #1a2."
 
 #: includes/mstw-team-rosters-admin.php:505
 msgid "Enter your team roster table settings."
-msgstr ""
+msgstr "Introduce la configuración de la tabla del roster del equipo."
 
 #: theme-templates/content-single-player.php:70
 msgid "Ht"
-msgstr ""
+msgstr "Alt"
 
 #: theme-templates/content-single-player.php:70
 msgid "Wt"
-msgstr ""
+msgstr "Kg"
 
 #: theme-templates/content-single-player.php:76
 msgid "Hometown"
-msgstr ""
+msgstr "Ciudad"
 
 #: theme-templates/content-single-player.php:77
 #: theme-templates/content-single-player.php:82
 msgid "Last School"
-msgstr ""
+msgstr "Última escuela"
 
 #: theme-templates/content-single-player.php:83
 msgid "Country"
-msgstr ""
+msgstr "País"
 
 #: theme-templates/content-single.php:33
 msgid "Pages:"
-msgstr ""
+msgstr "Páginas"
 
 #: theme-templates/content-single.php:39 theme-templates/content-single.php:42
 msgid ", "
-msgstr ""
+msgstr ","
 
 #: theme-templates/content-single.php:44
 #, php-format
@@ -204,7 +207,7 @@ msgstr ""
 
 #: theme-templates/content-single.php:61
 msgid "Edit"
-msgstr ""
+msgstr "Edición"
 
 #: theme-templates/content-single.php:69
 #, php-format

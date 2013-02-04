@@ -25,8 +25,15 @@
  * 20121202-MAO: 
  *	(1)	Added settings section for the taxonomy (player gallery) page
  * 20121211-MAO: 
- *	(1)	Added setting for title of content ("Player Bio") on single page  
- *
+ *	(1)	Added setting for title of content ("Player Bio") on single page
+ * 
+ * 20130125-MAO: 
+ *	(1)	Added new admin page for CSV import - no page content/controls yet
+ * 20130126-MAO: 
+ *	(1)	Added content/controls for CSV import page 
+ 
+ * 20130129-MAO: 
+ *	(1)	Added theme support for thumbnails
  *-------------------------------------------------------------------------------------*/
 
 // --------------------------------------------------------------------------------------
@@ -42,9 +49,23 @@
 // --------------------------------------------------------------------------------------
 //function mstw_tr_delete_plugin_options() {
 //	delete_option('mstw_tr_options');
-//}
+//
 
+// ----------------------------------------------------------------
+// Load the mstw_utility_functions if necessary
+	if ( !function_exists( 'mstw_sanitize_hex_color' ) ) {
+		require_once 'mstw_utility_functions.php';
+	}
 
+// ----------------------------------------------------------------
+// Make sure the Feature Image meta is active for the player custom post type
+
+	add_action( 'after_setup_theme', 'mstw_tr_add_feat_img' );
+	
+	function mstw_tr_add_feat_img( ) {
+		if ( function_exists( 'add_theme_support' ) )
+			add_theme_support( 'post-thumbnails', array( 'player' ) );
+	}
 // ----------------------------------------------------------------
 // Create the meta box for the Team Roster custom post type
 
@@ -73,6 +94,9 @@
 
 	function mstw_tr_create_ui( $post ) {
 									  
+		$mstw_tr_bats_list = array( '', 'R', 'L', 'B' );
+		$mstw_tr_throws_list = array( '', 'R', 'L' );
+		
 		// Retrieve the metadata values if they exist
 		// The first set are used in all formats
 		$mstw_tr_first_name = get_post_meta( $post->ID, '_mstw_tr_first_name', true );
@@ -104,6 +128,12 @@
 		
 		// country is used in the pro format only
 		$mstw_tr_country = get_post_meta( $post->ID, '_mstw_tr_country', true );
+		
+		// bats is used in the baseball formats only
+		$mstw_tr_bats = get_post_meta( $post->ID, '_mstw_tr_bats', true );
+		
+		// throws is used in the baseball formats only
+		$mstw_tr_throws = get_post_meta( $post->ID, '_mstw_tr_throws', true );
 		
 		// other info is not currently used
 		$mstw_tr_other_info = get_post_meta( $post->ID, '_mstw_tr_other_info', true );
@@ -141,7 +171,6 @@
 			<td><input maxlength="8" size="8" name="mstw_tr_weight" 
 				value="<?php echo esc_attr( $mstw_tr_weight ); ?>"/></td>
 		</tr>
-		
 		<tr valign="top">
 			<th scope="row"><label for="mstw_tr_year" >Year:</label></th>
 			<td><input maxlength="8" size="8" name="mstw_tr_year"
@@ -171,6 +200,30 @@
 			<th scope="row"><label for="mstw_tr_country" >Country:</label></th>
 			<td><input maxlength="32" size="20" name="mstw_tr_country"
         	value="<?php echo esc_attr( $mstw_tr_country ); ?>"/></td>
+		</tr>
+		<tr valign="top">
+    	<th scope="row"><label for="mstw_tr_bats" >Bats:</label></th>
+        <td>
+        <select name="mstw_tr_bats">    
+			<?php foreach ( $mstw_tr_bats_list as $label ) {  ?>
+          			<option value="<?php echo $label; ?>" <?php selected( $mstw_tr_bats, $label );?>>
+          				<?php echo $label; ?>
+                     </option>              
+     		<?php } ?> 
+        </select>   
+        </td>
+		</tr>
+		<tr valign="top">
+    	<th scope="row"><label for="mstw_tr_bats" >Throws:</label></th>
+        <td>
+        <select name="mstw_tr_throws">    
+			<?php foreach ( $mstw_tr_throws_list as $label ) {  ?>
+          			<option value="<?php echo $label; ?>" <?php selected( $mstw_tr_throws, $label );?>>
+          				<?php echo $label; ?>
+                     </option>              
+     		<?php } ?> 
+        </select>   
+        </td>
 		</tr>
 		<tr valign="top">
 			<th scope="row"><label for="mstw_tr_other_info" >Other Info:</label></th>
@@ -222,9 +275,19 @@ function mstw_tr_save_meta( $post_id ) {
 			
 	update_post_meta( $post_id, '_mstw_tr_experience',
 			strip_tags( $_POST['mstw_tr_experience'] ) );
-			
-	update_post_meta( $post_id, '_mstw_tr_age',
-			strip_tags( $_POST['mstw_tr_age'] ) );
+	
+	$age_update = strip_tags( $_POST['mstw_tr_age'] );
+	if ( $age_update != 'Deceased' ) { //age can be "Deceased" or 0<age<101
+		$age_update = intval( $age_update );
+		if ( $age_update <= 0 ) {
+			$age_update = '';
+		}
+		else if ( $age_update > 101 ) {
+			$age_update = 100;
+		}
+	}
+	update_post_meta( $post_id, '_mstw_tr_age', $age_update );
+			//strip_tags( $_POST['mstw_tr_age'] ) );
 			
 	update_post_meta( $post_id, '_mstw_tr_home_town',
 			strip_tags( $_POST['mstw_tr_home_town'] ) );
@@ -235,8 +298,11 @@ function mstw_tr_save_meta( $post_id ) {
 	update_post_meta( $post_id, '_mstw_tr_country',
 			strip_tags( $_POST['mstw_tr_country'] ) );
 			
-	update_post_meta( $post_id, '_mstw_tr_other_info',
-			strip_tags( $_POST['mstw_tr_other_info'] ) );
+	update_post_meta( $post_id, '_mstw_tr_bats',
+			strip_tags( $_POST['mstw_tr_bats'] ) );
+			
+	update_post_meta( $post_id, '_mstw_tr_throws',
+			strip_tags( $_POST['mstw_tr_throws'] ) );
 	
 }
 
@@ -328,17 +394,30 @@ function mstw_tr_remove_quick_edit( $actions, $post ) {
 // Add a menu for our option page
 add_action('admin_menu', 'mstw_tr_add_page');
 
-function mstw_tr_add_page() {
+function mstw_tr_add_page( ) {
 	//The next line adds the settings page to the Settings menu
 	//add_options_page( 'Team Rosters Settings', 'Team Rosters Settings', 'manage_options', 'mstw_tr_settings', 'mstw_tr_option_page' );
 	
 	// But I decided to add the settings page to the Players menu
 	$page = add_submenu_page( 	'edit.php?post_type=player', 
-						'Team Rosters Settings', 
-						'Settings', 
+						'Team Rosters Settings', 		//page title
+						'Display Settings', 			//menu title
 						'manage_options', 
 						'mstw_tr_settings', 
 						'mstw_tr_option_page' );
+						
+
+    //require_once ABSPATH . '/wp-admin/admin.php'; - not needed?
+    $plugin = new MSTWImporterPlugin;
+    //add_management_page('edit.php', 'CSV Importer', 'manage_options', __FILE__,
+        //array($plugin, 'form'));
+	add_submenu_page(	'edit.php?post_type=player',
+						'Import Roster from CSV File',			//page title
+						'CSV Roster Import',					//menu title
+						'manage_options',
+						'mstw_tr_csv_import',
+						array( $plugin, 'form' )
+					);
 						
 	// Now also add action to load java scripts ONLY when you're on this page
 	// add_action( 'admin_print_styles-' . $page, mstw_tr_load_scripts );
@@ -392,11 +471,38 @@ function mstw_tr_admin_init(){
 		'mstw_tr_settings'
 	);
 	
+	// Show/hide player weight (for girls teams)
+		add_settings_field(
+		'mstw_tr_hide_weight',
+		'Hide player weight:',
+		'mstw_tr_hide_weight_input',
+		'mstw_tr_settings',
+		'mstw_tr_single_page_settings'
+	);
+	
 	// Title for the content (E.g., "Player Bio")
 	add_settings_field(
 		'mstw_tr_sp_content_title',
-		'Player content title (defaults to "Player Bio"):',
+		'Player content title text:',
 		'mstw_tr_sp_content_title_input',
+		'mstw_tr_settings',
+		'mstw_tr_single_page_settings'
+	);
+	
+	// Player Photo (thumbnail) width
+	add_settings_field(
+		'mstw_tr_sp_image_width',
+		'Player photo width:',
+		'mstw_tr_sp_image_width_input',
+		'mstw_tr_settings',
+		'mstw_tr_single_page_settings'
+	);
+	
+	// Player Photo (thumbnail) height
+	add_settings_field(
+		'mstw_tr_sp_image_height',
+		'Player photo height:',
+		'mstw_tr_sp_image_height_input',
 		'mstw_tr_settings',
 		'mstw_tr_single_page_settings'
 	);
@@ -404,7 +510,7 @@ function mstw_tr_admin_init(){
 	// Background color of main box
 	add_settings_field(
 		'mstw_tr_sp_main_bkgd_color',
-		'Main box background color (hex):',
+		'Main box background color [#hex]:',
 		'mstw_tr_sp_main_bkgd_color_input',
 		'mstw_tr_settings',
 		'mstw_tr_single_page_settings'
@@ -422,7 +528,7 @@ function mstw_tr_admin_init(){
 	// Text color of main box
 	add_settings_field(
 		'mstw_tr_sp_main_text_color',
-		'Main box text color (hex):',
+		'Main box text color [#hex]:',
 		'mstw_tr_sp_main_text_color_input',
 		'mstw_tr_settings',
 		'mstw_tr_single_page_settings'
@@ -484,7 +590,7 @@ function mstw_tr_admin_init(){
 	// Link text color. (Hover effect is underline by default. Use stylesheet to customize.)
 	add_settings_field(
 		'mstw_tr_table_links_color',
-		'Link text color (hex):',
+		'Link text color [#hex]:',
 		'mstw_tr_table_links_color_input',
 		'mstw_tr_settings',
 		'mstw_tr_roster_table_settings'
@@ -493,7 +599,7 @@ function mstw_tr_admin_init(){
 	// Roster Table Header Background Color
 	add_settings_field(
 		'mstw_tr_table_head_bkgd_color',
-		'Table Header Background Color (hex):',
+		'Table Header Background Color [#hex]:',
 		'mstw_tr_table_head_bkgd_color_input',
 		'mstw_tr_settings',
 		'mstw_tr_roster_table_settings'
@@ -502,7 +608,7 @@ function mstw_tr_admin_init(){
 	// Roster Table Header Text Color
 	add_settings_field(
 		'mstw_tr_table_head_text_color',
-		'Table Header Text Color (hex):',
+		'Table Header Text Color [#hex]:',
 		'mstw_tr_table_head_text_color_input',
 		'mstw_tr_settings',
 		'mstw_tr_roster_table_settings'
@@ -552,7 +658,7 @@ function mstw_tr_admin_init(){
 		'mstw_tr_settings'
 	);
 	
-	// Sort player galleray numerically or alphabetically
+	// Sort player gallery numerically or alphabetically
 	add_settings_field(
 		'mstw_tr_pg_sort_order',
 		'Sort alphabetically or by number:',
@@ -592,12 +698,43 @@ function mstw_tr_gallery_page_text() {
  *	Input fields for single player page section
  */
  
- function mstw_tr_sp_content_title_input() {
+function mstw_tr_hide_weight_input() {
+	// get option 'tr_hide_weight' value from the database
+	$options = get_option( 'mstw_tr_options' );
+	$tr_hide_weight = $options['tr_hide_weight'];
+	
+	// echo the field
+	$html = '<input type="checkbox" 
+					id="hide_weight" 
+					name="mstw_tr_options[tr_hide_weight]" 
+					value="hide-weight" ' . checked( "hide-weight", $options['tr_hide_weight'], false ) . '/>';  
+    $html .= "<label for='hide_weight'> Check to hide player weight in ALL roster tables.</label></p>";
+	
+    echo $html;  
+}   
+ 
+function mstw_tr_sp_content_title_input() {
 	// get option 'sp_content_title' value from the database
 	$options = get_option( 'mstw_tr_options' );
 	$sp_content_title = $options['sp_content_title'];
 	// echo the field
-	echo "<input id='sp_content_title' name='mstw_tr_options[sp_content_title]' type='text' value='$sp_content_title' />";
+	echo "<input id='sp_content_title' name='mstw_tr_options[sp_content_title]' type='text' value='$sp_content_title' />  (defaults to \"Player Bio\")";
+}
+
+function mstw_tr_sp_image_width_input() {
+	// get option 'sp_image_width' value from the database
+	$options = get_option( 'mstw_tr_options' );
+	$sp_image_width = $options['sp_image_width'];
+	// echo the field
+	echo "<input id='sp_image_width' name='mstw_tr_options[sp_image_width]' type='text' value='$sp_image_width' />  (in px defaults to 150)";
+}
+
+function mstw_tr_sp_image_height_input() {
+	// get option 'sp_image_height' value from the database
+	$options = get_option( 'mstw_tr_options' );
+	$sp_image_height = $options['sp_image_height'];
+	// echo the field
+	echo "<input id='sp_image_height' name='mstw_tr_options[sp_image_height]' type='text' value='$sp_image_height' /> (in px defaults to 150)";
 }
  
 function mstw_tr_sp_main_bkgd_color_input() {
@@ -645,7 +782,6 @@ function mstw_tr_player_name_format_input() {
 function mstw_tr_table_player_links_input() {
 	// get option 'tr_use_player_links' value from the database
 	$options = get_option( 'mstw_tr_options' );
-	$tr_use_player_links = $options['tr_use_player_links'];
 	
 	// echo the field
 	$html = '<input type="checkbox" 
@@ -704,7 +840,22 @@ function mstw_tr_table_default_format_input() {
 	$html .= "<p><input type='radio' id='pro-format' 
 				name='mstw_tr_options[tr_table_default_format]' value='pro'" . 
 				checked( "pro", $options['tr_table_default_format'], false ) . '/>';  
-    $html .= "<label for='pro-format'> Pro Format</label></p>";	
+    $html .= "<label for='pro-format'> Pro Format</label></p>";
+
+	$html .= "<p><input type='radio' id='hs-baseball-format' 
+				name='mstw_tr_options[tr_table_default_format]' value='hs-baseball'" . 
+				checked( "hs-baseball", $options['tr_table_default_format'], false ) . '/>';  
+    $html .= "<label for='hs-baseball-format'> High School Baseball Format</label></p>";
+	
+	$html .= "<p><input type='radio' id='coll-baseball-format' 
+				name='mstw_tr_options[tr_table_default_format]' value='coll-baseball'" . 
+				checked( "coll-baseball", $options['tr_table_default_format'], false ) . '/>';  
+    $html .= "<label for='coll-baseball-format'> College Baseball Format</label></p>";
+	
+	$html .= "<p><input type='radio' id='pro-baseball-format' 
+				name='mstw_tr_options[tr_table_default_format]' value='pro-baseball'" . 
+				checked( "pro-baseball", $options['tr_table_default_format'], false ) . '/>';  
+    $html .= "<label for='pro-baseball-format'> Pro Baseball Format</label></p>";
 	
     echo $html;  
 } 
@@ -848,9 +999,10 @@ function mstw_tr_validate_options( $input ) {
 											'error');
 					}
 					break;
-				
+					
 				// Check all other settings
 				default:
+					//case 'tr_hide_weight':
 					//case 'tr_player_name_format':
 					//case 'tr_use_player_links':
 					//case 'tr_table_default_format':
@@ -867,47 +1019,413 @@ function mstw_tr_validate_options( $input ) {
 	return apply_filters( 'sandbox_theme_validate_input_examples', $output, $input );
 }
 
-function mstw_sanitize_hex_color( $color ) {
-	// Check $color for proper hex color format (3 or 6 digits) or the empty string.
-	// Returns corrected string if valid hex color, returns null otherwise
-	
-	if ( '' === $color )
-		return '';
-
-	// 3 or 6 hex digits, or the empty string.
-	if ( preg_match('|^#([A-Fa-f0-9]{3}){1,2}$|', $color ) )
-		return $color;
-
-	return null;
-}
-
 function mstw_tr_admin_notices() {
     settings_errors( );
 }
 add_action( 'admin_notices', 'mstw_tr_admin_notices' );
 
 // --------------------------------------------------------------------------------------
-// Callback for: register_activation_hook(__FILE__, 'mstw_tr_set_defaults')
 // --------------------------------------------------------------------------------------
-// This function runs when the plugin is activated. If there are no options currently set, 
-// or the user has selected the checkbox to reset the options to their defaults,
-// then the options are set/reset. Otherwise the options remain unchanged.
+// CSV Importer Class
 // --------------------------------------------------------------------------------------
-/* function mstw_tr_set_defaults() {
-	$tmp = get_option('mstw_tr_options');
-    if(($tmp['chk_default_options_db']=='1')||(!is_array($tmp))) {
-		delete_option('mstw_tr_options'); // so we don't have to reset all the 'off' checkboxes too! 
-		$arr = array(	"mstw_tr_hdr_bkgd" => "#000000",
-						"mstw_tr_hdr_text" => "#FFFFFF",
-						"mstw_tr_even_bkgd" => "#DBE5F1",
-						"mstw_tr_even_text" => "#000000",
-						"mstw_tr_odd_bkgd" => "#FFFFFF",
-						"mstw_tr_odd_text" => "#000000",
-						"mstw_tr_brdr_width" => "2",  //px
-						"mstw_tr_brdr_color" => "#F481BD",
-						"mstw_tr_default_opts" => "",
-		);
-		update_option('mstw_tr_options', $arr);
-	}
+// --------------------------------------------------------------------------------------
+class MSTWImporterPlugin {
+    var $defaults = array(
+        'csv_post_title'      => null,
+        'csv_post_post'       => null,
+        'csv_post_type'       => null,
+        'csv_post_excerpt'    => null,
+        'csv_post_date'       => null,
+        'csv_post_tags'       => null,
+        'csv_post_categories' => null,
+        'csv_post_author'     => null,
+        'csv_post_slug'       => null,
+        'csv_post_parent'     => 0,
+    );
+
+    var $log = array();
+
+    /**
+     * Determine value of option $name from database, $default value or $params,
+     * save it to the db if needed and return it.
+     *
+     * @param string $name
+     * @param mixed  $default
+     * @param array  $params
+     * @return string
+     */
+    function process_option( $name, $default, $params ) {
+        if ( array_key_exists( $name, $params ) ) {
+            $value = stripslashes( $params[$name] );
+        } elseif ( array_key_exists( '_'.$name, $params ) ) {
+            // unchecked checkbox value
+            $value = stripslashes( $params['_'.$name] );
+        } else {
+            $value = null;
+        }
+        $stored_value = get_option( $name );
+        if ( $value == null ) {
+            if ($stored_value === false) {
+                if (is_callable($default) &&
+                    method_exists($default[0], $default[1])) {
+                    $value = call_user_func($default);
+                } else {
+                    $value = $default;
+                }
+                add_option($name, $value);
+            } else {
+                $value = $stored_value;
+            }
+        } else {
+            if ($stored_value === false) {
+                add_option($name, $value);
+            } elseif ($stored_value != $value) {
+                update_option($name, $value);
+            }
+        }
+        return $value;
+    } //End function process_option()
+
+    /**
+     * Plugin's admin user interface
+     *
+     * @return void
+     */
+    function form( ) {
+        
+        $opt_cat = $this->process_option( 'csv_importer_cat', 0, $_POST );
+
+        if ('POST' == $_SERVER['REQUEST_METHOD']) {
+            $this->post(compact('opt_draft', 'opt_cat'));
+        }
+
+        // form HTML {{{
+?>
+
+<div class="wrap">
+    <h2>Import CSV</h2>
+    <form class="add:the-list: validate" method="post" enctype="multipart/form-data">
+	
+		<!-- Team taxonomy -->
+		<?php $args = array(	'show_option_all'    => 'Select a team ...',
+								'show_option_none'   => '',
+								'orderby'            => 'name', 
+								'order'              => 'ASC',
+								'show_count'         => 0,
+								'hide_empty'         => 0, 
+								'child_of'           => 0,
+								'exclude'            => '',
+								'echo'               => 1,
+								'selected'           => $opt_cat,
+								'hierarchical'       => 0, 
+								'name'               => 'csv_importer_cat',
+								'id'                 => '',
+								'class'              => 'postform',
+								'depth'              => 0,
+								'tab_index'          => 0,
+								'taxonomy'           => 'teams',
+								'hide_if_empty'      => false
+							); ?>
+							
+        <p>Select Team to Import:  <?php wp_dropdown_categories( $args );?><br/>
+        </p>
+
+        <!-- File input -->
+        <p><label for="csv_import">Upload file:</label><br/>
+            <input name="csv_import" id="csv_import" type="file" value="" aria-required="true" /></p>
+        <p class="submit"><input type="submit" class="button" name="submit" value="Import" /></p>
+    </form>
+</div><!-- end wrap -->
+
+<?php
+        // end form HTML }}}
+
+    } //End of function form()
+
+    function print_messages() {
+        if (!empty($this->log)) {
+
+        // messages HTML {{{
+?>
+
+<div class="wrap">
+    <?php if (!empty($this->log['error'])): ?>
+
+    <div class="error">
+
+        <?php foreach ($this->log['error'] as $error): ?>
+            <p><?php echo $error; ?></p>
+        <?php endforeach; ?>
+
+    </div>
+
+    <?php endif; ?>
+
+    <?php if (!empty($this->log['notice'])): ?>
+
+    <div class="updated fade">
+
+        <?php foreach ($this->log['notice'] as $notice): ?>
+            <p><?php echo $notice; ?></p>
+        <?php endforeach; ?>
+
+    </div>
+
+    <?php endif; ?>
+</div><!-- end wrap -->
+
+<?php
+        // end messages HTML }}}
+
+            $this->log = array();
+        }
+    } //End function print_messages()
+
+    /**
+     * Handle POST submission
+     *
+     * @param array $options
+     * @return void
+     */
+    function post( $options ) {
+	
+		extract( $options );
+		
+		// Check that a team has been selected
+		/*echo '<p>$opt_cat(ID): ' . $opt_cat;
+		$term = get_term_by( 'id', $opt_cat, 'teams' );
+		echo ' Team slug: ' . $term->slug . '</p>';*/
+		if ( $term ) {
+			echo 'Team slug: ' . $term->slug . '</p>';
+		}
+		else {
+			$this->log['error'][] = 'Please select a team. Exiting.';
+            $this->print_messages();
+            return;
+		}
+		// Check that a file has been uploaded
+        if ( empty($_FILES['csv_import']['tmp_name']) ) {
+            $this->log['error'][] = 'Please select a file. Exiting.';
+            $this->print_messages();
+            return;
+        }
+
+        //echo '<p> Loading DataSource ... </p>';
+        require_once 'DataSource.php';
+		//echo '<p> Done </p>';
+
+        $time_start = microtime(true);
+        $csv = new File_CSV_DataSource;
+        $file = $_FILES['csv_import']['tmp_name'];
+        $this->stripBOM($file);
+
+        if (!$csv->load($file)) {
+            $this->log['error'][] = 'Failed to load file, aborting.';
+            $this->print_messages();
+            return;
+        }
+
+        // pad shorter rows with empty values
+        $csv->symmetrize();
+
+        // WordPress sets the correct timezone for date functions somewhere
+        // in the bowels of wp_insert_post(). We need strtotime() to return
+        // correct time before the call to wp_insert_post().
+        $tz = get_option('timezone_string');
+        if ($tz && function_exists('date_default_timezone_set')) {
+            date_default_timezone_set($tz);
+        }
+
+        $skipped = 0;
+        $imported = 0;
+        $comments = 0;
+        foreach ($csv->connect() as $csv_data) {
+			// First try to create the post from the row
+            if ($post_id = $this->create_post( $csv_data, $options )) {
+                $imported++;
+				//Insert the custom fields, which is most everything
+                $this->create_custom_fields( $post_id, $csv_data );
+            } else {
+                $skipped++;
+            }
+        }
+
+        if (file_exists($file)) {
+            @unlink($file);
+        }
+
+        $exec_time = microtime(true) - $time_start;
+
+        if ($skipped) {
+            $this->log['notice'][] = "<b>Skipped {$skipped} posts (most likely due to empty title, body and excerpt).</b>";
+        }
+        $this->log['notice'][] = sprintf("<b>Imported {$imported} posts to {$term->slug} in %.2f seconds.</b>", $exec_time);
+        $this->print_messages();
+    }
+
+    function create_post( $data, $options ) {
+        extract( $options );
+
+        $data = array_merge( $this->defaults, $data );
+
+		// The post type is hardwired for this plugin's custom post type
+		$type = 'player';
+		
+        $valid_type = ( function_exists( 'post_type_exists' ) &&
+            post_type_exists( $type )) || in_array( $type, array('post', 'page' ));
+
+        if ( !$valid_type ) {
+            $this->log['error']["type-{$type}"] = sprintf(
+                'Unknown post type "%s".', $type);
+        }
+		
+		$temp_title = '';
+		
+		if ( $data['First Name'] != '' ) {
+			$temp_title .= $data['First Name'];
+		} else if ( $data['First'] != '' ) {
+			$temp_title .= $data['First'];
+		}
+		if ( $data['Last Name'] != '' ) {
+			if ( $temp_title != '' ) //add a space between the names
+				$temp_title .= ' ';
+			$temp_title .= $data['Last Name'];
+		} else if ( $data['Last'] != '' ) {
+			if ( $temp_title != '' ) 
+				$temp_title .= ' ';  //add a space between the names
+			$temp_title .= $data['Last'];
+		}
+		
+		if ( $temp_title == '' )
+			$temp_title = __( 'No first or last name', 'mstw-loc-domain' );
+		else
+			$temp_slug = sanitize_title( $temp_title );  
+		
+		echo '<p>Title: ' . $temp_title . ' Slug: ' . $temp_slug . '</p>';
+		echo '<p>$opt_cat(ID): ' . $opt_cat . '</p>';
+		$term = get_term_by( 'id', $opt_cat, 'teams' );
+		/*if ( $term ) {
+			echo ' Slug: ' . $term->slug . '</p>';
+			//$tax_input = array( 'teams' => array( $term->slug ) );
+			//$tax_input = '';
+		}
+		else {
+			$this->log['error'][] = "Unknown team. Are you sure you selected one?";
+		}*/
+
+        $new_post = array(
+            'post_title'   => convert_chars( $temp_title ),
+            'post_content' => wpautop(convert_chars($data['Bio'])),
+            'post_status'  => 'publish',
+            'post_type'    => $type,
+            'post_name'    => $temp_slug,
+        );
+        
+        // create!
+        $id = wp_insert_post( $new_post );
+		
+		if ( $id ) {
+			$term = get_term_by( 'id', $opt_cat, 'teams' );
+			wp_set_object_terms( $id, $term->slug, 'teams');
+		}
+
+        if ('page' !== $type && !$id) {
+            // cleanup new categories on failure
+            foreach ($cats['cleanup'] as $c) {
+                wp_delete_term($c, 'category');
+            }
+        }
+        return $id;
+    } //End function create_post()
+
+    function create_custom_fields( $post_id, $data ) {
+        foreach ( $data as $k => $v ) {
+            // anything that doesn't start with csv_ is a custom field
+            if (!preg_match('/^csv_/', $k) && $v != '') {
+				switch ( strtolower( $k ) ) {
+					case __( "first name", "mstw-loc-domain" ):
+					case __( "first", "mstw-loc-domain" ):
+						$k = '_mstw_tr_first_name';
+						break;
+					case __( "last name", "mstw-loc-domain" ):
+					case __( "last", "mstw-loc-domain" ):
+						$k = '_mstw_tr_last_name';
+						break;
+					case __( "position", "mstw-loc-domain" ):
+					case __( "pos", "mstw-loc-domain" ):
+						$k = '_mstw_tr_position';
+						break;
+					case __( "number", "mstw-loc-domain" ):
+					case __( "nbr", "mstw-loc-domain" ):
+					case __( "#", "mstw-loc-domain" ):
+						$k = '_mstw_tr_number';
+						break;
+					case __( "weight", "mstw-loc-domain" ):
+					case __( "wt", "mstw-loc-domain" ):
+						$k = '_mstw_tr_weight';
+						break;
+					case __( "height", "mstw-loc-domain" ):
+					case __( "ht", "mstw-loc-domain" ):
+						$k = '_mstw_tr_height';
+						break;
+					case __( "age", "mstw-loc-domain" ):
+						$k = '_mstw_tr_age';
+						break;
+					case __( "year", "mstw-loc-domain" ):
+					case __( "yr", "mstw-loc-domain" ):
+						$k = '_mstw_tr_year';
+						break;
+					case __( "experience", "mstw-loc-domain" ):
+					case __( "exp", "mstw-loc-domain" ):
+						$k = '_mstw_tr_experience';
+						break;
+					case __( "home town", "mstw-loc-domain" ):
+						$k = '_mstw_tr_home_town';
+						break;
+					case __( "country", "mstw-loc-domain" ):
+						$k = '_mstw_tr_country';
+						break;
+					case __( "last school", "mstw-loc-domain" ):
+						$k = '_mstw_tr_last_school';
+						break;
+				}
+				
+				$ret = update_post_meta( $post_id, $k, $v );	
+				
+				echo '<p>retval = '. $ret . ' ID: ' . $post_id . ' K: ' . $k . ' V: ' . $v . '</p>';
+            }
+        }
+    }
+
+    /**
+     * Delete BOM from UTF-8 file.
+     *
+     * @param string $fname
+     * @return void
+     */
+    function stripBOM($fname) {
+        $res = fopen($fname, 'rb');
+        if (false !== $res) {
+            $bytes = fread($res, 3);
+            if ($bytes == pack('CCC', 0xef, 0xbb, 0xbf)) {
+                $this->log['notice'][] = 'Getting rid of byte order mark...';
+                fclose($res);
+
+                $contents = file_get_contents($fname);
+                if (false === $contents) {
+                    trigger_error('Failed to get file contents.', E_USER_WARNING);
+                }
+                $contents = substr($contents, 3);
+                $success = file_put_contents($fname, $contents);
+                if (false === $success) {
+                    trigger_error('Failed to put file contents.', E_USER_WARNING);
+                }
+            } else {
+                fclose($res);
+            }
+        } else {
+            $this->log['error'][] = 'Failed to open file, aborting.';
+        }
+    }
 }
-*/
+?>
