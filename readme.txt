@@ -203,6 +203,8 @@ Individual player photos are entered as the Featured Image on the Player Edit sc
 No featured image is found, the single player page and the player gallery page will look for the file default-photo-team-slug.jpg in the plugin's /images directory. So you can set a different default images (usually the team's logo) for each team. If that file is not found, the single player page and the player gallery page will use the default-photo.jpg image from the plugin's /images directory. Out of the box, the default is a "mystery man". You use an FTP program to replace it with another image of your choosing, your team logo, say. Your replacement default-photo.jpg file **MUST** use that name and should be 150px by 150px by default.  
 
 = Loading rosters from CSV files =
+Thanks to 'dvkob' for the great CSVImporter plugin (http://wordpress.org/extend/plugins/csv-importer/). I simplified this pluging (greatly) for this specific use. Team Rosters can be imported via this plugin, but the roster format in Excel would change dramatically from what one would normally view. I also include and use the File_CSV_Datasource class by Kazuyoshi Tlacaelel exactly as it was found in the CSV Importer plugin. **All their GNU/MIT copyrights are passed through.**
+
 New in version 2.0 is the ability to load team rosters from files in CSV format. This allows teams to load their roster from an Excel spreadsheet, which is often used to create the printed roster. However, some rules apply. Sample CSV files are avaliable in the plugins /csv-examples directory. I recommend you get these examples to work, then copy them for your own needs. 
 
 **Rule 1:** The Team must exist in the Teams taxonomy before the roster can be uploaded. Note that hierarchical entries are not supported. Create the team using the Players->Teams screen. [All teams are at the top level of the taxonomy, for example, teams->baseball->giants does not work.]
@@ -241,6 +243,9 @@ CVS Column Header -> Database Field
 6. Sample Player Gallery page
 
 == Changelog ==
+
+= 2.0.1 =
+* One include file was omitted from the build. That file is only needed for the CSV import function, which won't run without it.
 
 = 2.0 =
 * Added the ability to import rosters from CSV files
