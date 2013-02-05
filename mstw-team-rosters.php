@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Team Rosters
-Plugin URI: http://wordpress.org/extend/plugins/
+Plugin URI: http://wordpress.org/extend/plugins/team-rosters/
 Description: The Team Rosters Plugin defines a custom type - Player - for use in the MySportTeamWebite framework. It generates a roster table view and player bio view.
 Version: 2.0
 Author: Mark O'Donnell
