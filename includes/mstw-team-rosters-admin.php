@@ -34,6 +34,9 @@
  
  * 20130129-MAO: 
  *	(1)	Added theme support for thumbnails
+ *
+ * 20130202-MAO: 
+ *	(1)	Added content/controls for baseball formats
  *-------------------------------------------------------------------------------------*/
 
 // --------------------------------------------------------------------------------------
@@ -1192,9 +1195,9 @@ class MSTWImporterPlugin {
 		extract( $options );
 		
 		// Check that a team has been selected
-		/*echo '<p>$opt_cat(ID): ' . $opt_cat;
+		echo '<p>$opt_cat(ID): ' . $opt_cat;
 		$term = get_term_by( 'id', $opt_cat, 'teams' );
-		echo ' Team slug: ' . $term->slug . '</p>';*/
+		echo ' Team slug: ' . $term->slug . '</p>';
 		if ( $term ) {
 			echo 'Team slug: ' . $term->slug . '</p>';
 		}
@@ -1210,9 +1213,13 @@ class MSTWImporterPlugin {
             return;
         }
 
-        //echo '<p> Loading DataSource ... </p>';
-        require_once 'DataSource.php';
-		//echo '<p> Done </p>';
+        echo '<p> Loading DataSource ... </p>';
+		if ( !class_exists( 'File_CSV_DataSource' ) ) {
+			require_once 'DataSource.php';
+			echo '<p> Done. </p>';
+		} else {
+			echo '<p> Alrady loaded. </p>';
+		}
 
         $time_start = microtime(true);
         $csv = new File_CSV_DataSource;
@@ -1280,12 +1287,13 @@ class MSTWImporterPlugin {
         }
 		
 		$temp_title = '';
-		
+		echo '<p>First Name: ' . $data['First Name'] . '</p>';
 		if ( $data['First Name'] != '' ) {
 			$temp_title .= $data['First Name'];
 		} else if ( $data['First'] != '' ) {
 			$temp_title .= $data['First'];
 		}
+		echo '<p>Last Name: ' . $data['Last Name'] . '</p>';
 		if ( $data['Last Name'] != '' ) {
 			if ( $temp_title != '' ) //add a space between the names
 				$temp_title .= ' ';
