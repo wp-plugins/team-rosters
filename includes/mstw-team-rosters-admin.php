@@ -61,28 +61,23 @@
 	}
 
 // ----------------------------------------------------------------
-// Make sure the Feature Image meta is active for the player custom post type
+/* Make sure the Feature Image meta is active for the player custom post type
 
 	add_action( 'after_setup_theme', 'mstw_tr_add_feat_img' );
 	
 	function mstw_tr_add_feat_img( ) {
-		if ( function_exists( 'add_theme_support' ) )
+		if ( function_exists( 'add_theme_support' ) ) {
 			add_theme_support( 'post-thumbnails', array( 'player' ) );
+		}
 	}
+*/
+
 // ----------------------------------------------------------------
 // Create the meta box for the Team Roster custom post type
 
 	add_action( 'add_meta_boxes', 'mstw_tr_add_meta' );
 
 	function mstw_tr_add_meta () {
-	
-		/* This is an attempt to move the player meta box above the 
-			content editor box
-		global $_wp_post_type_features;
-		if (isset($_wp_post_type_features['post']['editor']) && 
-					$_wp_post_type_features['post']['editor']) {
-			unset($_wp_post_type_features['post']['editor']);
-		} */
 		
 		add_meta_box(	'mstw-tr-meta', 
 						__('Player', 'mstw-loc-domain'), 
@@ -411,9 +406,8 @@ function mstw_tr_add_page( ) {
 						
 
     //require_once ABSPATH . '/wp-admin/admin.php'; - not needed?
-    $plugin = new MSTWImporterPlugin;
-    //add_management_page('edit.php', 'CSV Importer', 'manage_options', __FILE__,
-        //array($plugin, 'form'));
+    $plugin = new MSTW_TR_ImporterPlugin;
+    
 	add_submenu_page(	'edit.php?post_type=player',
 						'Import Roster from CSV File',			//page title
 						'CSV Roster Import',					//menu title
@@ -439,8 +433,9 @@ function mstw_tr_load_scripts() {
 						);
 }
 
-// --------------------------------------------------------------------------------------
+// ----------------------------------------------------------------
 // Render the option page
+// ----------------------------------------------------------------
 function mstw_tr_option_page() {
 	?>
 	<div class="wrap">
@@ -448,17 +443,21 @@ function mstw_tr_option_page() {
 		<h2>Team Rosters Plugin Settings</h2>
 		<?php //settings_errors(); ?>
 		<form action="options.php" method="post">
-			<?php settings_fields('mstw_tr_options'); ?>
-			<?php do_settings_sections('mstw_tr_settings'); ?>
+			<?php settings_fields( 'mstw_tr_options' ); ?>
+			<?php do_settings_sections( 'mstw_tr_settings' ); ?>
+			<p>
 			<input name="Submit" type="submit" class="button-primary" value="Save Changes" />
+			</p>
 		</form>
 	</div>
 	<?php
 }
 
-// --------------------------------------------------------------------------------------
+// ----------------------------------------------------------------
 // Register and define the settings
+// ----------------------------------------------------------------
 add_action('admin_init', 'mstw_tr_admin_init');
+
 function mstw_tr_admin_init(){
 	register_setting(
 		'mstw_tr_options',
@@ -1018,21 +1017,52 @@ function mstw_tr_validate_options( $input ) {
 		} // end if
 	} // end foreach
 	
+	// Store the .css file
+	// first check to see if the user wants to use the settings
+
+	/*$use_settings = false;
+	if ( $use_settings ) {
+		if ( $built = mstw_tr_build_styles( $output ) ) {
+			//echo '<p> We built the stylesheet </p>';
+			add_settings_error( 'mstw_tr_css',
+								'mstw_tr_css_error',
+								'Built stylesheet = ' . $built,
+								'error' );
+		}
+	}*/
+	
 	// Return the array processing any additional functions filtered by this action
 	return apply_filters( 'sandbox_theme_validate_input_examples', $output, $input );
+	//return $output;
 }
+
+// Build and save the stylesheet from the settings
+// $settings is the output array of valid theme settings
+/*function mstw_tr_build_styles( $settings ) {
+	//echo '<p> We be building the stylesheet </p>';
+	$ss_dir = WP_PLUGIN_DIR . '/team-rosters/css'; //get_stylesheet_directory(); // Shorten code, save 1 call
+	//echo '<p> Plugin Directory: ' . WP_PLUGIN_DIR . '/team-rosters/css ' . ' </p>';
+	//die;
+	ob_start(); // Capture all output (output buffering)
+	require($ss_dir . '/dynamic.php'); // Generate CSS
+	$css = ob_get_clean( ); // Get generated CSS (output buffering)
+	//$css = 'go Bears!';
+	file_put_contents($ss_dir . '/mstw-tr-style.css', $css, LOCK_EX); // Save it
+	
+	return true;
+}*/
 
 function mstw_tr_admin_notices() {
     settings_errors( );
 }
 add_action( 'admin_notices', 'mstw_tr_admin_notices' );
 
-// --------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // CSV Importer Class
-// --------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------
-class MSTWImporterPlugin {
+// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
+class MSTW_TR_ImporterPlugin {
     var $defaults = array(
         'csv_post_title'      => null,
         'csv_post_post'       => null,
@@ -1051,11 +1081,6 @@ class MSTWImporterPlugin {
     /**
      * Determine value of option $name from database, $default value or $params,
      * save it to the db if needed and return it.
-     *
-     * @param string $name
-     * @param mixed  $default
-     * @param array  $params
-     * @return string
      */
     function process_option( $name, $default, $params ) {
         if ( array_key_exists( $name, $params ) ) {
@@ -1092,7 +1117,6 @@ class MSTWImporterPlugin {
     /**
      * Plugin's admin user interface
      *
-     * @return void
      */
     function form( ) {
         
