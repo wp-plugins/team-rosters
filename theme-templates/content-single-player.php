@@ -19,6 +19,9 @@
  * 20130202-MAO:
  *	(1) Added support for baseball formats 
  *
+ * 20130422-MAO:
+ *	(1) Changed the thumbnail support to 'full'. Actual size needs to be set
+ *		in WordPress->General Settings->Media
  -----------------------------------------------------------------------*/
 ?>
 
@@ -65,22 +68,15 @@
 			<?php 
 			// Check the settings for the height and width of the photo
 			// Default is 150 x 150
-			if ( $sp_image_width == '' ) {  // no setting provided
-				$img_width = '150';
-			} else {
-				$img_width = $sp_image_width;
-			}
-			
-			if ( $sp_image_height == '' ) {  // no setting provided
-				$img_height = '150';
-			} else {
-				$img_height = $sp_image_height;
-			}
+			$img_width = ( $sp_image_width == '' ) ? 150 : $sp_image_width;
+			$img_height = ( $sp_image_height == '' ) ? 150 : $sp_image_height;
 			
 			// check if the post has a Post Thumbnail assigned to it.
-			
 			if ( has_post_thumbnail( ) ) { 
-				echo get_the_post_thumbnail( get_the_ID(), array($img_width, $img_height) );
+				//echo get_the_post_thumbnail( get_the_ID(), 'full' );
+				$photo_file_url = wp_get_attachment_thumb_url( get_post_thumbnail_id() );
+				$alt = 'Photo of ' . $first_name . ' ' . $last_name;
+				//echo '<p>Photo File: ' . $photo_file_url . '</p>';
 			} else {
 				// Default image is tied to the team taxonomy. 
 				// Try to load default-photo-team-slug.jpg, If it does not exst,
@@ -92,9 +88,11 @@
 				else {
 					$photo_file_url = plugins_url() . '/team-rosters/images/default-photo' . '.jpg';
 				}
+				$alt = 'Default Player Photo';
 				
-				echo( '<img src=' . $photo_file_url . ' alt="Default Player Photo" width="' . $img_width . '" height="' . $img_height . '" />' );
+				//echo( '<img src=' . $photo_file_url . ' alt="Default Player Photo" width="' . $img_width . '" height="' . $img_height . '" />' );
 			}
+			echo( '<img src="' . $photo_file_url . '" alt="' . $alt . '" width="' . $img_width . '" height="' . $img_height . '" />' );
 			?>
 		</div> <!-- #player-photo -->
 		
