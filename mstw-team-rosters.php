@@ -70,9 +70,9 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 // ----------------------------------------------------------------
 // Want to show player post type on category pages
 
-	add_filter( 'pre_get_posts', 'my_get_posts' );
+	add_filter( 'pre_get_posts', 'mstw_tr_get_posts' );
 
-	function my_get_posts( $query ) {
+	function mstw_tr_get_posts( $query ) {
 		// Need to check the need for this first conditional ... someday
 		if ( is_category() && $query->is_main_query() )
 			$query->set( 'post_type', array( 'post', 'player' ) ); 
@@ -177,6 +177,21 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 //		
 // --------------------------------------------------------------------------------------
 
+// First want to make sure thumbnails are active in the theme before adding them via the 
+//	register_post_type call in the 'init' action
+
+	add_action( 'after_setup_theme', 'mstw_tr_add_feat_img' );
+	
+	function mstw_tr_add_feat_img( ) {
+		if ( function_exists( 'add_theme_support' ) and function_exists( 'get_theme_support' ) ) {
+			if ( get_theme_support( 'post-thumbnails' ) === false ) {
+				add_theme_support( 'post-thumbnails' );
+			}
+		}
+	}
+
+
+// Add the player custom post type
 add_action( 'init', 'mstw_tr_register_post_types' );
 
 function mstw_tr_register_post_types() {
