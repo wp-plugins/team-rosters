@@ -1,0 +1,217 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Team Rosters\n"
+"POT-Creation-Date: 2012-12-17 16:09-0800\n"
+"PO-Revision-Date: 2012-12-17 16:10-0800\n"
+"Last-Translator: Mark O'Donnell <mark@shoalsummitsolutions.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
+"X-Poedit-Basepath: c:\\users\\mark\\documents\\shoal summit consulting\\web "
+"presence\\development site\\wp-content\\plugins\\mstw-team-rosters\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: ./includes\n"
+
+#: mstw-team-rosters.php:89
+msgid "Teams"
+msgstr ""
+
+#: mstw-team-rosters.php:90
+msgid "Team"
+msgstr ""
+
+#: mstw-team-rosters.php:223 mstw-team-rosters.php:225
+#: mstw-team-rosters.php:226
+msgid "Players"
+msgstr ""
+
+#: mstw-team-rosters.php:224 includes/mstw-team-rosters-admin.php:60
+msgid "Player"
+msgstr ""
+
+#: mstw-team-rosters.php:227 mstw-team-rosters.php:228
+msgid "Add New Player"
+msgstr ""
+
+#: mstw-team-rosters.php:229
+msgid "Edit Player"
+msgstr ""
+
+#: mstw-team-rosters.php:230
+msgid "New Player"
+msgstr ""
+
+#: mstw-team-rosters.php:231
+msgid "View Player"
+msgstr ""
+
+#: mstw-team-rosters.php:232
+msgid "Search Players"
+msgstr ""
+
+#: mstw-team-rosters.php:233
+msgid "No player found"
+msgstr ""
+
+#: mstw-team-rosters.php:234
+msgid "No player found in trash"
+msgstr ""
+
+#: mstw-team-rosters.php:235
+msgid "All Players"
+msgstr ""
+
+#: mstw-team-rosters.php:365
+msgid "Nbr"
+msgstr ""
+
+#: mstw-team-rosters.php:366
+msgid "Name"
+msgstr ""
+
+#: mstw-team-rosters.php:367 includes/mstw-team-rosters-admin.php:252
+#: theme-templates/content-single-player.php:69
+msgid "Position"
+msgstr ""
+
+#: mstw-team-rosters.php:368 includes/mstw-team-rosters-admin.php:253
+msgid "Height"
+msgstr ""
+
+#: mstw-team-rosters.php:369 includes/mstw-team-rosters-admin.php:254
+msgid "Weight"
+msgstr ""
+
+#: mstw-team-rosters.php:374 mstw-team-rosters.php:378
+#: includes/mstw-team-rosters-admin.php:255
+#: theme-templates/content-single-player.php:74
+#: theme-templates/content-single-player.php:86
+msgid "Year"
+msgstr ""
+
+#: mstw-team-rosters.php:379 mstw-team-rosters.php:385
+msgid "Exp"
+msgstr ""
+
+#: mstw-team-rosters.php:380
+msgid "Hometown (Last School)"
+msgstr ""
+
+#: mstw-team-rosters.php:384 theme-templates/content-single-player.php:80
+msgid "Age"
+msgstr ""
+
+#: mstw-team-rosters.php:386
+msgid "Last School (Country)"
+msgstr ""
+
+#: mstw-team-rosters.php:530
+msgid "Sorry, No players found for team: "
+msgstr ""
+
+#: includes/mstw-team-rosters-admin.php:111
+#: includes/mstw-team-rosters-admin.php:249
+msgid "First Name"
+msgstr ""
+
+#: includes/mstw-team-rosters-admin.php:116
+#: includes/mstw-team-rosters-admin.php:250
+msgid "Last Name"
+msgstr ""
+
+#: includes/mstw-team-rosters-admin.php:248
+msgid "Title"
+msgstr ""
+
+#: includes/mstw-team-rosters-admin.php:251
+msgid "Number"
+msgstr ""
+
+#: includes/mstw-team-rosters-admin.php:256
+#: theme-templates/content-single-player.php:75
+#: theme-templates/content-single-player.php:81
+msgid "Experience"
+msgstr ""
+
+#: includes/mstw-team-rosters-admin.php:500
+msgid "Enter your single player page settings. "
+msgstr ""
+
+#: includes/mstw-team-rosters-admin.php:500
+#: includes/mstw-team-rosters-admin.php:505
+msgid ""
+"All color values are in hex, starting with a hash(#), followed by either 3 "
+"or 6 hex digits. For example, #123abd or #1a2."
+msgstr ""
+
+#: includes/mstw-team-rosters-admin.php:505
+msgid "Enter your team roster table settings."
+msgstr ""
+
+#: theme-templates/content-single-player.php:70
+msgid "Ht"
+msgstr ""
+
+#: theme-templates/content-single-player.php:70
+msgid "Wt"
+msgstr ""
+
+#: theme-templates/content-single-player.php:76
+msgid "Hometown"
+msgstr ""
+
+#: theme-templates/content-single-player.php:77
+#: theme-templates/content-single-player.php:82
+msgid "Last School"
+msgstr ""
+
+#: theme-templates/content-single-player.php:83
+msgid "Country"
+msgstr ""
+
+#: theme-templates/content-single.php:33
+msgid "Pages:"
+msgstr ""
+
+#: theme-templates/content-single.php:39 theme-templates/content-single.php:42
+msgid ", "
+msgstr ""
+
+#: theme-templates/content-single.php:44
+#, php-format
+msgid ""
+"This entry was posted in %1$s and tagged %2$s by <a href=\"%6$s\">%5$s</a>. "
+"Bookmark the <a href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark"
+"\">permalink</a>."
+msgstr ""
+
+#: theme-templates/content-single.php:46
+#, php-format
+msgid ""
+"This entry was posted in %1$s by <a href=\"%6$s\">%5$s</a>. Bookmark the <a "
+"href=\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark\">permalink</a>."
+msgstr ""
+
+#: theme-templates/content-single.php:48
+#, php-format
+msgid ""
+"This entry was posted by <a href=\"%6$s\">%5$s</a>. Bookmark the <a href="
+"\"%3$s\" title=\"Permalink to %4$s\" rel=\"bookmark\">permalink</a>."
+msgstr ""
+
+#: theme-templates/content-single.php:61
+msgid "Edit"
+msgstr ""
+
+#: theme-templates/content-single.php:69
+#, php-format
+msgid "About %s"
+msgstr ""
+
+#: theme-templates/content-single.php:73
+#, php-format
+msgid "View all posts by %s <span class=\"meta-nav\">&rarr;</span>"
+msgstr ""
