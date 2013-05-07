@@ -4,7 +4,7 @@ Donate link: http://shoalsummitsolutions.com
 Tags: sports,games,roster,sports teams,team roster,sports roster,sports team roster  
 Requires at least: 3.4.2
 Tested up to: 3.5
-Stable tag: 2.0.1
+Stable tag: 2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -182,6 +182,9 @@ As of version 2.0, there are several ways to accomplish this. First, you can tur
 == Usage Notes ==
 *I recommend that you use the test pages on http://shoalsummitsolutions.com/dev as guides to compare what works with what doesn't.*
 
+= Help me seek out and destroy a dastardly bug! =
+It has been reported that sometimes the data for one or more players simply disappears!? I have seen this problem on my development site once and it was when I was working on the Featured Images / Thumbnails for version 2.1. Others report it happens when editting player bios. Whatever I've tried I cannot consistently repeat the error, and therefore I can't pinpoint the cause. If you have seen this error, please let me know (mark@shoalsummitsolutions.com). Thanks.  
+
 = The single-player.php template and the single player view =
 The single player pages are linked from the names in the roster table. You can deactivate those links in the plugin settings. If you wish to use the single player view, you must copy both the single-player.php and the content-single-player.php templates from the plugins /theme-templates directory to your theme's main directory. The links in the roster table are of the form:
 `your-base-url/players/player-slug/?format=your-format`
@@ -243,6 +246,12 @@ CVS Column Header -> Database Field
 6. Sample Player Gallery page
 
 == Changelog ==
+
+= 2.1 =
+* Re-factored the featured image (thumbnail) activation code to avoid conflicts with another plugin. (Thanks, Razz.)
+* In the process, modified the theme settings so that the player photo width and height settings would always be honored. The default remains 150x150px regardless of how the thumbnail sizes are set in the theme.
+* Corrected another conflict with some themes due to my horrible choice of the function name - my_get_posts(). Shame on me ... it's now mstw_tr_get_posts(). Doh!
+
 
 = 2.0.1 =
 * One include file was omitted from the build. That file is only needed for the CSV import function, which won't run without it.
