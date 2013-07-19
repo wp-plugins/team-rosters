@@ -13,7 +13,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
  *------------------------------------------------------*/
  
 /* player-header contains player photo and information */
-header#player-header {
+header.player-header {
 	/* admin settings will override these first two colors */
 	/*background-color: #ffc831; 			/*MC Football - yellow */
 	/*color: #b8202e; 						/*MC Football - red */
@@ -107,7 +107,7 @@ td.rt-col {
  *	player-bio contains whatever is in the post content 
  *	bio, stats, etc.
  */			
-#player-bio {
+.player-bio {
 	clear: both;
 	border-style: solid;
 	border-width: 2px;
@@ -116,7 +116,7 @@ td.rt-col {
 	border-color: #1982d1; 				/*Twentyeleven Default - lt blue */
 }
 
-#player-bio h1 {
+.player-bio h1 {
 	padding: 0 15px;
 	font-size: 18px;
 	font-weight: bold;
@@ -126,7 +126,7 @@ td.rt-col {
 	color: #1982d1;						/*Twentyeleven Default - lt blue */
 }
 
-#player-bio h2 {
+.player-bio h2 {
 	padding: 0 15px;
 	font-size: 15px;
 	/*color: #b8202e; 					/*MC Football - red */
@@ -134,7 +134,7 @@ td.rt-col {
 	color: #000;						/*MS Default - black */
 }
 
-#player-bio h3 {
+.player-bio h3 {
 	padding: 0 15px;
 	font-size: 13px;
 	text-transform: uppercase;
@@ -143,7 +143,7 @@ td.rt-col {
 	color: #000;						/*MS Default - black */
 }
 
-#player-bio p {
+.player-bio p {
 	padding: 0 15px;
 	font-size: 12px;
 	margin-bottom: 1.0em;
@@ -222,7 +222,7 @@ tr.mstw-tr-odd td, tr.mstw-tr-even td {
 	/*border: #000 solid 1px;				/*MC Football - sample */
 	/*border: #00004f solid 1px;			/*MCS Athletics - sample */
 }
-
+ 
 /*-------------------------------------------------------	
  *	"Teams/team-slug" taxonomy page - creates 'gallery page' 
  *------------------------------------------------------*/
@@ -232,7 +232,7 @@ tr.mstw-tr-odd td, tr.mstw-tr-even td {
 	width: 84.8%;
 }
 
-h1#team-head-title {
+h1.team-head-title {
 	font-size: 28px;
 	color: #5899E6;						/*MCS Athletics - sample */
 }
@@ -278,4 +278,187 @@ h1#team-head-title {
 	padding: 0 5px 5px 5px;
 }
 
+/*-------------------------------------------------------	
+ *	Special stuff for sf-giants 
+ *------------------------------------------------------*/
+ /*sf-giants roster table [shortcode]*/
+ .mstw-tr-table.mstw-tr-table-sf-giants {
+	border-bottom: 1px solid #555;
+	}
+	
+ .mstw-tr-table.mstw-tr-table-sf-giants th.mstw-tr-table-head {
+	color: #f59e19; /*orange;*/
+	background-color: black;
+	}
+	
+.mstw-tr-table.mstw-tr-table-sf-giants td.mstw-tr-odd {
+	color: black;
+	background-color: #f59e19; /*orange;*/
+	border-top: 1px solid #555;
+	}
+	
+.mstw-tr-table.mstw-tr-table-sf-giants td.mstw-tr-even {
+	color: black;
+	background-color: #fcdaa6; /*light orange*/
+	border-top: 1px solid #555;
+	}
+	
+.mstw-tr-table.mstw-tr-table-sf-giants td.mstw-tr-odd a ,
+.mstw-tr-table.mstw-tr-table-sf-giants td.mstw-tr-even a{
+	color: #555;
+	}
+
+/*sf-giants single player bio page*/	
+header.player-header.player-header-sf-giants {
+	background-color: #f59e19;  /*orange*/
+	color: #000;
+}
+
+h1.mstw_tr_roster_title.mstw_tr_roster_title_sf-giants {
+	color: black;
+}
+
+h1.player-head-title.player-head-title-sf-giants {
+	color: #000;
+}
+
+.player-bio-sf-giants {
+	border-color: #f59e19;  /*orange*/
+}
+
+.player-bio.player-bio-sf-giants h1 {
+	color: #000;
+}
+
+.player-bio.player-bio-sf-giants p {
+	color: #000;
+}
+
+/*sf-giants player gallery (taxonomy) page*/	
+/*.player-tile.player-tile-sf-giants {*/
+.player-tile-sf-giants {
+	background-color: #f59e19;  /*orange*/
+	color: black;
+}
+
+.player-tile.player-tile-sf-giants a {
+	color: gray;
+}
+
+h1.team-head-title.team-head-title-sf-giants {
+	color: #000;
+	font-weight: bold;
+}
+
+.player-tile-sf-giants .player-name-number {
+	color: #000;
+}
+	
+/*-------------------------------------------------------	
+ *	Special stuff for celts 
+ *------------------------------------------------------*/
+ .mstw-tr-table.mstw-tr-table-celts {
+	border-bottom: 1px solid #000;
+	}
+	
+ .mstw-tr-table.mstw-tr-table-celts th.mstw-tr-table-head {
+	color: white;
+	background-color: #028249; /*green*/
+	}
+	
+.mstw-tr-table.mstw-tr-table-celts td.mstw-tr-odd {
+	color: #028249; /*green*/
+	background-color: #fff;
+	border-top: 1px solid #000;
+	}
+	
+.mstw-tr-table.mstw-tr-table-celts td.mstw-tr-even {
+	color: white;
+	background-color: #028249; /*green*/
+	border-top: 1px solid #000;
+	}
+	
+.mstw-tr-table.mstw-tr-table-celts td.mstw-tr-odd a {
+	color: #028249; /*green*/
+	text-decoration: underline;
+	}
+	
+.mstw-tr-table.mstw-tr-table-celts td.mstw-tr-even a {
+	color: white;
+	text-decoration: underline;
+	}
+
+/*-------------------------------------------------------	
+ *	Special stuff for cal-bears 
+ *------------------------------------------------------*/
+ .mstw-tr-table.mstw-tr-table-cal-bears {
+	border-bottom: 1px solid #A2AAAD;
+	}
+	
+ .mstw-tr-table.mstw-tr-table-cal-bears th.mstw-tr-table-head {
+	color: #FEC524; /*gold*/
+	background-color: #002D62; /*blue*/
+	}
+	
+.mstw-tr-table.mstw-tr-table-cal-bears td.mstw-tr-odd {
+	color: #002D62; /*blue*/
+	background-color: #FEC524; /*gold*/
+	border-top: 1px solid #A2AAAD;
+	}
+	
+.mstw-tr-table.mstw-tr-table-cal-bears td.mstw-tr-even {
+	color: #FEC524; /*gold*/
+	background-color: #002D62; /*blue*/
+	border-top: 1px solid #A2AAAD;
+	}
+	
+.mstw-tr-table.mstw-tr-table-cal-bears td.mstw-tr-odd a,
+.mstw-tr-table.mstw-tr-table-cal-bears td.mstw-tr-even a {
+	color: #A2AAAD; /*gray*/
+	}
+	
+/*cal-bears single player bio page*/	
+header.player-header.player-header-cal-bears {
+	background-color: #002D62; /*blue*/
+	color: #FEC524; /*gold*/
+}
+
+.player-header-cal-bears #player-name-nbr {
+	color: #FEC524; /*gold*/
+}
+
+h1.player-head-title.player-head-title-cal-bears {
+	color: #002D62; /*blue*/
+}
+
+.player-bio.player-bio-cal-bears {
+	border-color: #002D62; 		/*blue*/
+	background-color: #AFB7BA; 	/*gray*/
+	color: #002D62; 			/*blue*/
+}
+
+.player-bio.player-bio-cal-bears h1 {
+	color: #002D62; /*blue*/ 
+}
+
+
+/*cal-bears player gallery (taxonomy) page*/	
+
+.player-tile.player-tile-cal-bears {
+	background-color: #002D62; /*blue*/
+	color: #FEC524; /*gold*/
+}
+
+h1.team-head-title.team-head-title-cal-bears {
+	color: #002D62; /*blue*/
+	font-weight: bold;
+}
+
+.player-tile-cal-bears .player-name-number {
+	color: #FEC524; /*gold*/
+}
+
+.player-tile.player-tile-cal-bears a {
+color: #AFB7BA; /*gray*/
+}
 

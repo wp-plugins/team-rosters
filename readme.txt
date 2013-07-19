@@ -13,15 +13,23 @@ Manages multiple sports team rosters. Displays tabular rosters, a single player 
 
 == Description ==
 
-The Team Rosters plugin creates a custom post type (player), installs an editor for this post type, and provides a shortcode to display rosters as simple html tables. Page templates are provided to offer a single player view and a team 'player gallery' view of the roster. Players are assigned to team rosters using a custom taxonomy for teams. The plugin supports as many players and team rosters as needed.
+Welcome to the MSTW Team Rosters Plugin from [Shoal Summit Solutions](http://shoalsummitsolutions.com/).
 
-**NEW IN VERSION 2.0** is the ability to upload team rosters from CSV files. See the *Usage Notes* section for complete details.
+The MSTW Team Rosters plugin manages rosters for multiple teams. It provides roster tables with built-in formats for high school, college, and professional teams as well as custom roster formats for basball. Players are assigned to team rosters using a custom taxonomy for teams. The plugin supports as many players and team rosters as needed. It provides several views of team rosters including: a table (via a shortcode), a player gallery (via a custom taxonomy template), and single player bio (via a custom post type template). Samples of all of the above displays are available on the [Shoal Summit Solutions Plugin Development Site](http://shoalsummitsolutions.com/dev).
 
-A shortcode adds team rosters to your site in six tabular formats. (screenshot-3). A custom template (single-player.php) displays an individual player in a 'player bio' format (screenshot-4). A custom template (taxomony-teams.php) displays a team as a 'player gallery' (screenshot-6). [Read the Installation Instructions, FAQs, and Usage Notes for how to get these pages working properly.]
+The following features enhance the user experience on both the front and back ends:
 
-The look of roster tables and player bios can be customized using the plugin's settings (screenshot-5) or by editting the plugin's stylesheet (/css/mstw-tr-style.css). The admin settings override the stylesheet rules. So if you choose to hack the stylesheet, you may want to clear all the stylesheet related settings on the admin settings screen.
+VERSION 3.0 HAS BEEN COMPLETELY REFACTORED TO PROVIDE SIGNIFICANT NEW FUNCTIONALITY AS OUTLINED BELOW. If you are upgrading you will want to read the installation update documentation carefully. The following features enhance the user experience on both the front and back ends: 
+* You can now filter the "All Players" table on the admin screen by team.
+* Configure table columns and data fields to meet your requirements. You and show/hide all columns (except Player Name) and change the header/label of all columns and data fields. 
+* Additional color settings have been provided on the admin settings screen, and the code to apply these settings has been re-factored to improve performance.
+* The new WordPress Color Selector has been added to the admin settings screen.
+* Additional CSS tags have been added to the display code to allow any team's rosters to be uniquely styled via the plugin's stylesheet. This functionality supports websites with multiple teams (schools or clubs) with multiple colors. 
+* The player name format can now be controlled on the admin setting screen. Several formats are available, but most importantly a first name only format is now available to address privacy concerns.
 
-The plugin is internationalized and ready for translation. I am happy to help translators.
+So while the six built-in roster formats remain (high-school, college, pro, baseball-high-school, baseball-college, and baseball-pro), roster and player displays are highly configurable. So between the settings and the stylesheets, you can take (almost) complete control of your displays.
+
+The plugin is internationalized and ready for translation. The current translations in the /lang directory now require updating, especially for the extensive additions to the admin screens. I am happy to help translators.
 
 Use the Edit Player screen (screenshot-2) to enter player information. The available fields are:
 
@@ -44,32 +52,28 @@ Use the Edit Player screen (screenshot-2) to enter player information. The avail
 
 * TEAMS (category): Select the team(s) the player is on.
 
-* FEATURED IMAGE: If you are using the player bios, add the player's photo as the Featured Image. The default size for player photos is 150px by 150px; that can be changed in the admin settings.
+* FEATURED IMAGE: If you are using the player bios, add the player's photo as the Featured Image. The default size for player photos is 150px by 150px; that can be changed in the admin settings. Note however, that the uploaded images much match the specified size or they may be distorted, compressed, or pixelated.
 
 **Team Roster Shortcode**
 
-Game rosters are displayed via the shortcode [mstw-tr-roster] (screenshot-2), which accepts the following arguments:
+Game rosters are displayed via the shortcode [mstw-tr-roster] (screenshot-2), which may be customized via a large number of arguments. Please refer to the [Shoal Summit Solutions website](http://shoalsummitsolutions.com/) for complete information about the [shortcode] arguments and the display settings.
  
-1. team. REQUIRED. Use team=the-team-permalink to specific which roster to show. 
+Only one argument is REQUIRED by the [mstw-tr-roster] shortcode, and that is team = team-slug. Use team-slug, not the team name. So insert [mstw-tr-roster team=team-slug] onto a page or post to get a basic roster. From there, the roster is controlled by the settings on the Display Settings admin screen, other shortcode arguments, and the mstw-tr-style.css stylesheet. Note that any arguments provided to the shortcode will override the admin Display Settings. 
 
-2. roster_type. Use roster_type=pro|college|high-school|baseball-high-school|baseball-college|baseball-pro to specify the roster format. Defaults to high-school, which shows the minimum amount of player information.
+There are six built-in roster types: roster_type=pro|college|high-school|baseball-pro|baseball-college|baseball-high-school. If one of these roster types is specified it WILL OVERRIDE ALL DISPLAY SETTINGS from the admin screen.
 
-3. show_title. Use show_title=false if you want to provide your own title for the roster. Defaults to the team name.
 
-4. sort_order. Use sort_order=alpha|numeric to specify the sort order. Alphabetically by last name is the default. Numerically is the option. Note that this argument will override the corresponding setting on the admin settings page.
-
-5. show_weight. Use show_weight=show|hide to show or hide the player weight. Defaults to show. This argument will override the corresponding setting on the admin settings page.
 
 **Singular Post Template (Individual Player Bios)**
 
-The single post template - the single-player.php and content-single-player.php files - provides the "bio" view for a single player (screenshot-3).  These files are located in the plugin's theme-templates directory. Copy these files into your theme's directory if you want to use the single player view. Note that if you don't want to use this feature, you can disable the links from the shortcode's table to the individual player views from the admin settings screen. These files were originally built and tested on the WordPress twentyeleven theme, so I believe they are fairly generic, but you certainly may need to edit them for your specific theme. (If you have problems, let me know and I'll certainly try to help you if I can.)
+The single post template - the single-player.php and content-single-player.php files - provides the "bio" view for a single player (screenshot-3).  These files are located in the plugin's theme-templates directory. Copy these files into your theme's directory if you want to use the single player view. Note that if you don't want to use this feature, you can disable the links from the shortcode's table to the individual player views from the admin settings screen. These files were originally built and tested on the WordPress twentyeleven theme, so I believe they are fairly generic, but you will likely need to edit them for your specific theme. (I'll be happly to help you if I can.)
 
 **Team Taxonomy Template (Player Gallery View)**
 
-*New in release 1.1!* The team taxonomy template - taxonomy-team.php - provides the "player gallery" view for a team (screenshot-6).  This file is located in the plugin's theme-templates directory. Copy these files into your theme's directory if you want to use the player gallery view. Note that there are no links from the shortcode output to this view. You have to link to this page however you choose. This file was originally built and tested on the WordPress twentyeleven theme (and WordPress 3.5), so I believe it is fairly generic, but you certainly may need to edit it for your specific theme. (If you have problems, let me know and I'll certainly try to help you if I can.)
+The team taxonomy template - taxonomy-team.php - provides the "player gallery" view for a team (screenshot-6).  This file is located in the plugin's theme-templates directory. Copy these files into your theme's directory if you want to use the player gallery view. Note that there are no links from the shortcode output to this view. You have to link to this page however you choose. This file was originally built and tested on the WordPress twentyeleven theme (and WordPress 3.5), so I believe it is fairly generic, but you certainly may need to edit it for your specific theme. (If you have problems, let me know and I'll certainly try to help you if I can.)
 
 **Roster Views**
-As described above the roster table, single player, and taxonomy views may be set to display six formats: high-school, college, pro, baseball-high-school, baseball-college, and baseball-pro. Here are the fields that are shown in each view type:
+As described above the roster table, single player, and player gallery views may be set to display six formats: high-school, college, pro, baseball-high-school, baseball-college, and baseball-pro. Here are the fields that are shown in each view type:
 
 * High School: Number, Name, Position, Height, Weight, Year 
 * High School Baseball: Number, Name, Position, Bats/Throws, Height, Weight, Year
@@ -78,39 +82,20 @@ As described above the roster table, single player, and taxonomy views may be se
 * Pro: Number, Name, Position, Height, Weight, Age, Experience, Last School, Country
 * Pro Baseball: Number, Name, Position, Bats/Throws, Height, Weight, Age, Experience, Last School, Country
 
-**Settings**
+The roster table, single player, and player gallery views also support custom settings, which may be set on the Display Settings admin screen (see below) or, in the case of the roster table, via shortcode arguments, which duplicate the admin settings. The display settings are prioritized as follows:
+1. The six pre-programmed display formats, high-school, college, pro, etc. 
+2. The [shortcode] arguments
+3. The display settings from the admin screen
 
-The Admin Settings Page provides the following settings to customize the [shortcode] and single page displays.
+NOTE that the roster tables are more customizable and flexible than the single player or player gallery views. The single player and player gallery views are page templates and do not have [shortcode] arguments. Therefore the admin display settings will apply to ALL single player and player gallery pages which do not use one of the pre-programmed views. One implication is that if a roster table is customized via [shortcode] arguments, and links to click thru to single player views are enabled, the single player views will follow the display settings on the admin page, NOT the table's [shortcode] arguments.
 
-*Single Player View Settings*
+**Display Settings**
 
-* Show Player Weight (defaults to "show") Read more about this setting in the FAQ section.  
-* Single Player Content Title (defaults to "Player Bio")
-* Single Player Page Main Box Background Color
-* Single Player Page Main Box Text Color
+The Display Settings admin screen provides close to fifty settings to customize both the colors and formats of the roster table [shortcode], single player, and player gallery views. [See screenshot-5.] 
 
-*Roster Table [shortcode]*
+For complete documentation please visit [Shoal Summit Solutions](http://shoalsummitsolutions.com/)
 
-* Sort Roster Alphabetically (by Last Name) or Numerically
-* Roster Table Title Text Color
-* Roster Table Player Name Format ("First Last" or "Last, First")
-* Roster Table Format (high-school, pro, or college)
-* Add Links from Roster Table to Player Bios 
-* Link Text Color (links on roster table to player bios)
-* Roster Table Header Background Color
-* Roster Table Header Text Color
-* Roster Table Even Row Text Color
-* Roster Table Even Row Background Color
-* Roster Table Odd Row Text Color
-* Roster Table Odd Row Background Color
-
-*Player Gallery*
-
-* Sort Player Gallery Alphabetically (by Last Name) or Numerically
-* Add Links from Player Gallery to Player Bios
-* Note that the player name format "First Last" or "Last, First" - is inherited from the Roster Table Settings. (Don't ask me why; I guess it just seemed weird to have names displayed in different ways for the same team.)
-
-More complete control of the graphic design of the roster tables, the single player page, and the player gallery page may be obtained via the plugin's style sheet /css/mstw-tr-style.css. **Note** that the admin page settings will override the corresponding styles in the stylesheet. You must clear any admin settings to enable the corresponding stylesheet rules to take effect. (Out of the box, the admin settings should all be blank so the stylesheet rules control the default display.)
+Complete control of the graphic design of the roster tables, the single player page, and the player gallery page may be obtained via the plugin's style sheet /css/mstw-tr-style.css. **Note** that the admin page settings will override the corresponding styles in the stylesheet. You must clear any admin settings to enable the corresponding stylesheet rules to take effect. (Out of the box, the admin settings should all be blank so the stylesheet rules control the default display.)
 
 **Player Photos & Defaults**
 
@@ -118,7 +103,7 @@ See the *Usage Notes* section.
 
 **Notes:**
 
-The Team Rosters plugin is the third in a set of plugins supporting a framework for sports team websites. Others will include Game Locations and Game Schedules(both available on wordpress.org/extend/plugins/  or at shoalsummitsolutions.com), Coaching Staffs, Sponsors, Frequently Asked Questions, Users Guide, and more. If you are a developer and there is one you would really like to have, or if you would like to participate in the development of one, please let me know (mark@shoalsummitsolutions.com).
+The Team Rosters plugin is the third in a set of plugins supporting a framework for sports team websites. Others include Game Locations, Game Schedules, and League Standings (all now available on wordpress.org/extend/plugins/  or at shoalsummitsolutions.com), Coaching Staffs, Sponsors, Frequently Asked Questions, Users Guide, and more. If you are a developer and there is one you would really like to have, or if you would like to participate in the development of one, please let me know (mark@shoalsummitsolutions.com).
 
 == Installation ==
 
@@ -147,11 +132,11 @@ Basic installation the **MANUAL** way:
 1.	single-player.php
 2.	content-single-player.php
 
-See *Usage Notes* for more information.
-
 = If you plan to use the Player Gallery page, then you must copy the following file from the team-rosters/theme-templates directory to your theme's directory: =
 
 1.	taxomony-teams.php
+
+See *Usage Notes* for more information.
 
 == Frequently Asked Questions ==
 
@@ -165,7 +150,7 @@ Yes. You can assign two Team categories to one player, in which case both teams 
 The plugin supports localization as of version 2.0. If you happen to live in Split, you're in luck. The Croatian translation is contained in the /lang directory. (Thanks Juraj!)
 
 = How do I change the look (text colors, background colors, etc.) of the team roster table and/or the player bio page? =
-See the information under *Settings* above. 
+See the information under *Display Settings* on the *Description* tab. 
 
 = Can I display more than one roster on a single page by using multiple shortcodes? =
 Yes.
@@ -177,10 +162,10 @@ Maybe nothing. First, please review the installation instructions. You must copy
 You probably need to reset your permalinks. Go to your admin dashboard -> Settings -> Permalinks. Change the permalink setting and save. Then change it back. (FWIW, you probably want to use the Post-name setting, but you must change it to reset the permalinks.)
 
 = I don't want to display weights for a women's team? How can I do that? =
-As of version 2.0, there are several ways to accomplish this. First, you can turn off the weights in the admin settings screen. This will remove the weight column from ALL roster tables on your site. Then you can override the admin setting with the 'show_weight' argument in the [shortcode]. `show_weight=show|hide` will show or hide the weight column regardless of the admin setting. Finally, to remove the weight from the single player and player gallery views, just don't enter weights for the players. If a player has a blank for his or her weight then nothing will be display (or "Weight" title or data).
+As of version 3.0, there are two ways to accomplish this. First, you can hide the Show Weight column/field in the admin settings screen. This will remove the weight column from ALL roster tables on your site by default. You can override the admin setting with the 'show_weight' argument in the [shortcode]. `show_weight=0|1` will show or hide the weight column regardless of the admin setting.
 
 == Usage Notes ==
-*I recommend that you use the test pages on http://shoalsummitsolutions.com/dev as guides to compare what works with what doesn't.*
+*I recommend that you use the test pages on [my plugin development site](http://shoalsummitsolutions.com/dev) as guides to compare what works and what doesn't.*
 
 = Help me seek out and destroy a dastardly bug! =
 It has been reported that sometimes the data for one or more players simply disappears!? I have seen this problem on my development site once and it was when I was working on the Featured Images / Thumbnails for version 2.1. Others report it happens when editting player bios. Whatever I've tried I cannot consistently repeat the error, and therefore I can't pinpoint the cause. If you have seen this error, please let me know (mark@shoalsummitsolutions.com). Thanks.  
@@ -201,7 +186,7 @@ The player gallery page(s) must be linked from somewhere on your site, for examp
 The first problem many users encounter is a 404 message, which indicates that their permalinks need to be reset. See the instructions above. The next problem is that the player gallery page doesn't look right in a given theme. See the discussion above. 
 
 = Default images for player photos =
-Individual player photos are entered as the Featured Image on the Player Edit screen. See instructions above.
+Individual player photos are entered as the Featured Image on the Player Edit screen. The default size is 150x150px, which works pretty well with the current single player and player gallery templates. *NOTE* that if you choose to change the image size on the Display Settings admin screen, you MUST enter images with the new size (or at least with the same aspect ratio) or you WILL see some distortion. Also, you will probably need to modify the single player and player gallery templates and/or styles (in css/mstw-tr-styles.css) in order to get the your images to fit properly in the space provided by your theme.
 
 No featured image is found, the single player page and the player gallery page will look for the file default-photo-team-slug.jpg in the plugin's /images directory. So you can set a different default images (usually the team's logo) for each team. If that file is not found, the single player page and the player gallery page will use the default-photo.jpg image from the plugin's /images directory. Out of the box, the default is a "mystery man". You use an FTP program to replace it with another image of your choosing, your team logo, say. Your replacement default-photo.jpg file **MUST** use that name and should be 150px by 150px by default.  
 
@@ -238,20 +223,24 @@ CVS Column Header -> Database Field
 
 == Screenshots ==
 
-1. Edit All Players page
-2. Edit Single Player page
-3. Sample of shortcode display
-4. Sample of single player (bio) page
-5. Settings page
+1. Edit All Players admin page
+2. Edit Single Player admin page
+3. Sample of a Roster Table [shortcode] display
+4. Sample of Single Player (bio) page
+5. Display Settings admin page
 6. Sample Player Gallery page
+7. Teams (taxonomy) admin page
 
 == Changelog ==
+
+= 3.0 =
+*
+*
 
 = 2.1 =
 * Re-factored the featured image (thumbnail) activation code to avoid conflicts with another plugin. (Thanks, Razz.)
 * In the process, modified the theme settings so that the player photo width and height settings would always be honored. The default remains 150x150px regardless of how the thumbnail sizes are set in the theme.
 * Corrected another conflict with some themes due to my horrible choice of the function name - my_get_posts(). Shame on me ... it's now mstw_tr_get_posts(). Doh!
-
 
 = 2.0.1 =
 * One include file was omitted from the build. That file is only needed for the CSV import function, which won't run without it.

@@ -44,26 +44,179 @@
 	$throws = get_post_meta($post->ID, '_mstw_tr_throws', true );
 
 	$options = get_option( 'mstw_tr_options' );
-	$sp_main_text_color = $options['sp_main_text_color'];
-	$sp_main_bkgd_color = $options['sp_main_bkgd_color'];
+	
+	//Set the options based on the roster format
+	// Set the roster table format.  
+	if ( $_GET['format'] == '' ) {
+		$format = $options['roster_type'];
+	} else {
+		$format = $_GET['format'];
+	}
+			
+	//echo '<p>format: ' . $format . '</p>';
+		
+	switch ( $format ) {
+	case 'baseball-high-school':
+	case 'baseball-college':
+	case 'baseball-pro':
+		$show_bats_throws = 1;
+		break;
+	default:
+		$show_bats_throws = 0;
+		break;
+	}
+	
+	//echo '<h1>format: ' . $format . '  show_bats_throws: ' . $show_bats_throws . '</h1>';
+		
+	switch ( $format ) {
+		case 'baseball-high-school':
+		case 'high-school':
+			$settings = array(	
+				//'team'					=> 'no-team-specified',
+				//'roster_type'			=> 'custom',
+				//'show_title'			=> 1,
+				//'sort_order'			=> 'alpha',
+				//'name_format'			=> 'last-first',
+				//'name_label'			=> __( 'Name', 'mstw-loc-domain' ),
+				'show_number'			=> 1,
+				//'number_label'			=> __( 'Number', 'mstw-loc-domain' ),
+				'show_position'			=> 1,
+				'show_height'			=> 1,
+				//'height_label'			=> __( 'Height', 'mstw-loc-domain' ),
+				//'show_weight'			=> 1,
+				//'weight_label'			=> __( 'Weight', 'mstw-loc-domain' ),
+				'show_year'				=> 1,
+				//'year_label'			=> __( 'Year', 'mstw-loc-domain' ),
+				'show_experience'		=> 0,
+				//'experience_label'		=> __( 'Exp', 'mstw-loc-domain' ),
+				'show_age'				=> 0,
+				//'age_label'				=> __( 'Age', 'mstw-loc-domain' ),
+				'show_home_town'		=> 0,
+				//'home_town_label'		=> __( 'Home Town', 'mstw-loc-domain' ),
+				'show_last_school'		=> 0,
+				//'last_school_label'		=> __( 'Last School', 'mstw-loc-domain' ),
+				'show_country'			=> 0,
+				//'country_label'			=> __( 'Country', 'mstw-loc-domain' ),
+				'show_bats_throws'		=> $show_bats_throws,
+				//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-loc-domain' ),
+				'show_other_info'		=> 0,
+				//'other_info_label'		=> __( 'Other', 'mstw-loc-domain' ),
+			);
+			break;
+			
+		case 'baseball-college':
+		case 'college':
+			$settings = array(	
+				//'team'					=> 'no-team-specified',
+				//'roster_type'			=> 'custom',
+				//'show_title'			=> 1,
+				//'sort_order'			=> 'alpha',
+				//'name_format'			=> 'last-first',
+				//'name_label'			=> __( 'Name', 'mstw-loc-domain' ),
+				'show_number'			=> 1,
+				//'number_label'			=> __( 'Number', 'mstw-loc-domain' ),
+				'show_position'			=> 1,
+				'show_height'			=> 1,
+				//'height_label'			=> __( 'Height', 'mstw-loc-domain' ),
+				//'show_weight'			=> 1,
+				//'weight_label'			=> __( 'Weight', 'mstw-loc-domain' ),
+				'show_year'				=> 1,
+				//'year_label'			=> __( 'Year', 'mstw-loc-domain' ),
+				'show_experience'		=> 1,
+				//'experience_label'		=> __( 'Exp', 'mstw-loc-domain' ),
+				'show_age'				=> 0,
+				//'age_label'				=> __( 'Age', 'mstw-loc-domain' ),
+				'show_home_town'		=> 1,
+				//'home_town_label'		=> __( 'Home Town', 'mstw-loc-domain' ),
+				'show_last_school'		=> 1,
+				//'last_school_label'		=> __( 'Last School', 'mstw-loc-domain' ),
+				'show_country'			=> 0,
+				//'country_label'			=> __( 'Country', 'mstw-loc-domain' ),
+				'show_bats_throws'		=> $show_bats_throws,
+				//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-loc-domain' ),
+				'show_other_info'		=> 0,
+				//'other_info_label'		=> __( 'Other', 'mstw-loc-domain' ),
+			);		
+			break;
+		
+		case 'pro':
+		case 'baseball-pro':
+			$settings = array(	
+				//'team'					=> 'no-team-specified',
+				//'roster_type'			=> 'custom',
+				//'show_title'			=> 1,
+				//'sort_order'			=> 'alpha',
+				//'name_format'			=> 'last-first',
+				//'name_label'			=> __( 'Name', 'mstw-loc-domain' ),
+				'show_number'			=> 1,
+				//'number_label'			=> __( 'Number', 'mstw-loc-domain' ),
+				'show_position'			=> 1,
+				'show_height'			=> 1,
+				//'height_label'			=> __( 'Height', 'mstw-loc-domain' ),
+				//'show_weight'			=> 1,
+				//'weight_label'			=> __( 'Weight', 'mstw-loc-domain' ),
+				'show_year'				=> 0,
+				//'year_label'			=> __( 'Year', 'mstw-loc-domain' ),
+				'show_experience'		=> 1,
+				//'experience_label'		=> __( 'Exp', 'mstw-loc-domain' ),
+				'show_age'				=> 1,
+				//'age_label'				=> __( 'Age', 'mstw-loc-domain' ),
+				'show_home_town'		=> 0,
+				//'home_town_label'		=> __( 'Home Town', 'mstw-loc-domain' ),
+				'show_last_school'		=> 1,
+				//'last_school_label'		=> __( 'Last School', 'mstw-loc-domain' ),
+				'show_country'			=> 1,
+				//'country_label'			=> __( 'Country', 'mstw-loc-domain' ),
+				'show_bats_throws'		=> $show_bats_throws,
+				//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-loc-domain' ),
+				'show_other_info'		=> 0,
+				//'other_info_label'		=> __( 'Other', 'mstw-loc-domain' ),
+			);
+			break;
+			
+		default:  // custom roster format
+			$settings = $options;
+			break;
+	}
+	
+	//echo '<h2>ORIG OPTIONS</h2>';
+	//print_r( $settings );
+			
+	//$options = mstw_tr_set_fields( $format, $options );
+	//echo '<h2>FORMAT: ' . $format . ' OPTIONS</h2>';
+	//print_r( $settings );
+				
+	//echo '<h2>REVISED OPTIONS</h2>';
+	$options = wp_parse_args( $settings, $options );
+	//print_r( $options );
+	
+	//$sp_main_text_color = $options['sp_main_text_color'];
+	//$sp_main_bkgd_color = $options['sp_main_bkgd_color'];
 	$sp_content_title = $options['sp_content_title'];
 	$sp_image_width = $options['sp_image_width'];
 	$sp_image_height = $options['sp_image_height'];
 	
 	// Single Player Page title
+	$html = '<h1 class="player-head-title ';
 	$player_teams = wp_get_object_terms($post->ID, 'teams');
 	if( !empty( $player_teams ) ) {
 		if( !is_wp_error( $player_teams ) ) {
 			foreach( $player_teams as $team ) {
 				$team_name = $team->name;
 				$team_slug = $team->slug;
-				echo '<h1 class="player-head-title" style="color:' . $sp_main_text_color . ';">' . $team_name. '</h1>'; 
+				$html .=  'player-head-title-' . $team_slug . ' ';
+				//echo '<h1 class="player-head-title" style="color:' . $sp_main_text_color . ';">' . $team_name. '</h1>'; 
 			}
+			$html .= '">';
 		}
 	}
+	$html .= $team_name . '</h1>';
+	
+	echo $html;
 	?>
 	
-	<header id="player-header" style="color:<?php echo $sp_main_text_color . ';'?> background-color:<?php echo $sp_main_bkgd_color . ';'?> ">
+	<header class="player-header player-header-<?php echo( $team_slug ) ?>">
+		<!-- First, figure out the player's photo -->
 		<div id = "player-photo">
 			<?php 
 			// Check the settings for the height and width of the photo
@@ -92,98 +245,109 @@
 				
 				//echo( '<img src=' . $photo_file_url . ' alt="Default Player Photo" width="' . $img_width . '" height="' . $img_height . '" />' );
 			}
+			
 			echo( '<img src="' . $photo_file_url . '" alt="' . $alt . '" width="' . $img_width . '" height="' . $img_height . '" />' );
 			?>
 		</div> <!-- #player-photo -->
 		
-		<div id = "player-name-nbr">
-			<div id="number"> <?php echo $number; ?> </div>
-			<div id="player-name"><?php echo $first_name . '<br/>' . $last_name; ?></div>
+		<!-- Figure out the player name and number -->
+		<div id="player-name-nbr">
+			<?php if ( $options['show_number'] ) { ?>
+				<div id="number"> 
+					<?php echo $number; ?> 
+				</div><!-- #number -->
+			<?php } ?>
+			<div id="player-name">
+				<?php 
+				switch ( $options['name_format'] ) { 
+					case 'first-last':
+						echo $first_name . '<br/>' . $last_name;
+						break; 
+					case 'first-only':
+						echo $first_name;
+						break;
+					case 'last-only':
+						echo $first_name;
+						break;
+					default: 
+						echo $last_name . '<br/>' . $first_name; 
+						break; 
+				} 
+				?>
+			</div><!-- #player-name -->
 		
-		<!-- <div id = "player-info"> -->
-		<table id= "player-info">
-		<tbody>
-		<?php 
-			$row_start = '<tr><td class="lf-col">';
-			$new_cell = ':</td><td class="rt-col">';
-			$row_end = '</td></tr>';
-			
-			// Set the roster table format.  
-			if ( $_GET['format'] == '' ) {
-				$format = $options['tr_table_default_format'];
-			} else {
-				$format = $_GET['format'];
-			}
-			
-			// the first two rows are (now almost) the same in all formats
-			echo $row_start . __('Position', 'mstw-loc-domain') . $new_cell .  $position . $row_end;
-			if ( strpos( $format, 'baseball' ) !== false ) { //baseball format add bats/throws
-				echo $row_start . __('Bat', 'mstw-loc-domain') . '/' .  __('Thw', 'mstw-loc-domain') . $new_cell .  $bats . '/' . $throws . $row_end;
-			}
-			
-			if ( $weight == '' ) { // don't show the weight
-				echo $row_start . __('Ht', 'mstw-loc-domain') . $new_cell .  $height . $row_end;
-			} 
-			else { //show the weight
-				echo $row_start . __('Ht', 'mstw-loc-domain') . '/' .  __('Wt', 'mstw-loc-domain') . $new_cell .  $height . '/' . $weight . $row_end;
-			}
+			<table id= "player-info">
+			<tbody>
+			<?php 
+				$row_start = '<tr><td class="lf-col">';
+				$new_cell = ':</td><td class="rt-col">';
+				$row_end = '</td></tr>';
 				
-			
-			switch ( $format ) { 
-				case "college":
-				case "baseball-college":
-					echo $row_start . __('Year', 'mstw-loc-domain') . $new_cell .  $year . $row_end;
-					echo $row_start . __('Experience', 'mstw-loc-domain') . $new_cell . $experience . $row_end;
-					echo $row_start . __('Hometown', 'mstw-loc-domain') . $new_cell . $home_town . $row_end;
-					echo $row_start . __('Last School', 'mstw-loc-domain') . $new_cell . $last_school . $row_end;
-					break;
-				case "pro": 
-				case "baseball-pro":
-					echo $row_start . __('Age', 'mstw-loc-domain') . $new_cell . $age . $row_end;  
-					echo $row_start . __('Experience', 'mstw-loc-domain') . $new_cell . $experience . $row_end;
-					echo $row_start . __('Last School', 'mstw-loc-domain') . $new_cell . $last_school . $row_end;
-					echo $row_start . __('Country', 'mstw-loc-domain') . $new_cell . $country . $row_end;
-					break;
-				default: // default to high-school, the lowest common demononator
-					echo $row_start . __('Year', 'mstw-loc-domain') . $new_cell . $year . $row_end;
-					break;
-			} ?>
-		</tbody>
-		</table>
-		<!-- </div><!-- #player-info --> 
+				// the first two rows are (now almost) the same in all formats
+				if ( $options['show_position'] ) {
+					//echo $row_start . __('Position', 'mstw-loc-domain') . $new_cell .  $position . $row_end;
+					echo $row_start . $options['position_label'] . $new_cell .  $position . $row_end;
+				}
+				
+				if ( $options['show_bats_throws'] ) {
+					echo $row_start . $options['bats_throws_label']. $new_cell .  $bats . '/' . $throws . $row_end;
+				}
+				
+				// If showing both height and weight show them as height/weight
+				// Otherwise show just one or the other
+				if ( $options['show_weight'] and $options['show_weight'] ) {
+					echo $row_start . $options['height_label'] . '/' . $options['weight_label'] . $new_cell .  $height . '/' . $weight . $row_end;
+				} 
+				else  if ( $options['show_weight'] ) {
+						echo $row_start . $options['weight_label'] . $new_cell .  $weight . $row_end;
+				} 
+				else if ( $options['show_height'] ) {
+						echo $row_start . $options['height_label'] . $new_cell .  $weight . $row_end;
+				}		
+				
+				//Year
+				if ( $options['show_year'] ) {
+					echo $row_start . $options['year_label'] . $new_cell . $year . $row_end;
+				}
+				//Age
+				if ( $options['show_age'] ) {
+					echo $row_start . $options['age_label'] . $new_cell . $age . $row_end;
+				}
+				//Experience
+				if ( $options['show_experience'] ) {
+					echo $row_start . $options['experience_label'] . $new_cell . $experience . $row_end;
+				}
+				//Hometown
+				if ( $options['show_home_town'] ) {
+					echo $row_start . $options['home_town_label'] . $new_cell . $home_town . $row_end;
+				}
+				//Last School
+				if ( $options['show_last_school'] ) {
+					echo $row_start . $options['last_school_label'] . $new_cell . $last_school . $row_end;
+				}
+				//Country
+				if ( $options['show_country'] ) {
+					echo $row_start . $options['country_label'] . $new_cell . $country . $row_end;
+				}
+				?>
+			</tbody>
+			</table>
+			<!-- </div><!-- #player-info --> 
 		
 		</div><!-- #player-name-nbr -->
 		
 	</header><!-- #player-header -->
 	
-	<?php if( get_the_content( ) != "" ) { 
-		// create the player-bio div
-		$html = '<div id="player-bio" ';
-		// if color is set in admin settings, add it to the element style
-		if ( $sp_main_bkgd_color != '' ) {
-			//add the style attribute
-			$html .= 'style="border-color:' . $sp_main_bkgd_color . ';" ';
-		}
-		$html .= '>';
+	<?php if( get_the_content( ) != "" ) { ?>
 		
-		echo $html;
+		<div class="player-bio player-bio-<?php echo $team_slug; ?> ">
 		
-		// great the header for the bio
-		$html = '<h1 ';
-		
-		if ( $sp_main_text_color != '' ) {
-			//add the style attribute
-			$html .= 'style="color:' . $sp_main_text_color . ';" ';
-		}
-		if ( $sp_content_title == '' ) {
-			$sp_content_title = 'Player Bio';
-		}
-		
-		$html .= '>' . $sp_content_title . '</h1>';
-		echo $html;
+			<?php $sp_content_title = ($sp_content_title == '' ) ? __( 'Player Bio', 'mstw-loc-domain' ) : $sp_content_title; ?>
+			
+			<h1><?php echo $sp_content_title ?></h1>
 
-		//add the bio content (format it as desired in the post)
-		the_content(); ?>
+			<!--add the bio content (format it as desired in the post)-->
+			<?php the_content(); ?>
 		
 		</div><!-- #player-bio -->
 		

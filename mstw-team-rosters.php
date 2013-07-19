@@ -47,6 +47,35 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 	
 //	Who knows?	
 	$mstw_tr_msg_str = '';
+
+
+// ----------------------------------------------------------------
+// Create the mstw_tr_admin role on activation
+
+	register_activation_hook( __FILE__, 'mstw_tr_activate' );	
+
+	function mstw_tr_activate( ) {
+		$mstw_tr_msg_str;
+		$result = add_role( 'mstw_tr_admin', 'MSTW Team Rosters Admin', 
+							array(	'read'						=> true,
+									'edit_player' 				=> true,
+									'read_player' 				=> true,
+									'delete_player' 			=> true,
+									'edit_players'				=> true,
+									'edit_others_players'		=> true,
+									'edit_others_players'		=> true,
+									'publish_players'			=> true,
+									'read_private_players'		=> true,
+									'delete_players'			=> true,
+									'delete_private_players'	=> true,
+									'delete_published_players'	=> true,
+									'delete_others_players'		=> true,
+									'edit_private_players'		=> true,
+									'edit_published_players'	=> true
+									)
+									
+								);
+	}
 	
 // ----------------------------------------------------------------
 // If an admin, load the admin functions (once)
@@ -55,6 +84,113 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 		// we're in wp-admin
 		require_once ( dirname( __FILE__ ) . '/includes/mstw-team-rosters-admin.php' );
     }
+
+// ----------------------------------------------------------------
+// Load the Team Rosters utility functions (once)
+
+	if ( !function_exists( 'mstw_tr_get_defaults' ) ) {
+		// we're in wp-admin
+		require_once ( dirname( __FILE__ ) . '/includes/mstw-tr-utility-functions.php' );
+    }
+	
+// ----------------------------------------------------------------
+// Add the CSS code to the header
+
+	add_filter( 'wp_head', 'mstw_tr_add_css');
+		
+	function mstw_tr_add_css( ) {
+		//header("Content-type: text/css");
+        //echo "/* mstw_tr_add_css was here */";
+		
+		$options = get_option( 'mstw_tr_options' );
+		
+		echo '<style type="text/css">';
+		
+		echo "tr.mstw-tr-table-head { \n";
+			echo mstw_tr_build_css_rule( $options, 'tr_table_head_text_color', 'color' );
+			echo mstw_tr_build_css_rule( $options, 'tr_table_head_bkgd_color', 'background-color' );
+		echo "} \n";
+		
+		echo "h1.team-head-title { \n";
+			echo mstw_tr_build_css_rule( $options, 'tr_table_title_text_color', 'color' );		
+		echo "} \n";
+		
+		echo 'tr.mstw-tr-odd {';
+			echo mstw_tr_build_css_rule( $options, 'tr_table_odd_row_color', 'color' );
+			echo mstw_tr_build_css_rule( $options, 'tr_table_odd_row_bkgd', 'background-color' );
+		echo '}';
+		
+		echo 'tr.mstw-tr-even {';
+			echo mstw_tr_build_css_rule( $options, 'tr_table_even_row_color', 'color' );
+			echo mstw_tr_build_css_rule( $options, 'tr_table_even_row_bkgd', 'background-color' );
+		echo '}';
+		
+		echo "tr.mstw-tr-odd a, tr.mstw-tr-even a { \n";
+			echo mstw_tr_build_css_rule( $options, 'tr_table_links_color', 'color' );
+		echo "} \n";
+		
+		//Rules for single player
+		echo "header.player-header { \n";
+			echo mstw_tr_build_css_rule( $options, 'sp_main_bkgd_color', 'background-color' );
+		echo "} \n";
+		
+		echo "#player-name-nbr { \n";
+			echo mstw_tr_build_css_rule( $options, 'sp_main_text_color', 'color' );
+		echo "} \n";
+		
+		echo ".player-bio { \n";
+			echo mstw_tr_build_css_rule( $options, 'sp_bio_border_color', 'border-color' );
+		echo '}';
+		
+		echo ".player-bio h1 { \n";
+			echo mstw_tr_build_css_rule( $options, 'sp_bio_header_color', 'color' );
+		echo "}\n";
+		
+		echo ".player-bio { \n";
+			echo mstw_tr_build_css_rule( $options, 'sp_bio_text_color', 'color' );
+		echo "}\n";
+		
+		echo ".player-bio { \n";
+			echo mstw_tr_build_css_rule( $options, 'sp_bio_bkgd_color', 'background-color' );
+		echo "}\n";
+		
+		echo "h1.player-head-title { \n";
+			echo mstw_tr_build_css_rule( $options, 'tr_table_title_text_color', 'color' );
+		echo "}\n";
+		
+		echo "h1.mstw_tr_roster_title { \n";
+			echo mstw_tr_build_css_rule( $options, 'tr_table_title_text_color', 'color' );
+		echo "}\n";
+		
+		// Rules for player galleries
+		echo ".player-tile { \n";
+			echo mstw_tr_build_css_rule( $options, 'sp_main_bkgd_color', 'background-color' );
+		echo "} \n";
+		
+		echo ".player-tile { \n";
+			echo mstw_tr_build_css_rule( $options, 'sp_main_text_color', 'color' );
+		echo "} \n";
+		
+		echo ".player-name-number { \n";
+			echo mstw_tr_build_css_rule( $options, 'sp_main_text_color', 'color' );
+		echo "} \n";
+		
+		echo ".player-name-number a { \n";
+			echo mstw_tr_build_css_rule( $options, 'gallery_links_color', 'color' );
+		echo "}\n";
+		
+		echo '</style>';
+		
+	}
+	
+	function mstw_tr_build_css_rule( $options_array, $option_name, $css_rule ) {
+		if ( isset( $options_array[$option_name] ) and !empty( $options_array[$option_name] ) ) {
+			return $css_rule . ":" . $options_array[$option_name] . "; \n";	
+		} 
+		else {
+			return "";
+		}
+	}
 	
 // ----------------------------------------------------------------
 // Set up localization (internationalization)
@@ -105,21 +241,45 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 		}		
 	}  
 	
-// ----------------------------------------------------------------
-// Add the custom Teams taxonomy ... will act like tags	
+	// ----------------------------------------------------------------
+	// Add the custom Teams taxonomy ... will act like tags	
+	
+	add_action( 'init', 'mstw_tr_create_taxonomy' );
 
-	add_action( 'init', 'mstw_create_taxonomy', 0 );
-
-	function mstw_create_taxonomy() {
-		register_taxonomy( 
-				'teams', 'player', 
-				array( 'hierarchical' => true, 
-						'labels' => array('name' => __('Teams', 'mstw-loc-domain'), 
-											'singular_name' => __('Team', 'mstw-loc-domain')),
-						'query_var' => true, 
-						'rewrite' => true ) 
-				);
+	function mstw_tr_create_taxonomy( ) {
+	
+		$labels = array( 
+					'name' 				   		   => __( 'Teams', 'mstw-loc-domain' ),
+					'singular_name' 			   =>  __( 'Team', 'mstw-loc-domain' ),
+					'search_items' 				   => __( 'Search Teams', 'mstw-loc-domain' ),
+					'popular_items' 			   => __( 'Popular Teams', 'mstw-loc-domain' ),
+					'all_items' 				   => __( 'All Teams', 'mstw-loc-domain' ),
+					'parent_item' 				   => null,
+					'parent_item_colon' 		   => null,
+					'edit_item' 				   => __( 'Edit Team', 'mstw-loc-domain' ), 
+					'update_item'                  => __( 'Update Team', 'mstw-loc-domain' ),
+					'add_new_item'                 => __( 'Add New Team', 'mstw-loc-domain' ),
+					'new_item_name'                => __( 'New Team Name', 'mstw-loc-domain' ),
+					'separate_items_with_commas'   => __( 'Separate Teams with commas', 'mstw-loc-domain' ),
+					'add_or_remove_items'          => __( 'Add or Remove Teams', 'mstw-loc-domain' ),
+					'choose_from_most_used'        => __( 'Choose from the most used Teams', 'mstw-loc-domain' ),
+					'not_found'                    => __( 'No Teams found', 'mstw-loc-domain' ),
+					'menu_name'                    => __( 'Teams', 'mstw-loc-domain' ),
+				  );
+				  
+		$args = array( 
+			'hierarchical' 			=> false, 
+			'labels' 				=> $labels, 
+			'show_ui'				=> true,
+			'show_admin_column'		=> true,
+			'query_var' 			=> true, 
+			'rewrite' 				=> true 
+			);
+			
+		register_taxonomy( 'teams', 'player', $args );
+				
 	}
+
 
 // ----------------------------------------------------------------
 // Deactivate, request upgrade, and exit if WP version is not right
@@ -192,16 +352,42 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 
 // Add the player custom post type
-add_action( 'init', 'mstw_tr_register_post_types' );
+add_action( 'init', 'mstw_tr_register_post_type' );
 
-function mstw_tr_register_post_types() {
+function mstw_tr_register_post_type( ) {
 
 	/* Set up the arguments for the game post type. */
 	$args = array(
-		'description'         => '',
-		'public'              => true,
-		'publicly_queryable'  => true,
-		'show_in_nav_menus'   => true,
+		'public'	=> true,
+		'query_var'	=> 'player',
+		'rewrite' 	=> array(
+							'slug'       => 'players',
+							'with_front' => false,
+						),
+		'supports' => array( 'title',
+							 'editor',
+							 'thumbnail',
+							 'excerpt',
+							),
+		/* Labels used when displaying the posts. */
+		'labels' => array(
+			'name'               => __( 'Players', 'mstw-loc-domain' ),
+			'singular_name'      => __( 'Player', 'mstw-loc-domain' ),
+			'menu_name'          => __( 'MSTW Players', 'mstw-loc-domain' ),
+			'all_items'			 => __( 'All Players', 'mstw-loc-domain' ),
+			'name_admin_bar'     => __( 'Players', 'mstw-loc-domain' ),
+			'add_new'            => __( 'Add New Player', 'mstw-loc-domain' ),
+			'add_new_item'       => __( 'Add New Player', 'mstw-loc-domain' ),
+			'edit_item'          => __( 'Edit Player', 'mstw-loc-domain' ),
+			'new_item'           => __( 'New Player', 'mstw-loc-domain' ),
+			'view_item'          => __( 'View Player', 'mstw-loc-domain' ),
+			'search_items'       => __( 'Search Players', 'mstw-loc-domain' ),
+			'not_found'          => __( 'No player found', 'mstw-loc-domain' ),
+			'not_found_in_trash' => __( 'No player found in trash', 'mstw-loc-domain' ),
+			'all_items'          => __( 'All Players', 'mstw-loc-domain' ),
+			),
+		'taxonomies' => array( 'teams' ),
+		/*'show_in_nav_menus'   => true,
 		'show_in_admin_bar'   => true,
 		'exclude_from_search' => false,
 		'show_ui'             => true,
@@ -211,73 +397,7 @@ function mstw_tr_register_post_types() {
 		'can_export'          => true,
 		'delete_with_user'    => false,
 		'hierarchical'        => false,
-		'has_archive'         => 'players',
-		'query_var'           => 'true',
-		'capability_type'     => 'post',
-		//'map_meta_cap'        => true,
-
-		/* By default, only 3 caps are needed: 'create_games', 'manage_games', and 'edit_games'. */
-		/*'capabilities' => array(
-
-			// meta caps (don't assign these to roles)
-			'edit_post'              => 'edit_player',
-			'read_post'              => 'read_player',
-			'delete_post'            => 'delete_player',
-
-			// primitive/meta caps
-			'create_posts'           => 'create_players',
-
-			// primitive caps used outside of map_meta_cap()
-			'edit_posts'             => 'edit_players',
-			'edit_others_posts'      => 'manage_players',
-			'publish_posts'          => 'manage_players',
-			'read_private_posts'     => 'read',
-
-			// primitive caps used inside of map_meta_cap()
-			'read'                   => 'read',
-			'delete_posts'           => 'manage_players',
-			'delete_private_posts'   => 'manage_players',
-			'delete_published_posts' => 'manage_players',
-			'delete_others_posts'    => 'manage_players',
-			'edit_private_posts'     => 'edit_players',
-			'edit_published_posts'   => 'edit_players'
-		),
-		*/
-		/* The rewrite handles the URL structure. */
-		'rewrite' => array(
-			'slug'       => 'players',
-			'with_front' => false,
-			'pages'      => true,
-			'feeds'      => true,
-			'ep_mask'    => EP_PERMALINK,
-		),
-
-		/* What features the post type supports. */
-		'supports' => array(
-			'title',
-			'editor',
-			'thumbnail',
-			'excerpt',
-		),
-		
-		/* 'taxonomies' => array('category', 'post_tag'), */
-
-		/* Labels used when displaying the posts. */
-		'labels' => array(
-			'name'               => __( 'Players',                  'mstw-loc-domain' ),
-			'singular_name'      => __( 'Player',                   'mstw-loc-domain' ),
-			'menu_name'          => __( 'Players',                  'mstw-loc-domain' ),
-			'name_admin_bar'     => __( 'Players',                  'mstw-loc-domain' ),
-			'add_new'            => __( 'Add New Player',           'mstw-loc-domain' ),
-			'add_new_item'       => __( 'Add New Player',           'mstw-loc-domain' ),
-			'edit_item'          => __( 'Edit Player',              'mstw-loc-domain' ),
-			'new_item'           => __( 'New Player',               'mstw-loc-domain' ),
-			'view_item'          => __( 'View Player',              'mstw-loc-domain' ),
-			'search_items'       => __( 'Search Players',           'mstw-loc-domain' ),
-			'not_found'          => __( 'No player found',          'mstw-loc-domain' ),
-			'not_found_in_trash' => __( 'No player found in trash', 'mstw-loc-domain' ),
-			'all_items'          => __( 'All Players',              'mstw-loc-domain' ),
-		)
+		'has_archive'         => 'players',*/
 	);
 
 	/* Register the player item post type. */
@@ -294,15 +414,21 @@ add_shortcode( 'mstw-tr-roster', 'mstw_tr_shortcode_handler' );
 
 
 function mstw_tr_shortcode_handler( $atts ){
+
+	// get the options set in the admin screen
+	$options = get_option( 'mstw_tr_options' );
+	//$output = '<pre>OPTIONS:' . print_r( $options, true ) . '</pre>';
 	
-	extract( shortcode_atts( array(	'team' => 'no-team', 
-									'roster_type' => 'default',
-									'show_title' => true,
-									'sort_order' => '',
-									'show_weight' => 'show'), 
-									$atts ) );
-		
-	$mstw_tr_roster = mstw_tr_build_roster( $team, $roster_type, $show_title, $sort_order, $show_weight );
+	// and merge them with the defaults
+	$args = wp_parse_args( $options, mstw_tr_get_defaults( ) );
+	//$output .= '<pre>ARGS:' . print_r( $args, true ) . '</pre>';
+	
+	// then merge the parameters passed to the shortcode with the result									
+	$attribs = shortcode_atts( $args, $atts );
+	//$output .= '<pre>ATTS:' . print_r( $atts, true ) . '</pre>';
+	//$output .= '<pre>ATTRIBS:' . print_r( $attribs, true ) . '</pre>';
+	
+	$mstw_tr_roster = mstw_tr_build_roster( $attribs );
 	
 	return $mstw_tr_roster;
 }
@@ -313,69 +439,57 @@ function mstw_tr_shortcode_handler( $atts ){
 // Loops through the Player Custom posts in the "team" category and formats them 
 // into a pretty table.
 // --------------------------------------------------------------------------------------
-function mstw_tr_build_roster( $team, $roster_type, $show_title, $sort_order, $show_weight ) {
+function mstw_tr_build_roster( $attribs, $output ) {
 	
 	// These will come from plugin options someday 
 	// Add the colors and stuff
+	
+	//$output = '<pre>BEFORE:' . print_r( $attribs, true ) . '</pre>';
+	
+	$attribs = mstw_tr_set_fields( $attribs['roster_type'], $attribs );
+	
+	//FOR INITIAL DEBUGGING 
+	//$output . = '<p>Roster_type: ' . $attribs['roster_type'] . '</p>';
+	//$output .= '<p>strpos( $roster_type, "baseball"): ' . strpos( $attribs['roster_type'], "baseball" ) . '</p>';
+	//$output .= '<pre>ATTRIBS AFTER:' . print_r( $attribs, true ) . '</pre>';
+	//return $output;
+	
+	extract( $attribs );
+	
+	if ( $team == 'no-team-specified' ) {
+		$output = '<h3>No Team Specified </h3>';
+		return $output;
+	}
 	
 	$output = "";
 	
 	// Settings from the admin page
 	$options = get_option( 'mstw_tr_options' );
 	
-	// show/hide player weight
-	if ( $show_weight == 'hide' or $show_weight == 'hide-weight' ) {
-		$hide_weight = 'hide-weight';
-	}
-	else {
-		$hide_weight = $options['tr_hide_weight'];
-	}
-	
 	// Set the roster table format. If default in [shortcode] atts, 
 	// then use the default setting from admin page.
 	if ($roster_type == 'default') 
 		$roster_type = $options['tr_table_default_format'];
 	
-	$hdr_bkgd =  $options['tr_table_head_bkgd_color'];
-	$hdr_color = $options['tr_table_head_text_color'];
-	$odd_text = $options['tr_table_odd_row_color'];
-	$odd_bkgd = $options['tr_table_odd_row_bkgd'];
-	$even_text = $options['tr_table_even_row_color'];
-	$even_bkgd = $options['tr_table_even_row_bkgd'];
-	
 	if ( $show_title == 1 ) {
 		//Set the title color
-		$title_color = $options['tr_table_title_text_color'];
-		
-		if ($title_color == "" )
-			$title_h1 = '<h1 class="mstw_tr_roster_title">';
-		else
-			$title_h1 = '<h1 class="mstw_tr_roster_title" ' . 'style="color: ' . $title_color . ';" >';
 		
 		$term_array = get_term_by( 'slug', $team, 'teams' );
+		$team_name = $term_array->name;
 		
-		$team_name = $term_array->name; 
+		$team_class = 'mstw_tr_roster_title mstw_tr_roster_title_' . $team;
+        
+		$title_h1 = '<h1 class="' . $team_class . '">'; 
 		
 		$output .= $title_h1 . $team_name . ' Roster' . '</h1>';
 	}
 	
-	// Set the sort order. If an argument is passed through the [shortcode] handler,
-	// use it. Otherwise, use the setting from the admin page.
-	if ($sort_order == '') {
-		if ( $options['tr_table_sort_order'] == 'numeric' ) {
-			$sort_key = '_mstw_tr_number';
-			$order_by = 'meta_value_num';
-		}
-		else {   //This is the default if no shortcode arg is passed in.   
-			$sort_key = '_mstw_tr_last_name'; 
-			$order_by = 'meta_value';
-		}
-	}
-	else if ( $sort_order == 'numeric' ) {
+	// Set the sort order	
+	if ( $sort_order == 'numeric' ) {
 		$sort_key = '_mstw_tr_number';
 		$order_by = 'meta_value_num';
 	}
-	else { // This is the default is a shortcode arg is passed in.
+	else { 		// default is alpha
 		$sort_key = '_mstw_tr_last_name';
 		$order_by = 'meta_value';
 	}
@@ -392,68 +506,80 @@ function mstw_tr_build_roster( $team, $roster_type, $show_title, $sort_order, $s
     if( $posts ) {
 		// Make table of posts
 		// Start with the table header
-		// We need to switch based on a setting 'high-school', 'college', 'pro'
 
-        $output .= '<table class="mstw-tr-table">';
+		$team_class = 'mstw-tr-table-' . $team;
+        $output .= '<table class="mstw-tr-table ' . $team_class . '">';
 		
 		// leave this open and check on styles from the admin settings
-		$thead = '<thead><tr class="mstw-tr-table-head" ';
-		
-		// see if we have any styles to add from the admin settings
-		if ( $hdr_color != '' || $hdr_bkgd != '' ) {
-			//open the style attribute
-			$thead .= 'style = "';
-			
-			if ( $hdr_color != '' ) {
-				$thead .= 'color: ' . $hdr_color . '; ';
-			}
-			
-			if ( $hdr_bkgd != '' ) {
-				$thead .= 'background-color: ' . $hdr_bkgd . '; ';
-			}
-			
-			// close the style attribute
-			$thead .= '"';
-		}
-
-		// add thead to the output and close the tr element
-		$output .= $thead . '>';
-			
+		$output .= '<thead><tr class="mstw-tr-table-head">';
+	
 		$th_temp = '<th class="mstw-tr-table-head" > ';
-			
-		$output .= $th_temp . __( 'Nbr', 'mstw-loc-domain' ) . '</th>';
-		$output .= $th_temp . __( 'Name', 'mstw-loc-domain' ) . '</th>';
-		$output .= $th_temp . __( 'Position', 'mstw-loc-domain' ) . '</th>';
-		if ( strpos( $roster_type, 'baseball' ) !== false ) {
-			$output .= $th_temp . __( 'Bat', 'mstw-loc-domain' ) . '/' .  __( 'Thw', 'mstw-loc-domain' ) . '</th>';	
-		}
-		$output .= $th_temp . __( 'Height', 'mstw-loc-domain' ) . '</th>';
 		
-		if ( $hide_weight != "hide-weight" ) {
-			$output .= $th_temp . __( 'Weight', 'mstw-loc-domain' ) . '</th>';
+		if ( $show_number ) {	
+			$output .= $th_temp . $number_label . '</th>';
 		}
 		
-		// This is where roster-type specific columns will go
-		switch( $roster_type ) {
-		case 'high-school':
-		case 'baseball-high-school':
-			$output .= $th_temp . __( 'Year', 'mstw-loc-domain' ) . '</th>';
-			break;
-			
-		case 'college':
-		case 'baseball-college':
-			$output .= $th_temp . __( 'Year', 'mstw-loc-domain' ) . '</th>';
-			$output .= $th_temp . __( 'Exp', 'mstw-loc-domain' ) . '</th>';
-			$output .= $th_temp . __( 'Hometown (Last School)', 'mstw-loc-domain' ) . '</th>';
-			break;
-			
-		case 'pro':
-		case 'baseball-pro':
-			$output .= $th_temp . __( 'Age', 'mstw-loc-domain' ) . '</th>';
-			$output .= $th_temp . __( 'Exp', 'mstw-loc-domain' ) . '</th>';
-			$output .= $th_temp . __( 'Last School (Country)', 'mstw-loc-domain' ) . '</th>';
-			break;
-			
+		// Always show the NAME column
+		$output .= $th_temp . $name_label . '</th>';
+		
+		// POSITION column
+		if ( $show_position ) {
+			$output .= $th_temp . $position_label . '</th>';
+		}
+		
+		// BATS/THROWS column
+		if ( $show_bats_throws ) {
+			$output .= $th_temp . $bats_throws_label . '</th>';
+		}
+		
+		// HEIGHT column
+		if ( $show_height ) {
+			$output .= $th_temp . $height_label . '</th>';
+		}
+		
+		// WEIGHT column
+		if ( $show_weight ) {
+			$output .= $th_temp . $weight_label . '</th>';
+		}
+		
+		// YEAR column
+		if ( $show_year ) {
+			$output .= $th_temp . $year_label . '</th>';
+		}
+		
+		// AGE column
+		if ( $show_age ) {
+			$output .= $th_temp . $age_label . '</th>';
+		}
+		
+		// EXPERIENCE column
+		if ( $show_experience ) {
+			$output .= $th_temp . $experience_label . '</th>';
+		}
+		
+		// HOMETOWN column
+		if ( $show_home_town ) {
+			if ( $roster_type == 'college' or $roster_type == 'baseball-college' ) {
+				$output .= $th_temp . $home_town_label . ' ('. $last_school_label . ')' . '</th>';
+			}
+			else if ( $roster_type == 'custom' ) {
+				$output .= $th_temp . $home_town_label . '</th>';
+			}
+		}
+		
+		// LAST SCHOOL column
+		if ( $show_last_school ) {
+			if ( $roster_type == 'pro' or $roster_type == 'baseball-pro' ) {
+				$output .= $th_temp . $last_school_label . ' ('. $country_label . ')' . '</th>';
+			}
+			else if ( $roster_type == 'custom' ) {
+				$output .= $th_temp . $last_school_label . '</th>';
+			}
+		}
+		
+		// COUNTRY column
+		if ( $show_country and $roster_type == 'custom' ) {
+			$output .= $th_temp . $country_label . '</th>';
 		}
 		
         $output = $output . '</tr></thead>';
@@ -469,131 +595,111 @@ function mstw_tr_build_roster( $team, $roster_type, $show_title, $sort_order, $s
 			$even_or_odd_row = $even_and_odd[$row_cnt]; 
 			$row_class = 'mstw-tr-' . $even_or_odd_row;
 			
-			$row_tr = '<tr class="' . $row_class . '" '; 
-			
-			// if colors are set in the admin settings, they will override the stylesheet
-			if ( $even_or_odd_row == 'odd' && ( $odd_text != '' || $odd_bkgd != '' ) ) {
-				// do processing for odd row
-			
-				// open the style attribute
-				$row_tr .= 'style="';
-				
-				if ( $odd_text != '' ) {
-					// use the admin setting for odd row text color
-					$row_tr .= 'color: ' . $odd_text . '; ';
-				}
-				
-				if ( $odd_bkgd != '' ) {
-					// add admin setting for odd row background color
-					$row_tr .= 'background-color: ' . $odd_bkgd . '; ';
-				} 
-				
-				// close the style attribute
-				$row_tr .= '"';
-			} 
-			else {
-				//do processing for even row
-				if ( $even_or_odd_row == 'even' && ($even_text != '' || $even_bkgd != '' ) ) {
-				// do processing for even row
-			
-					// open the style attribute
-					$row_tr .= 'style="';
-					
-					if ( $even_text != '' ) {
-						// use the admin setting for even row text color
-						$row_tr .= 'color: ' . $even_text . '; ';
-					}
-					
-					if ( $even_bkgd != '' ) {
-						// add admin setting for even row background color
-						$row_tr .= 'background-color: ' . $even_bkgd . '; ';
-					} 
-					
-					// close the style attribute
-					$row_tr .= '"';
-				}
-			}
-			// close the row element
-			$row_tr .=  '>';
-			
+			$row_tr = '<tr class="' . $row_class . '">'; 
 			$row_td = '<td class="' . $row_class . '">'; 
 			
 			// create the row
 			$row_string = $row_tr;			
 			
 			// column 1: Add the player's number
-			$row_string = $row_string. $row_td . get_post_meta( $post->ID, '_mstw_tr_number', true ) . '</td>';
+			if ( $show_number ) {
+				$row_string .= $row_td . get_post_meta( $post->ID, '_mstw_tr_number', true ) . '</td>';
+			}
 			
 			// column 2: Add the player's name
-			if ( $options['tr_player_name_format'] == "first-last" ) 
+			switch( $name_format ) {
+			case 'first-last':
 				$player_name = get_post_meta( $post->ID, '_mstw_tr_first_name', true ) . " " . 
 				get_post_meta( $post->ID, '_mstw_tr_last_name', true );
-			else
+				break;
+			case 'first-only':
+				$player_name = get_post_meta( $post->ID, '_mstw_tr_first_name', true );
+				break;
+				
+			case 'last-only':
+				$player_name = get_post_meta( $post->ID, '_mstw_tr_last_name', true );
+				break;
+			
+			default: //It's going to be last-first
 				$player_name = get_post_meta( $post->ID, '_mstw_tr_last_name', true ) . ', ' . 
 				get_post_meta( $post->ID, '_mstw_tr_first_name', true );
+				break;
+			}
 			
-			if ( $options['tr_use_player_links'] == "show-links" ) {
+			if  ( $use_player_links ) { //( $options['tr_use_player_links'] == "show-links" ) {
 				$player_html = '<a href="' .  get_permalink($post->ID) . '?format=' . $roster_type . '" ';
-				if ( $options['tr_table_links_color'] != '' ) {
+				/*if ( $options['tr_table_links_color'] != '' ) {
 					$player_html .= 'style="color:' . $options['tr_table_links_color'] . ';"';
 				}
+				*/
 				$player_html .= '>' . $player_name . '</a>';
 			}
 			else {
 				$player_html = $player_name;
 			}
+			
 			$row_string =  $row_string . $row_td . $player_html . '</td>';
 			
 			// column 3: Add the player's postition
-			$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_position', true ) . '</td>';
+			if ( $show_position ) {
+				$row_string .= $row_td . get_post_meta( $post->ID, '_mstw_tr_position', true ) . '</td>';
+			}
 			
-			// baseball only: Add bats/throws
-			if ( strpos( $roster_type, 'baseball' ) !== false ) {
+			// column 3a bats/throws (baseball)
+			if ( $show_bats_throws ) {
 				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_bats', true ) . '/' . get_post_meta( $post->ID, '_mstw_tr_throws', true ) . '</td>';	
 			}	
 			
 			// column 4: Add the player's height
-			$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_height', true ) . '</td>';
+			if ( $show_height ) {
+				$row_string .= $row_td . get_post_meta( $post->ID, '_mstw_tr_height', true ) . '</td>';
+			}
 			
 			// column 5: Add the player's weight
-			if ( $hide_weight != "hide-weight" ) {
+			if ( $show_weight ) {
 				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_weight', true ) . '</td>';
 			}
 			
-			switch( $roster_type ) {
-			case 'high-school':
-			case 'baseball-high-school':
-				// column 5: Add the player's year in school
+			// column 6: Add the player's year (in school)
+			if ( $show_year ) {
 				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_year', true ) . '</td>';
-				break;
-				
-			case 'college':
-			case 'baseball-college':
-				// column 6: Add the player's year in school
-				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_year', true ) . '</td>';
-				
-				// column 7: Add the player's experience
-				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_experience', true ) . '</td>';
-				
-				// column 8: Add the player's hometown and school
-				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_home_town', true ) . 
-					' (' . get_post_meta( $post->ID, '_mstw_tr_last_school', true ) . ') </td>';
-				
-				break;
-				
-			case 'pro':
-			case 'baseball-pro':
-				// column 6: Add the player's age
+			}
+			
+			// AGE column
+			if ( $show_age ) {
 				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_age', true ) . '</td>';
-				
-				// column 7: Add the player's experience
+			}
+			
+			// EXPERIENCE column
+			if ( $show_experience ) {
 				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_experience', true ) . '</td>';
-				
-				// column 8: Add the player's last school and country
-				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_last_school', true ) . 
+			}
+			
+			// HOMETOWN column
+			if ( $show_home_town ) {
+				if ( $roster_type == 'college' or $roster_type == 'baseball-college' ) {
+					$row_string .=  $row_td . get_post_meta( $post->ID, '_mstw_tr_home_town', true ) . 
+					' (' . get_post_meta( $post->ID, '_mstw_tr_last_school', true ) . ') </td>';
+				}
+				else if ( $roster_type == 'custom' ) {
+					$row_string .= $row_td . get_post_meta( $post->ID, '_mstw_tr_home_town', true )  . '</td>';
+				}
+			}
+			
+			// LAST SCHOOL column
+			if ( $show_last_school ) {
+				if ( $roster_type == 'pro' or $roster_type == 'baseball-pro' ) {
+					$row_string .= $row_td . get_post_meta( $post->ID, '_mstw_tr_last_school', true ) . 
 					' (' . get_post_meta( $post->ID, '_mstw_tr_country', true ) . ') </td>';
-				break;
-				
+				}
+				else if ( $roster_type == 'custom' ) {
+					$row_string .= $row_td . get_post_meta( $post->ID, '_mstw_tr_last_school', true )  . '</td>';
+				}
+			}
+			
+			// COUNTRY column
+			if ( $show_country and $roster_type == 'custom' ) {
+				$row_string .= $row_td . get_post_meta( $post->ID, '_mstw_tr_country', true )  . '</td>';
 			}
 			
 			$output = $output . $row_string;
@@ -613,4 +719,139 @@ function mstw_tr_build_roster( $team, $roster_type, $show_title, $sort_order, $s
 	return $output;
 	
 }
+
+// Convenience function to determine whether or not to show a field
+	function mstw_tr_set_fields( $roster_format, $defaults ) {
+		//$show_bats_throws = ( strpos( $roster_type, 'baseball' ) === false ) ? 0 : 1;
+		switch ( $roster_format) {
+			case 'baseball-high-school':
+			case 'baseball-college':
+			case 'baseball-pro':
+				$show_bats_throws = 1;
+			break;
+			default:
+				$show_bats_throws = 0;
+				break;
+		}
+			
+		switch ( $roster_format ) {
+			case 'baseball-high-school':
+			case 'high-school':
+				$settings = array(	
+					//'team'					=> 'no-team-specified',
+					//'show_title'			=> '1',
+					//'roster_type'			=> 'custom',
+					//'show_title'			=> 1,
+					//'sort_order'			=> 'alpha',
+					//'name_format'			=> 'last-first',
+					//'name_label'			=> __( 'Name', 'mstw-loc-domain' ),
+					'show_number'			=> 1,
+					//'number_label'			=> __( 'Number', 'mstw-loc-domain' ),
+					'show_position'			=> 1,
+					'show_height'			=> 1,
+					//'height_label'			=> __( 'Height', 'mstw-loc-domain' ),
+					//'show_weight'			=> 1,
+					//'weight_label'			=> __( 'Weight', 'mstw-loc-domain' ),
+					'show_year'				=> 1,
+					//'year_label'			=> __( 'Year', 'mstw-loc-domain' ),
+					'show_experience'		=> 0,
+					//'experience_label'		=> __( 'Exp', 'mstw-loc-domain' ),
+					'show_age'				=> 0,
+					//'age_label'				=> __( 'Age', 'mstw-loc-domain' ),
+					'show_home_town'		=> 0,
+					//'home_town_label'		=> __( 'Home Town', 'mstw-loc-domain' ),
+					'show_last_school'		=> 0,
+					//'last_school_label'		=> __( 'Last School', 'mstw-loc-domain' ),
+					'show_country'			=> 0,
+					//'country_label'			=> __( 'Country', 'mstw-loc-domain' ),
+					'show_bats_throws'		=> $show_bats_throws,
+					//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-loc-domain' ),
+					'show_other_info'		=> 0,
+					//'other_info_label'		=> __( 'Other', 'mstw-loc-domain' ),
+				);
+				break;
+				
+			case 'baseball-college':
+			case 'college':
+				$settings = array(	
+					//'team'					=> 'no-team-specified',
+					//'roster_type'			=> 'custom',
+					//'show_title'			=> 1,
+					//'show_title'			=> 1,
+					//'sort_order'			=> 'alpha',
+					//'name_format'			=> 'last-first',
+					//'name_label'			=> __( 'Name', 'mstw-loc-domain' ),
+					'show_number'			=> 1,
+					//'number_label'			=> __( 'Number', 'mstw-loc-domain' ),
+					'show_position'			=> 1,
+					'show_height'			=> 1,
+					//'height_label'			=> __( 'Height', 'mstw-loc-domain' ),
+					//'show_weight'			=> 1,
+					//'weight_label'			=> __( 'Weight', 'mstw-loc-domain' ),
+					'show_year'				=> 1,
+					//'year_label'			=> __( 'Year', 'mstw-loc-domain' ),
+					'show_experience'		=> 1,
+					//'experience_label'		=> __( 'Exp', 'mstw-loc-domain' ),
+					'show_age'				=> 0,
+					//'age_label'				=> __( 'Age', 'mstw-loc-domain' ),
+					'show_home_town'		=> 1,
+					//'home_town_label'		=> __( 'Home Town', 'mstw-loc-domain' ),
+					'show_last_school'		=> 1,
+					//'last_school_label'		=> __( 'Last School', 'mstw-loc-domain' ),
+					'show_country'			=> 0,
+					//'country_label'			=> __( 'Country', 'mstw-loc-domain' ),
+					'show_bats_throws'		=> $show_bats_throws,
+					//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-loc-domain' ),
+					'show_other_info'		=> 0,
+					//'other_info_label'		=> __( 'Other', 'mstw-loc-domain' ),
+				);		
+				break;
+			
+			case 'pro':
+			case 'baseball-pro':
+				$settings = array(	
+					//'team'					=> 'no-team-specified',
+					//'show_title'			=> 1,
+					//'roster_type'			=> 'custom',
+					//'show_title'			=> 1,
+					//'sort_order'			=> 'alpha',
+					//'name_format'			=> 'last-first',
+					//'name_label'			=> __( 'Name', 'mstw-loc-domain' ),
+					'show_number'			=> 1,
+					//'number_label'			=> __( 'Number', 'mstw-loc-domain' ),
+					'show_position'			=> 1,
+					'show_height'			=> 1,
+					//'height_label'			=> __( 'Height', 'mstw-loc-domain' ),
+					//'show_weight'			=> 1,
+					//'weight_label'			=> __( 'Weight', 'mstw-loc-domain' ),
+					'show_year'				=> 0,
+					//'year_label'			=> __( 'Year', 'mstw-loc-domain' ),
+					'show_experience'		=> 1,
+					//'experience_label'		=> __( 'Exp', 'mstw-loc-domain' ),
+					'show_age'				=> 1,
+					//'age_label'				=> __( 'Age', 'mstw-loc-domain' ),
+					'show_home_town'		=> 0,
+					//'home_town_label'		=> __( 'Home Town', 'mstw-loc-domain' ),
+					'show_last_school'		=> 1,
+					//'last_school_label'		=> __( 'Last School', 'mstw-loc-domain' ),
+					'show_country'			=> 1,
+					//'country_label'			=> __( 'Country', 'mstw-loc-domain' ),
+					'show_bats_throws'		=> $show_bats_throws,
+					//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-loc-domain' ),
+					'show_other_info'		=> 0,
+					//'other_info_label'		=> __( 'Other', 'mstw-loc-domain' ),
+				);
+				break;
+				
+			default:  // custom roster format
+				// Do nada
+				return $defaults;
+				break;
+		}
+	
+		$settings = wp_parse_args( $settings, $defaults );
+		
+		return $settings;
+	
+	}
 ?>
