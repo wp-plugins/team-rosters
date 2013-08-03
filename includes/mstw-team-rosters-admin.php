@@ -45,7 +45,13 @@
  *	(3) Admin settings for changing column and date field labels
  *	(4) Added Filter by Team button to View All Players screen
  *	(5) Removed Bulk Edit button from View All Players screen
- * *-------------------------------------------------------------------------------------*/
+ *
+ * 20130803-MAO:
+ *	(1) Corrections to eliminate debug warnings.
+ *	(2) Corrections to prevent conflicts with including mstw-admin-utility-functions.php.
+ *		Now requires mstw-tr-admin-utility-functions.php
+ * 
+ *-------------------------------------------------------------------------------------*/
 
 // --------------------------------------------------------------------------------------
 // Set-up Action and Filter Hooks for the Settings on the admin side
@@ -100,8 +106,8 @@
 	// ----------------------------------------------------------------
 	// Load the MSTW Admin Utility Functions if necessary
 		
-	if ( !function_exists( 'mstw_text_ctrl' ) ) {
-			require_once  plugin_dir_path( __FILE__ ) . 'mstw-admin-utility-functions.php';
+	if ( !function_exists( 'mstw_tr_text_ctrl' ) ) {
+			require_once  plugin_dir_path( __FILE__ ) . 'mstw-tr-admin-utility-functions.php';
 	}
 	
 	// ----------------------------------------------------------------
@@ -564,7 +570,7 @@
 		add_settings_field(
 			'show_title',
 			__( 'Show Roster Table Titles:', 'mstw-loc-domain' ),
-			'mstw_select_option_ctrl',							//Callback to display field
+			'mstw_tr_select_option_ctrl',							//Callback to display field
 			'mstw_tr_fields_settings',							//Page to display field
 			'mstw_tr_fields_columns_settings',					//Page section to display field
 			$args												//Callback arguments
@@ -588,7 +594,7 @@
 		add_settings_field(
 			'roster_type',										//ID attribute of tags
 			__('Roster Table Format:', 'mstw-loc-domain' ),		//Title of field
-			'mstw_select_option_ctrl',							//Callback to display field
+			'mstw_tr_select_option_ctrl',							//Callback to display field
 			'mstw_tr_fields_settings',							//Page to display field
 			'mstw_tr_fields_columns_settings',					//Page section to display field
 			$args												//Callback arguments
@@ -607,7 +613,7 @@
 		add_settings_field(
 			'use_player_links',
 			__( 'Add links to player pages:', 'mstw-loc-domain' ),
-			'mstw_select_option_ctrl',							//Callback to display field
+			'mstw_tr_select_option_ctrl',							//Callback to display field
 			'mstw_tr_fields_settings',							//Page to display field
 			'mstw_tr_fields_columns_settings',					//Page section to display field
 			$args												//Callback arguments
@@ -626,7 +632,7 @@
 		add_settings_field( 
 			'sort_order',									//ID attribute of tags
 			__( 'Sort Roster by:', 'mstw-loc-domain' ), 	//Title of field
-			'mstw_select_option_ctrl',						//Callback to display field
+			'mstw_tr_select_option_ctrl',						//Callback to display field
 			'mstw_tr_fields_settings',						//Page to display field
 			'mstw_tr_fields_columns_settings',				//Page section to display field
 			$args											//Callback arguments
@@ -647,7 +653,7 @@
 		add_settings_field( 
 			'name_format',									//ID attribute of tags
 			__( 'Display Players by:', 'mstw-loc-domain' ), 	//Title of field
-			'mstw_select_option_ctrl',						//Callback to display field
+			'mstw_tr_select_option_ctrl',						//Callback to display field
 			'mstw_tr_fields_settings',						//Page to display field
 			'mstw_tr_fields_columns_settings',				//Page section to display field
 			$args											//Callback arguments
@@ -664,7 +670,7 @@
 		add_settings_field(
 			'tr_show_number',
 			__( 'Show Number Column:', 'mstw-loc-domain' ),
-			'mstw_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -681,7 +687,7 @@
 		add_settings_field(
 			'tr_number_label',
 			__( 'Number Column Label:', 'mstw-loc-domain' ),
-			'mstw_text_ctrl',
+			'mstw_tr_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -699,7 +705,7 @@
 		add_settings_field(
 			'tr_name_label',
 			__( 'Name Column Label:', 'mstw-loc-domain' ),
-			'mstw_text_ctrl',
+			'mstw_tr_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -715,7 +721,7 @@
 		add_settings_field(
 			'tr_show_position',
 			__( 'Show Position Column:', 'mstw-loc-domain' ),
-			'mstw_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -731,7 +737,7 @@
 		add_settings_field(
 			'tr_position_label',
 			'Position Column Label:',
-			'mstw_text_ctrl',
+			'mstw_tr_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -747,7 +753,7 @@
 		add_settings_field(
 			'tr_show_height',
 			'Show Height Column:',
-			'mstw_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -764,7 +770,7 @@
 		add_settings_field(
 			'tr_height_label',
 			'Height Column Label:',
-			'mstw_text_ctrl',
+			'mstw_tr_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -780,7 +786,7 @@
 		add_settings_field(
 			'tr_show_weight',
 			'Show Weight Column:',
-			'mstw_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -797,7 +803,7 @@
 		add_settings_field(
 			'tr_weight_label',
 			'Weight Column Label:',
-			'mstw_text_ctrl',
+			'mstw_tr_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -814,7 +820,7 @@
 		add_settings_field(
 			'tr_show_year',
 			__( 'Show Year Column:', 'mstw-loc-domain' ),
-			'mstw_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -831,7 +837,7 @@
 		add_settings_field(
 			'tr_year_label',
 			'Year Column Label:',
-			'mstw_text_ctrl',
+			'mstw_tr_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -848,7 +854,7 @@
 		add_settings_field(
 			'tr_show_experience',
 			__( 'Show Experience Column:', 'mstw-loc-domain' ),
-			'mstw_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -865,7 +871,7 @@
 		add_settings_field(
 			'tr_experience_label',
 			'Experience Column Label:',
-			'mstw_text_ctrl',
+			'mstw_tr_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -882,7 +888,7 @@
 		add_settings_field(
 			'tr_show_age',
 			__( 'Show Age Column:', 'mstw-loc-domain' ),
-			'mstw_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -899,7 +905,7 @@
 		add_settings_field(
 			'tr_age_label',
 			'Age Column Label:',
-			'mstw_text_ctrl',
+			'mstw_tr_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -916,7 +922,7 @@
 		add_settings_field(
 			'tr_show_home_town',
 			__( 'Show Home Town Column:', 'mstw-loc-domain' ),
-			'mstw_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -933,7 +939,7 @@
 		add_settings_field(
 			'tr_home_town_label',
 			'Home Town Column Label:',
-			'mstw_text_ctrl',
+			'mstw_tr_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -950,7 +956,7 @@
 		add_settings_field(
 			'tr_show_last_school',
 			__( 'Show Last School Column:', 'mstw-loc-domain' ),
-			'mstw_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -967,7 +973,7 @@
 		add_settings_field(
 			'tr_last_school_label',
 			'Last School Column Label:',
-			'mstw_text_ctrl',
+			'mstw_tr_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -984,7 +990,7 @@
 		add_settings_field(
 			'tr_show_country',
 			__( 'Show Country Column:', 'mstw-loc-domain' ),
-			'mstw_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -1001,7 +1007,7 @@
 		add_settings_field(
 			'tr_country_label',
 			'Country Column Label:',
-			'mstw_text_ctrl',
+			'mstw_tr_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -1018,7 +1024,7 @@
 		add_settings_field(
 			'tr_show_bats_throws',
 			__( 'Show Bats/Throws Column:', 'mstw-loc-domain' ),
-			'mstw_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -1035,7 +1041,7 @@
 		add_settings_field(
 			'tr_bats_throws_label',
 			'Bats/Throws Column Label:',
-			'mstw_text_ctrl',
+			'mstw_tr_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -1052,7 +1058,7 @@
 		add_settings_field(
 			'tr_show_other_info',
 			__( 'Show Other Column:', 'mstw-loc-domain' ),
-			'mstw_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -1069,7 +1075,7 @@
 		add_settings_field(
 			'tr_other_info_label',
 			'Other Column Label:',
-			'mstw_text_ctrl',
+			'mstw_tr_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -1287,9 +1293,11 @@ function mstw_tr_validate_fields_options( $input ) {
 	// Pull the previous (good) options
 	$options = get_option( 'mstw_tr_options' );
 	
-	if ( $input['reset'] ) {
-			$output = mstw_tr_get_defaults( );
-			return $output;
+	if ( array_key_exists( 'reset', $input ) ) {
+		if ( $input['reset'] ) {
+				$output = mstw_tr_get_defaults( );
+				return $output;
+		}
 	}
 	
 	// Loop through each of the incoming options
@@ -1311,7 +1319,7 @@ function mstw_tr_validate_fields_options( $input ) {
 				case 'gallery_links_color':
 					// validate the color for proper hex format
 					
-					$sanitized_color = mstw_sanitize_hex_color( $input[$key] );
+					$sanitized_color = mstw_tr_sanitize_hex_color( $input[$key] );
 					
 					// decide what to do - save new setting 
 					// or display error & revert to last setting
@@ -1436,13 +1444,14 @@ function mstw_tr_validate_fields_options( $input ) {
 			//$args										//Callback arguments
 		);
 		
-		// Roster Table Odd Row Text Color 
+		/* Roster Table Odd Row Text Color 
 		$args = array(	'id' => 'tr_table_odd_row_color',
 						'name' => 'mstw_tr_options[tr_table_odd_row_color]',
 						'class' => 'tr_table_odd_row_color',
 						'value' => $options['tr_table_odd_row_color'],
 						'label' => __( "Roster Table [shortcode] odd row color.", 'mstw-loc-domain')
 						);	
+		*/
 		
 		// Roster Table Odd Row Text Color
 		add_settings_field(
@@ -1601,7 +1610,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'use_gallery_links', 									//"id" attribute of tags
 			__( 'Add links to player bios:', 'mstw-loc-domain' ),	//title of the field
-			'mstw_select_option_ctrl',								//Callback to display field
+			'mstw_tr_select_option_ctrl',								//Callback to display field
 			$display_on_page,										//Page to display field
 			$page_section,											//Page section to display field
 			$args													//Callback arguments

@@ -1,6 +1,11 @@
 <?php
 /*
  * mstw-tr-admin-utility-fucnctions.php
+ *
+ * 20130803-MAO:
+ *	Added to resolve include conflicts in the MSTW plugin family.
+ *	All functions renamed.
+ *
  */
  
  /*----------------------------------------------------------------	
