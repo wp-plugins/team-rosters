@@ -4,7 +4,7 @@ Donate link: http://shoalsummitsolutions.com
 Tags: sports,games,roster,sports teams,team roster,sports roster,sports team roster  
 Requires at least: 3.4.2
 Tested up to: 3.5
-Stable tag: 3.0
+Stable tag: 3.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,6 +16,7 @@ Manages multiple sports team rosters. Displays tabular rosters, a single player 
 Welcome to the MSTW Team Rosters Plugin from [Shoal Summit Solutions](http://shoalsummitsolutions.com/).
 
 The MSTW Team Rosters plugin manages rosters for multiple teams. It provides roster tables with built-in formats for high school, college, and professional teams as well as custom roster formats for basball. Players are assigned to team rosters using a Teams custom taxonomy (screenshot-7). The plugin supports as many players and teams as needed. It provides several views of rosters including: a table (via a shortcode), a player gallery (via a custom taxonomy template), and single player bio (via a custom post type template). Samples of all of the above displays are available on the [Shoal Summit Solutions Plugin Development Site](http://shoalsummitsolutions.com/dev).
+
 
 VERSION 3.0 HAS BEEN COMPLETELY REFACTORED TO PROVIDE SIGNIFICANT NEW FUNCTIONALITY AS OUTLINED BELOW. IF YOU ARE UPGRADING YOU WILL WANT TO READ THE INSTALLATION DOCUMENTATION AND UPGRADE NOTICE CAREFULLY. 
 
@@ -84,6 +85,10 @@ The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are ava
 8. CSV File Import Screen
 
 == Changelog ==
+
+= 3.0.1 =
+* Tweaked two calls (one in mstw-team-rosters.php and one in includes/mstw-team-rosters-admin.php) to prevent WARNINGS. (Easily fixed by setting WP_DEBUG to false in wp-config.php.) 
+* Restructured the include files (filenames and function calls) to prevent conflicts with other MSTW plugins.
 
 = 3.0 =
 * Added a filter by team to the "All Players" table on the admin screen (screenshot-1).
