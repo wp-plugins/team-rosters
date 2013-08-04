@@ -225,23 +225,24 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 			$uri_array = explode( '/', $_SERVER['REQUEST_URI'] );	
 			$team_slug = $uri_array[sizeof( $uri_array )-2];
 			
-			if ( $options['tr_pg_sort_order'] == 'numeric' ) {
-				// sort by number ascending
-				$query->set( 'post_type', 'player' );
-				$query->set( 'teams' , $team_slug );
-				$query->set( 'orderby', 'meta_value_num' );    
-				$query->set( 'meta_key', '_mstw_tr_number' );     
-				$query->set( 'order', 'ASC' );
+			// sort alphabetically by last name ascending by default
+			$query->set( 'post_type', 'player' );
+			$query->set( 'teams' , $team_slug );
+			$query->set( 'orderby', 'meta_value' );  
+			$query->set( 'meta_key', '_mstw_tr_last_name' );   
+			$query->set( 'order', 'ASC' );
+			
+			if ( array_key_exists( 'tr_pg_sort_order', $options ) ) {
+				if ( $options['tr_pg_sort_order'] == 'numeric' ) {
+					// sort by number ascending
+					$query->set( 'post_type', 'player' );
+					$query->set( 'teams' , $team_slug );
+					$query->set( 'orderby', 'meta_value_num' );    
+					$query->set( 'meta_key', '_mstw_tr_number' );     
+					$query->set( 'order', 'ASC' );
+				}	 
 			}
-			else {   //$options['tr_pg_sort_order'] == 'alpha'
-				// sort alphabetically by last name ascending 
-				$query->set( 'post_type', 'player' );
-				$query->set( 'teams' , $team_slug );
-				$query->set( 'orderby', 'meta_value' );  
-				$query->set( 'meta_key', '_mstw_tr_last_name' );   
-				$query->set( 'order', 'ASC' );
-			}  
-		}		
+		}
 	}  
 	
 	// ----------------------------------------------------------------
