@@ -18,11 +18,11 @@ Welcome to the MSTW Team Rosters Plugin from [Shoal Summit Solutions](http://sho
 The MSTW Team Rosters plugin manages rosters for multiple teams. It provides roster tables with built-in formats for high school, college, and professional teams as well as custom roster formats for basball. Players are assigned to team rosters using a Teams custom taxonomy (screenshot-7). The plugin supports as many players and teams as needed. It provides several views of rosters including: a table (via a shortcode), a player gallery (via a custom taxonomy template), and single player bio (via a custom post type template). Samples of all of the above displays are available on the [Shoal Summit Solutions Plugin Development Site](http://shoalsummitsolutions.com/dev).
 
 
-VERSION 3.0 HAS BEEN COMPLETELY REFACTORED TO PROVIDE SIGNIFICANT NEW FUNCTIONALITY AS OUTLINED BELOW. IF YOU ARE UPGRADING YOU WILL WANT TO READ THE INSTALLATION DOCUMENTATION AND UPGRADE NOTICE CAREFULLY. 
+VERSION 3.1 HAS BEEN UPGRADED SIGNIFICANTLY TO PROVIDE NEW FEATURES AND FIX SOME BUGS AS OUTLINED BELOW. ALSO SEE THE VERSION HISTORY. IF YOU ARE UPGRADING YOU WILL WANT TO READ THE INSTALLATION DOCUMENTATION AND UPGRADE NOTICE CAREFULLY. 
 
 The following features enhance the user experience on both the front and back ends:
  
-* You can now filter the "All Players" table on the admin screen by team (screenshot-1).
+* The filter by team feature on the "All Players" admin screen now works (screenshot-1).
 * Configure table columns and data fields to meet your requirements. You can show/hide all columns (except Player Name) and change the header/label of all columns and data fields (screenshot-5).
 * Additional color settings have been provided on the admin settings screen, and the code to apply these settings has been re-factored to improve performance (screenshot-5).
 * The new WordPress Color Selector has been added to the admin settings screen.
@@ -85,6 +85,17 @@ The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are ava
 8. CSV File Import Screen
 
 == Changelog ==
+
+= 3.1 =
+* Fixed bug with sort order. Roster table and player gallery views both sort properly by number, first name, and last name.
+* Re-enabled the bulk delete menu on the All Players screen.
+* Fixed the "Filter by Team" dropdown on the Show All Players admin screen.
+* Enabled the "Other" field. It may now be used on all 'custom' displays but it is disabled by default.
+* Fixed minor bug: gallery sometimes linked to players/player-slug/?format='' instead of players/player-slug/?format=custom. This bug may or may not have an affect on a site, depending on formats and usage. 
+* Combined `single-player.php` and `content-single-player.php` templates (into the `single-player.php` template. Why? ...
+* The use of links from the players/roster gallery or players/roster table to the single player profile is now determined by the existence of the `single-player.php` template in the active theme's main directory. Removed the 'use_xxx-links' settings, which are now superfluous. If you want links, just put the `single-player.php` template in the right directory. If not, omit it.
+* Re-factored the admin menu code. Added MSTW icon to admin menu and screens.
+* The new WordPress Color Selector has been added to all color settings in the admin settings screen.
 
 = 3.0.1 =
 * Tweaked two calls (one in mstw-team-rosters.php and one in includes/mstw-team-rosters-admin.php) to prevent WARNINGS. (Easily fixed by setting WP_DEBUG to false in wp-config.php.) 

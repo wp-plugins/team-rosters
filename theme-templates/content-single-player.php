@@ -73,7 +73,7 @@
 		case 'high-school':
 			$settings = array(	
 				//'team'					=> 'no-team-specified',
-				//'roster_type'			=> 'custom',
+				'roster_type'			=> $format,
 				//'show_title'			=> 1,
 				//'sort_order'			=> 'alpha',
 				//'name_format'			=> 'last-first',
@@ -108,7 +108,7 @@
 		case 'college':
 			$settings = array(	
 				//'team'					=> 'no-team-specified',
-				//'roster_type'			=> 'custom',
+				'roster_type'			=> $format,
 				//'show_title'			=> 1,
 				//'sort_order'			=> 'alpha',
 				//'name_format'			=> 'last-first',
@@ -143,7 +143,7 @@
 		case 'baseball-pro':
 			$settings = array(	
 				//'team'					=> 'no-team-specified',
-				//'roster_type'			=> 'custom',
+				'roster_type'			=> $format,
 				//'show_title'			=> 1,
 				//'sort_order'			=> 'alpha',
 				//'name_format'			=> 'last-first',

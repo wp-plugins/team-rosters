@@ -4,24 +4,32 @@
  *	It is loaded conditioned on is_admin() 
  */
 
-/*  Copyright 2012  Mark O'Donnell  (email : mark@shoalsummitsolutions.com)
+/*-----------------------------------------------------------------------------------
+Copyright 2012-13  Mark O'Donnell  (email : mark@shoalsummitsolutions.com)
 
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-/*-------------------------------------------------------------------------------------
+Code from the CSV Importer plugin was modified under that plugin's 
+GPLv2 (or later) license from Smackcoders. 
+
+Code from the File_CSV_DataSource class was re-used unchanged under
+that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel. 
+-----------------------------------------------------------------------------------*/
+
+/*-------------------------------------------------------------------------
+ * CHANGE LOG:
+ *
  * 20121202-MAO: 
  *	(1)	Added settings section for the taxonomy (player gallery) page
  * 20121211-MAO: 
@@ -50,8 +58,14 @@
  *	(1) Corrections to eliminate debug warnings.
  *	(2) Corrections to prevent conflicts with including mstw-admin-utility-functions.php.
  *		Now requires mstw-tr-admin-utility-functions.php
- * 
- *-------------------------------------------------------------------------------------*/
+ *
+ * 20130822-MAO:
+ *	(1) Re-enabled the bulk edit menu for delete only. 
+ *		(really only needed quick actions menu removed)
+ * 	(2) Removed link options. Taxonomy template and table 
+ *		shortcode now detect the single-player.php 
+ *		template and add the links automagically.
+ * *-------------------------------------------------------------------------*/
 
 // --------------------------------------------------------------------------------------
 // Set-up Action and Filter Hooks for the Settings on the admin side
@@ -111,6 +125,28 @@
 	}
 	
 	// ----------------------------------------------------------------
+	// Add the custom MSTW icon to CPT pages
+	add_action('admin_head', 'mstw_tr_custom_css');
+	
+	function mstw_tr_custom_css() { ?>
+		<style type="text/css">
+			#icon-mstw-tr-main-menu.icon32 {
+				background: url('<?php echo plugins_url( '/team-rosters/images/mstw-logo-32x32.png', 'team-rosters' ); ?>') transparent no-repeat;
+			}
+			#icon-player.icon32 {
+				background: url( ' <?php echo plugins_url( '/team-rosters/images/mstw-logo-32x32.png', 'team-rosters' ); ?> ') transparent no-repeat;
+			}
+			#icon-edit.icon32-posts-player {
+				background: url( ' <?php echo plugins_url( '/team-rosters/images/mstw-logo-32x32.png', 'team-rosters' );?> ') transparent no-repeat;
+			}
+			#menu-posts-player .wp-menu-image {
+				background-image: url('<?php echo plugins_url( '/team-rosters/images/mstw-admin-menu-icon.png', 'team-rosters' );?> ') no-repeat 6px -17px !important;
+			}
+			
+		</style>
+	<?php }
+	
+	// ----------------------------------------------------------------
 	// Remove Quick Edit Menu	
 	add_filter( 'post_row_actions', 'mstw_tr_remove_quick_edit', 10, 2 );
 
@@ -123,15 +159,54 @@
 
 	// ----------------------------------------------------------------
 	// Remove the Bulk Actions pull-down
-	add_filter( 'bulk_actions-' . 'edit-player', '__return_empty_array' );	
+	// 20130822-MAO: No reason to remove this. Really just needed
+	// 		the quick edit menu removed.
+	//add_filter( 'bulk_actions-' . 'edit-player', '__return_empty_array' );
+
+
+    function mstw_tr_bulk_actions( $actions ){
+        unset( $actions['edit'] );
+        return $actions;
+    }
+    add_filter( 'bulk_actions-edit-player', 'mstw_tr_bulk_actions' );
+
 		
 	// ----------------------------------------------------------------
 	// Add a filter the All Teams screen based on the Leagues Taxonomy
-	// This new code is from http://wordpress.stackexchange.com/questions/578/adding-a-taxonomy-filter-to-admin-list-for-a-custom-post-type
-	add_action( 'restrict_manage_posts', 'mstw_restrict_manage_posts' );
-	add_filter('parse_query','mstw_convert_restrict');
+	add_action('restrict_manage_posts','mstw_tr_restrict_manage_posts');
+	function mstw_tr_restrict_manage_posts( ) {
+		global $typenow;
+
+		if ( $typenow=='player' ){
+			// Trying to find current selection
+			$selected = isset( $_REQUEST[$teams] ) ? $_REQUEST[$teams] : '';
+				
+			$args = array(
+						'show_option_all' => 'All Teams',
+						'taxonomy' => 'teams',
+						'name' => 'teams',
+						'orderby' => 'name',
+						'selected' => $_GET['teams'],
+						'show_count' => true,
+						'hide_empty' => true,
+						);
+			wp_dropdown_categories( $args );
+		}
+	}
 	
-	function mstw_restrict_manage_posts() {
+	add_action( 'request', 'mstw_tr_request' );
+	function mstw_tr_request( $request ) {
+		if ( is_admin( ) && $GLOBALS['PHP_SELF'] == '/wp-admin/edit.php' && isset( $request['post_type'] ) && $request['post_type']=='player' ) {
+			$request['term'] = get_term( $request['teams'], 'teams' )->name;
+		}
+		return $request;
+	}
+
+/*	// This new code is from http://wordpress.stackexchange.com/questions/578/adding-a-taxonomy-filter-to-admin-list-for-a-custom-post-type
+	add_action( 'restrict_manage_posts', 'mstw_tr_restrict_manage_posts' );
+	add_filter('parse_query','mstw_tr_convert_restrict');
+	
+	function mstw_tr_restrict_manage_posts() {
 		global $typenow;
 		$args=array( 'public' => true, '_builtin' => false ); 
 		$post_types = get_post_types($args);
@@ -140,7 +215,7 @@
 			foreach ($filters as $tax_slug) {
 				$tax_obj = get_taxonomy($tax_slug);
 				wp_dropdown_categories(array(
-					'show_option_all' => __('Show All '.$tax_obj->label ),
+					'show_option_all' => __('Show All '.$tax_obj->label, 'mstw-loc-domain' ),
 					'taxonomy' => $tax_slug,
 					'name' => $tax_obj->name,
 					'orderby' => 'term_order',
@@ -153,7 +228,7 @@
 		}
 	}
 	
-	function mstw_convert_restrict($query) {
+	function mstw_tr_convert_restrict($query) {
 		global $pagenow;
 		global $typenow;
 		if ($pagenow=='edit.php') {
@@ -168,6 +243,7 @@
 		}
 		return $query;
 	}
+	*/
 	
 	// ----------------------------------------------------------------
 	// Create the meta box for the Team Roster custom post type
@@ -228,8 +304,8 @@
 		$bats = get_post_meta( $post->ID, '_mstw_tr_bats', true );
 		$throws = get_post_meta( $post->ID, '_mstw_tr_throws', true );
 		
-		// other info is not currently used
-		$other_info = get_post_meta( $post->ID, '_mstw_tr_other_info', true );
+		// other info
+		$other = get_post_meta( $post->ID, '_mstw_tr_other', true );
 		   
 		?>	
 		
@@ -318,10 +394,11 @@
         </select>   
         </td>
 		</tr>
+		
 		<tr valign="top">
-			<th scope="row"><label for="mstw_tr_other_info" >Other Info:</label></th>
-			<td><input maxlength="256" size="20" name="mstw_tr_other_info"
-        	value="<?php echo esc_attr( $other_info ); ?>"/></td>
+			<th scope="row"><label for="mstw_tr_other" >Other Info:</label></th>
+			<td><input maxlength="256" size="20" name="mstw_tr_other"
+        	value="<?php echo esc_attr( $other ); ?>"/></td>
 		</tr>
 		
     </table>
@@ -380,6 +457,9 @@
 				
 		update_post_meta( $post_id, '_mstw_tr_throws',
 				strip_tags( $_POST['mstw_tr_throws'] ) );
+				
+		update_post_meta( $post_id, '_mstw_tr_other',
+				strip_tags( $_POST['mstw_tr_other'] ) );
 		
 	}
 
@@ -468,9 +548,39 @@
 		}
 	}
 
+	
+	// Add a menu item for the Admin pages
+	add_action('admin_menu', 'mstw_tr_register_menu_pages');
+
+	function mstw_tr_register_menu_pages( ) {
+	
+		// Add the columns/fields page to the Players menu
+		$page = add_submenu_page( 	'edit.php?post_type=player', 				//parent slug
+							__( 'Team Rosters Display Settings', 'mstw-loc-domain' ), 	//page title
+							__( 'Display Settings', 'mstw-loc-domain' ),	//menu title
+							'manage_options', 									//user capability required to access
+							'mstw_tr_fields_settings', 							//unique menu slug
+							'mstw_tr_fields_columns_page' );					//callback to display page
+							
+
+		//require_once ABSPATH . '/wp-admin/admin.php'; - not needed?
+		$plugin = new MSTW_TR_ImporterPlugin;
+		
+		add_submenu_page(	'edit.php?post_type=league_team',
+							'Import Roster from CSV File',			//page title
+							'CSV Roster Import',					//menu title
+							'manage_options',
+							'mstw_tr_csv_import',
+							array( $plugin, 'form' )
+						);
+							
+		// Now also add action to load java scripts ONLY when you're on this page
+	}
+					 
+					 
 	// --------------------------------------------------------------------------------------
 	// Add a menu for our option page
-	add_action('admin_menu', 'mstw_tr_add_pages');
+	//add_action('admin_menu', 'mstw_tr_add_pages');
 
 	function mstw_tr_add_pages(  ) {
 		//The next line adds the settings page to the Settings menu
@@ -505,7 +615,7 @@
 	function mstw_tr_fields_columns_page( ) {
 		?>
 		<div class="wrap">
-			<?php screen_icon(); ?>
+			<?php screen_icon( ); ?>
 			<h2>Team Rosters Settings</h2>
 			<?php //settings_errors(); ?>
 			<form action="options.php" method="post">
@@ -546,7 +656,7 @@
 		/* Roster Table [shortcode] settings */
 		add_settings_section(
 			'mstw_tr_fields_columns_settings',  	//id attribute of tags
-			'Roster Table Column, Single Player and Player Gallery Data Field Settings',	//title of the section
+			__( 'Roster Table Column, Single Player and Player Gallery Data Field Settings', 'mstw-loc-domain' ),	//title of the section
 			'mstw_tr_fields_columns_text',			//callback to fill section with desired output - should echo
 			'mstw_tr_fields_settings'				//menu page slug on which to display
 		);
@@ -600,6 +710,10 @@
 			$args												//Callback arguments
 		);
 		
+		
+		/* Don't need this as links are now determined by the presence of the
+			single_player.php template in the active theme's main directory.
+			
 		// Add links from Roster Table to single player pages
 		$args = array(	'options' => array(	__( 'Add Links', 'mstw-loc-domain' ) => 1, 
 											__( 'No Links', 'mstw-loc-domain' ) => 0, 
@@ -618,6 +732,7 @@
 			'mstw_tr_fields_columns_settings',					//Page section to display field
 			$args												//Callback arguments
 			);
+		*/
 			
 		// Roster Table SORT ORDER
 		$args = array(	'options' => array(	__( 'Sort by Last Name', 'mstw-loc-domain' )=> 'alpha', 
@@ -1178,45 +1293,6 @@ function mstw_tr_table_links_color_input() {
 	// echo the field
 	echo "<input id='tr_table_links_color' class='tr_table_links_color' name='mstw_tr_options[tr_table_links_color]' type='text' value='$tr_table_links_color' />";
 }
-
-function mstw_tr_table_default_format_input() {
-	// get option 'tr_table_default_format' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$tr_table_default_format = $options['tr_table_default_format'];
-	
-	// echo the field
-    $html = "<p><input type='radio' id='high-school-format' 
-				name='mstw_tr_options[tr_table_default_format]' value='high-school'" . 
-				checked( "high-school", $options['tr_table_default_format'], false ) . '/>';  
-    $html .= "<label for='high-school-format'> High School Format</label></p>";
-	
-    $html .= "<p><input type='radio' id='college-format' 
-				name='mstw_tr_options[tr_table_default_format]' value='college'" . 
-				checked( "college", $options['tr_table_default_format'], false ) . '/>';  
-    $html .= "<label for='college-format'> College Format</label></p>";
-
-	$html .= "<p><input type='radio' id='pro-format' 
-				name='mstw_tr_options[tr_table_default_format]' value='pro'" . 
-				checked( "pro", $options['tr_table_default_format'], false ) . '/>';  
-    $html .= "<label for='pro-format'> Pro Format</label></p>";
-
-	$html .= "<p><input type='radio' id='hs-baseball-format' 
-				name='mstw_tr_options[tr_table_default_format]' value='hs-baseball'" . 
-				checked( "hs-baseball", $options['tr_table_default_format'], false ) . '/>';  
-    $html .= "<label for='hs-baseball-format'> High School Baseball Format</label></p>";
-	
-	$html .= "<p><input type='radio' id='coll-baseball-format' 
-				name='mstw_tr_options[tr_table_default_format]' value='coll-baseball'" . 
-				checked( "coll-baseball", $options['tr_table_default_format'], false ) . '/>';  
-    $html .= "<label for='coll-baseball-format'> College Baseball Format</label></p>";
-	
-	$html .= "<p><input type='radio' id='pro-baseball-format' 
-				name='mstw_tr_options[tr_table_default_format]' value='pro-baseball'" . 
-				checked( "pro-baseball", $options['tr_table_default_format'], false ) . '/>';  
-    $html .= "<label for='pro-baseball-format'> Pro Baseball Format</label></p>";
-	
-    echo $html;  
-} 
  
 function mstw_tr_table_head_bkgd_color_input() {
 	// get option 'tr_table_head_bkgd_color' value from the database
@@ -1444,14 +1520,6 @@ function mstw_tr_validate_fields_options( $input ) {
 			//$args										//Callback arguments
 		);
 		
-		/* Roster Table Odd Row Text Color 
-		$args = array(	'id' => 'tr_table_odd_row_color',
-						'name' => 'mstw_tr_options[tr_table_odd_row_color]',
-						'class' => 'tr_table_odd_row_color',
-						'value' => $options['tr_table_odd_row_color'],
-						'label' => __( "Roster Table [shortcode] odd row color.", 'mstw-loc-domain')
-						);	
-		*/
 		
 		// Roster Table Odd Row Text Color
 		add_settings_field(
@@ -1596,6 +1664,9 @@ function mstw_tr_validate_fields_options( $input ) {
 			//$args										//Callback arguments
 		);
 		
+		/* Don't need this as links are now determined by the presence of the
+			single_player.php template in the active theme's main directory.
+			
 		// Add links from Gallery to single player pages
 		$args = array(	'options' => array(	__( 'Add Gallery Links', 'mstw-loc-domain' ) => 1, 
 											__( 'No Gallery Links', 'mstw-loc-domain' ) => 0, 
@@ -1615,8 +1686,9 @@ function mstw_tr_validate_fields_options( $input ) {
 			$page_section,											//Page section to display field
 			$args													//Callback arguments
 		);	
-		
+	*/		
 	}
+
 	
 	// Single player section instructions
 	function mstw_tr_bio_gallery_text( ) {

@@ -10,7 +10,7 @@ Author URI: http://shoalsummitsolutions.com
 
 /*
 Team Rosters (Wordpress Plugin)
-Copyright (C) 2012 Mark O'Donnell
+Copyright (C) 2012-13 Mark O'Donnell
 Contact me at http://shoalsummitsolutions.com
 
 This program is free software: you can redistribute it and/or modify
@@ -25,6 +25,12 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+Code from the CSV Importer plugin was modified under that plugin's 
+GPLv2 (or later) license from Smackcoders. 
+
+Code from the File_CSV_DataSource class was re-used unchanged under
+that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel. 
 */
 
 /* ------------------------------------------------------------------------
@@ -256,7 +262,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 					'name' 				   		   => __( 'Teams', 'mstw-loc-domain' ),
 					'singular_name' 			   =>  __( 'Team', 'mstw-loc-domain' ),
 					'search_items' 				   => __( 'Search Teams', 'mstw-loc-domain' ),
-					'popular_items' 			   => __( 'Popular Teams', 'mstw-loc-domain' ),
+					'popular_items' 			   => null, //removes tagcloud __( 'Popular Teams', 'mstw-loc-domain' ),
 					'all_items' 				   => __( 'All Teams', 'mstw-loc-domain' ),
 					'parent_item' 				   => null,
 					'parent_item_colon' 		   => null,
@@ -277,7 +283,8 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 			'show_ui'				=> true,
 			'show_admin_column'		=> true,
 			'query_var' 			=> true, 
-			'rewrite' 				=> true 
+			'rewrite' 				=> true,
+			'show_tagcloud' 		=> false
 			);
 			
 		register_taxonomy( 'teams', 'player', $args );
@@ -360,6 +367,8 @@ add_action( 'init', 'mstw_tr_register_post_type' );
 
 function mstw_tr_register_post_type( ) {
 
+	$menu_icon_url = plugins_url( ) . '/team-rosters/images/mstw-admin-menu-icon.png';
+
 	/* Set up the arguments for the game post type. */
 	$args = array(
 		'public'	=> true,
@@ -377,7 +386,7 @@ function mstw_tr_register_post_type( ) {
 		'labels' => array(
 			'name'               => __( 'Players', 'mstw-loc-domain' ),
 			'singular_name'      => __( 'Player', 'mstw-loc-domain' ),
-			'menu_name'          => __( 'MSTW Players', 'mstw-loc-domain' ),
+			'menu_name'          => __( 'Team Rosters', 'mstw-loc-domain' ),
 			'all_items'			 => __( 'All Players', 'mstw-loc-domain' ),
 			'name_admin_bar'     => __( 'Players', 'mstw-loc-domain' ),
 			'add_new'            => __( 'Add New Player', 'mstw-loc-domain' ),
@@ -391,17 +400,17 @@ function mstw_tr_register_post_type( ) {
 			'all_items'          => __( 'All Players', 'mstw-loc-domain' ),
 			),
 		'taxonomies' => array( 'teams' ),
-		/*'show_in_nav_menus'   => true,
-		'show_in_admin_bar'   => true,
-		'exclude_from_search' => false,
-		'show_ui'             => true,
-		'show_in_menu'        => true,
-		'menu_position'       => null,
-		'menu_icon'           => null,
-		'can_export'          => true,
-		'delete_with_user'    => false,
-		'hierarchical'        => false,
-		'has_archive'         => 'players',*/
+		
+		//'show_in_admin_bar'   => true,
+		//'exclude_from_search' => false,
+		//'show_ui'             => true,
+		//'show_in_menu'        => 'mstw-tr-main-menu',
+		//'menu_position'       => null,
+		'menu_icon'           	=> $menu_icon_url,
+		//'can_export'          => true,
+		//'delete_with_user'    => false,
+		//'hierarchical'        => false,
+		//'has_archive'         => 'players',
 	);
 
 	/* Register the player item post type. */
@@ -449,6 +458,7 @@ function mstw_tr_build_roster( $attribs ) {
 	// Add the colors and stuff
 	
 	//$output = '<pre>BEFORE:' . print_r( $attribs, true ) . '</pre>';
+	//return $output;
 	
 	$attribs = mstw_tr_set_fields( $attribs['roster_type'], $attribs );
 	
@@ -468,12 +478,13 @@ function mstw_tr_build_roster( $attribs ) {
 	$output = "";
 	
 	// Settings from the admin page
+	// THIS IS OKAY ... ATTRIBS HAVE ALREADY BEEN EXTRACTED
 	$options = get_option( 'mstw_tr_options' );
 	
 	// Set the roster table format. If default in [shortcode] atts, 
 	// then use the default setting from admin page.
-	if ($roster_type == 'default') 
-		$roster_type = $options['tr_table_default_format'];
+	if ( $roster_type == 'default' or $roster_type == '' ) 
+		$roster_type = $options['roster_type'];
 	
 	if ( $show_title == 1 ) {
 		//Set the title color
@@ -489,13 +500,19 @@ function mstw_tr_build_roster( $attribs ) {
 	}
 	
 	// Set the sort order	
-	if ( $sort_order == 'numeric' ) {
-		$sort_key = '_mstw_tr_number';
-		$order_by = 'meta_value_num';
-	}
-	else { 		// default is alpha
-		$sort_key = '_mstw_tr_last_name';
-		$order_by = 'meta_value';
+	switch ( $sort_order ) {
+		case'numeric':
+			$sort_key = '_mstw_tr_number';
+			$order_by = 'meta_value_num';
+			break;
+		case 'alpha-first':
+			$sort_key = '_mstw_tr_first_name';
+			$order_by = 'meta_value';
+			break;
+		default: // alpha by last
+			$sort_key = '_mstw_tr_last_name';
+			$order_by = 'meta_value';
+			break;
 	}
 	
 	// Get the team roster		
@@ -586,6 +603,11 @@ function mstw_tr_build_roster( $attribs ) {
 			$output .= $th_temp . $country_label . '</th>';
 		}
 		
+		// OTHER column
+		if ( $show_other_info and $roster_type == 'custom' ) {
+			$output .= $th_temp . $other_info_label . '</th>';
+		}
+		
         $output = $output . '</tr></thead>';
         
 		// Keeps track of even and odd rows. Start with row 1 = odd.
@@ -629,8 +651,9 @@ function mstw_tr_build_roster( $attribs ) {
 				get_post_meta( $post->ID, '_mstw_tr_first_name', true );
 				break;
 			}
+			$single_player_template = get_template_directory( ) . '/single-player.php';
 			
-			if  ( $use_player_links ) { //( $options['tr_use_player_links'] == "show-links" ) {
+			if ( file_exists( $single_player_template ) ) {
 				$player_html = '<a href="' .  get_permalink($post->ID) . '?format=' . $roster_type . '" ';
 				/*if ( $options['tr_table_links_color'] != '' ) {
 					$player_html .= 'style="color:' . $options['tr_table_links_color'] . ';"';
@@ -706,6 +729,11 @@ function mstw_tr_build_roster( $attribs ) {
 				$row_string .= $row_td . get_post_meta( $post->ID, '_mstw_tr_country', true )  . '</td>';
 			}
 			
+			// OTHER column
+			if ( $show_other_info and $roster_type == 'custom' ) {
+				$row_string .= $row_td . get_post_meta( $post->ID, '_mstw_tr_other', true ) .'</td>';
+			}
+			
 			$output = $output . $row_string;
 			
 			$row_cnt = 1- $row_cnt;  // Get the styles right
@@ -727,7 +755,7 @@ function mstw_tr_build_roster( $attribs ) {
 // Convenience function to determine whether or not to show a field
 	function mstw_tr_set_fields( $roster_format, $defaults ) {
 		//$show_bats_throws = ( strpos( $roster_type, 'baseball' ) === false ) ? 0 : 1;
-		switch ( $roster_format) {
+		switch ( $roster_format ) {
 			case 'baseball-high-school':
 			case 'baseball-college':
 			case 'baseball-pro':
@@ -779,7 +807,7 @@ function mstw_tr_build_roster( $attribs ) {
 			case 'college':
 				$settings = array(	
 					//'team'					=> 'no-team-specified',
-					//'roster_type'			=> 'custom',
+					'roster_type'			=> $roster_format,
 					//'show_title'			=> 1,
 					//'show_title'			=> 1,
 					//'sort_order'			=> 'alpha',
@@ -816,7 +844,7 @@ function mstw_tr_build_roster( $attribs ) {
 				$settings = array(	
 					//'team'					=> 'no-team-specified',
 					//'show_title'			=> 1,
-					//'roster_type'			=> 'custom',
+					'roster_type'			=> $roster_format,
 					//'show_title'			=> 1,
 					//'sort_order'			=> 'alpha',
 					//'name_format'			=> 'last-first',

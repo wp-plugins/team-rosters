@@ -26,27 +26,29 @@
 	// Get the settings from the admin page
 	$options = get_option( 'mstw_tr_options' );
 	
-	//$sp_main_text_color = $options['sp_main_text_color'];
-	//$sp_main_bkgd_color = $options['sp_main_bkgd_color'];
-	//$hide_weight = $options['tr_hide_weight'];
-	
 	// Set the roster table format.  
 	if ( $_GET['format'] == '' ) {
-		$format = $options['tr_table_default_format'];
+		$format = $options['roster_type'];
+		//echo '<p>format from options: ' . $format . '</p>';
 	} else {
 		$format = $_GET['format'];
+		//echo '<p>format from url: ' . $format . '</p>';
 	}
+	
+	
 	
 	// Get the right settings for the format
 	$settings = mstw_tr_set_fields_by_format( $format );
+	
+	//echo '<p>format from set_fields_by_format: ' . $settings['roster_type'] . '</p>';
+	
 	
 	//echo '<h2>REVISED OPTIONS</h2>';
 	$options = wp_parse_args( $settings, $options );
 	//print_r( $options );
 	
-	//$show_title = 1; /* this will come from a setting */
-	
-	$use_player_links = $options['pg_use_player_links'];
+	//echo '<p>revised format: ' . $options['roster_type'] . '</p>';
+	//$roster_type = $options['roster_type'];
 	
 	// figure out the team name - for the title (if shown) and for team-based styles
 	$uri_array = explode( '/', $_SERVER['REQUEST_URI'] );	
@@ -71,6 +73,31 @@
 	$img_width = ( $sp_image_width == '' ) ? 150 : $sp_image_width;
 	$img_height = ( $sp_image_height == '' ) ? 150 : $sp_image_height;
 	
+	// Set the sort order	
+	switch ( $options['sort_order'] ) {
+		case'numeric':
+			$sort_key = '_mstw_tr_number';
+			$order_by = 'meta_value_num';
+			break;
+		case 'alpha-first':
+			$sort_key = '_mstw_tr_first_name';
+			$order_by = 'meta_value';
+			break;
+		default: // alpha by last
+			$sort_key = '_mstw_tr_last_name';
+			$order_by = 'meta_value';
+			break;
+	}
+	
+	// Get the team roster		
+	$posts = get_posts(array( 'numberposts' => -1,
+							  'post_type' => 'player',
+							  'teams' => $team_slug, 
+							  'orderby' => $order_by, 
+							  'meta_key' => $sort_key,
+							  'order' => 'ASC' 
+							));	
+	
 	while ( have_posts() ) : the_post(); 
 
 		$first_name = get_post_meta($post->ID, '_mstw_tr_first_name', true );
@@ -87,6 +114,7 @@
 		$country = get_post_meta($post->ID, '_mstw_tr_country', true );
 		$bats = get_post_meta($post->ID, '_mstw_tr_bats', true );
 		$throws = get_post_meta($post->ID, '_mstw_tr_throws', true );
+		$other = get_post_meta($post->ID, '_mstw_tr_other', true );
 		?> 
 		
 		<div class="player-tile player-tile-<?php echo( $team_slug ) ?>">
@@ -112,7 +140,8 @@
 						$photo_file_url = plugins_url() . '/team-rosters/images/default-photo' . '.jpg';
 					}
 				}
-				if ( $options['use_gallery_links'] ) {
+				$single_player_template = get_template_directory( ) . '/single-player.php';
+				if ( file_exists( $single_player_template ) ) {
 					echo( '<a href="' . get_permalink( $post->ID ) . '?format=' . $format . '">' . '<img src="' . $photo_file_url . '" alt="' . $alt . '" width="' . $img_width . '" height="' . $img_height . '" /></a>' );
 				}
 				else {
@@ -139,8 +168,9 @@
 							break;
 					}
 					
+					$single_player_template = get_template_directory( ) . '/single-player.php';
 					
-					if( $options['use_gallery_links'] ) {
+					if ( file_exists( $single_player_template ) ) {
 						// add links from player name to player bio page 	
 						$player_html = '<a href="' .  
 										get_permalink($post->ID) . 
@@ -213,6 +243,11 @@
 					//COUNTRY
 					if( $options['show_country'] ) {
 						echo $row_start . $options['country_label'] . $new_cell .  $country . $row_end;
+					}
+					
+					//OTHER
+					if( $options['show_other_info'] ) {
+						echo $row_start . $options['other_info_label'] . $new_cell .  $other . $row_end;
 					}
 					
 					?>
