@@ -536,6 +536,11 @@ function mstw_tr_build_roster( $attribs ) {
 	
 		$th_temp = '<th class="mstw-tr-table-head" > ';
 		
+		// Check the PHOTO Column
+		if ( $show_photos ) {
+			$output .= $th_temp . $photo_label . '</th>';
+		}
+		
 		if ( $show_number ) {	
 			$output .= $th_temp . $number_label . '</th>';
 		}
@@ -614,6 +619,9 @@ function mstw_tr_build_roster( $attribs ) {
 		$even_and_odd = array('even', 'odd');
 		$row_cnt = 1; 
 		
+		// Used to determine whether or not to add links from name & photo to player profiles 
+		$single_player_template = get_template_directory( ) . '/single-player.php';
+		
 		// Loop through the posts and make the rows
 		foreach($posts as $post){
 			// set up some housekeeping to make styling in the loop easier
@@ -651,7 +659,7 @@ function mstw_tr_build_roster( $attribs ) {
 				get_post_meta( $post->ID, '_mstw_tr_first_name', true );
 				break;
 			}
-			$single_player_template = get_template_directory( ) . '/single-player.php';
+			
 			
 			if ( file_exists( $single_player_template ) ) {
 				$player_html = '<a href="' .  get_permalink($post->ID) . '?format=' . $roster_type . '" ';
