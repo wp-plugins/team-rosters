@@ -82,46 +82,18 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 //	delete_option('mstw_tr_options');
 //
 
-	/* Add styles and scripts for the color picker. */
-	//add_action( 'admin_enqueue_scripts', 'mstw_tr_add_styles' );
-	
-	add_action( 'admin_enqueue_scripts', 'mstw_tr_enqueue_color_picker' );
-	function mstw_tr_enqueue_color_picker( $hook_suffix ) {
-		// first check that $hook_suffix is appropriate for your admin page
-		wp_enqueue_style( 'wp-color-picker' );
-		//wp_enqueue_style( 'wp-color-picker' );
-		//wp_enqueue_script( 'wp-color-picker-settings', plugins_url('my-script.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
-		wp_enqueue_script( 'wp-color-picker-settings', plugins_url( 'team-rosters/js/tr-color-settings.js' ), array( 'wp-color-picker' ), false, true ); 
-	}
-
-	function mstw_tr_add_styles( ) {
-		//Access the global $wp_version variable to see which version of WordPress is installed.
-		global $wp_version;
-		//global $just_playing;
-		
-		//If the WordPress version is greater than or equal to 3.5, then load the new WordPress color picker.
-		if ( 3.5 <= $wp_version ){
-		  //Both the necessary css and javascript have been registered already by WordPress, so all we have to do is load them with their handle.
-		  wp_enqueue_style( 'wp-color-picker' );
-		  wp_enqueue_script( 'wp-color-picker' );
-		}
-		//If the WordPress version is less than 3.5 load the older farbtasic color picker.
-		else {
-		  //As with wp-color-picker the necessary css and javascript have been registered already by WordPress, so all we have to do is load them with their handle.
-		  wp_enqueue_style( 'farbtastic' );
-		  wp_enqueue_script( 'farbtastic' );
-		}
-		
-		//Load our custom javascript file
-		wp_enqueue_script( 'wp-color-picker-settings', get_stylesheet_directory_uri() . '/js/color-settings.js' );
-		
-	 }
-
 	// ----------------------------------------------------------------
 	// Load the MSTW Admin Utility Functions if necessary
-		
-	if ( !function_exists( 'mstw_tr_text_ctrl' ) ) {
-			require_once  plugin_dir_path( __FILE__ ) . 'mstw-tr-admin-utility-functions.php';
+	if ( !function_exists( 'mstw_admin_utils_loaded' ) ) {
+			require_once  plugin_dir_path( __FILE__ ) . 'mstw-admin-utils.php';
+	}
+	// ----------------------------------------------------------------	
+	// Add styles and scripts for the color picker. 
+	add_action( 'admin_enqueue_scripts', 'mstw_tr_enqueue_color_picker' );
+	
+	function mstw_tr_enqueue_color_picker( $hook_suffix ) {
+		wp_enqueue_style( 'wp-color-picker' );
+		wp_enqueue_script( 'mstw-tr-color-picker', plugins_url( 'team-rosters/js/tr-color-settings.js' ), array( 'wp-color-picker' ), false, true ); 
 	}
 	
 	// ----------------------------------------------------------------
@@ -159,21 +131,19 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 
 	// ----------------------------------------------------------------
 	// Remove the Bulk Actions pull-down
-	// 20130822-MAO: No reason to remove this. Really just needed
+	// 20130822-MAO: No reason to remove this. Really just wanted
 	// 		the quick edit menu removed.
-	//add_filter( 'bulk_actions-' . 'edit-player', '__return_empty_array' );
-
+	add_filter( 'bulk_actions-edit-player', 'mstw_tr_bulk_actions' );
 
     function mstw_tr_bulk_actions( $actions ){
         unset( $actions['edit'] );
         return $actions;
     }
-    add_filter( 'bulk_actions-edit-player', 'mstw_tr_bulk_actions' );
-
 		
 	// ----------------------------------------------------------------
 	// Add a filter the All Teams screen based on the Leagues Taxonomy
 	add_action('restrict_manage_posts','mstw_tr_restrict_manage_posts');
+	
 	function mstw_tr_restrict_manage_posts( ) {
 		global $typenow;
 
@@ -201,49 +171,6 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		}
 		return $request;
 	}
-
-/*	// This new code is from http://wordpress.stackexchange.com/questions/578/adding-a-taxonomy-filter-to-admin-list-for-a-custom-post-type
-	add_action( 'restrict_manage_posts', 'mstw_tr_restrict_manage_posts' );
-	add_filter('parse_query','mstw_tr_convert_restrict');
-	
-	function mstw_tr_restrict_manage_posts() {
-		global $typenow;
-		$args=array( 'public' => true, '_builtin' => false ); 
-		$post_types = get_post_types($args);
-		if ( in_array($typenow, $post_types) ) {
-		$filters = get_object_taxonomies($typenow);
-			foreach ($filters as $tax_slug) {
-				$tax_obj = get_taxonomy($tax_slug);
-				wp_dropdown_categories(array(
-					'show_option_all' => __('Show All '.$tax_obj->label, 'mstw-loc-domain' ),
-					'taxonomy' => $tax_slug,
-					'name' => $tax_obj->name,
-					'orderby' => 'term_order',
-					'selected' => $_GET[$tax_obj->query_var],
-					'hierarchical' => $tax_obj->hierarchical,
-					'show_count' => true,
-					'hide_empty' => true
-				));
-			}
-		}
-	}
-	
-	function mstw_tr_convert_restrict($query) {
-		global $pagenow;
-		global $typenow;
-		if ($pagenow=='edit.php') {
-			$filters = get_object_taxonomies($typenow);
-			foreach ($filters as $tax_slug) {
-				$var = &$query->query_vars[$tax_slug];
-				if ( isset($var) ) {
-					$term = get_term_by('id',$var,$tax_slug);
-					$var = $term->slug;
-				}
-			}
-		}
-		return $query;
-	}
-	*/
 	
 	// ----------------------------------------------------------------
 	// Create the meta box for the Team Roster custom post type
@@ -680,7 +607,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'show_title',
 			__( 'Show Roster Table Titles:', 'mstw-loc-domain' ),
-			'mstw_tr_select_option_ctrl',							//Callback to display field
+			'mstw_utl_select_option_ctrl',						//Callback to display field
 			'mstw_tr_fields_settings',							//Page to display field
 			'mstw_tr_fields_columns_settings',					//Page section to display field
 			$args												//Callback arguments
@@ -704,35 +631,11 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'roster_type',										//ID attribute of tags
 			__('Roster Table Format:', 'mstw-loc-domain' ),		//Title of field
-			'mstw_tr_select_option_ctrl',							//Callback to display field
+			'mstw_utl_select_option_ctrl',							//Callback to display field
 			'mstw_tr_fields_settings',							//Page to display field
 			'mstw_tr_fields_columns_settings',					//Page section to display field
 			$args												//Callback arguments
 		);
-		
-		
-		/* Don't need this as links are now determined by the presence of the
-			single_player.php template in the active theme's main directory.
-			
-		// Add links from Roster Table to single player pages
-		$args = array(	'options' => array(	__( 'Add Links', 'mstw-loc-domain' ) => 1, 
-											__( 'No Links', 'mstw-loc-domain' ) => 0, 
-											),
-						'id' => 'use_player_links',
-						'name' => 'mstw_tr_options[use_player_links]',
-						'value' => $options['use_player_links'],
-						'label' => __( "Add links from Roster Table to player pages. (Default: No Links)", 'mstw-loc-domain')
-						);
-						
-		add_settings_field(
-			'use_player_links',
-			__( 'Add links to player pages:', 'mstw-loc-domain' ),
-			'mstw_tr_select_option_ctrl',							//Callback to display field
-			'mstw_tr_fields_settings',							//Page to display field
-			'mstw_tr_fields_columns_settings',					//Page section to display field
-			$args												//Callback arguments
-			);
-		*/
 			
 		// Roster Table SORT ORDER
 		$args = array(	'options' => array(	__( 'Sort by Last Name', 'mstw-loc-domain' )=> 'alpha', 
@@ -747,7 +650,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field( 
 			'sort_order',									//ID attribute of tags
 			__( 'Sort Roster by:', 'mstw-loc-domain' ), 	//Title of field
-			'mstw_tr_select_option_ctrl',						//Callback to display field
+			'mstw_utl_select_option_ctrl',						//Callback to display field
 			'mstw_tr_fields_settings',						//Page to display field
 			'mstw_tr_fields_columns_settings',				//Page section to display field
 			$args											//Callback arguments
@@ -768,7 +671,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field( 
 			'name_format',									//ID attribute of tags
 			__( 'Display Players by:', 'mstw-loc-domain' ), 	//Title of field
-			'mstw_tr_select_option_ctrl',						//Callback to display field
+			'mstw_utl_select_option_ctrl',						//Callback to display field
 			'mstw_tr_fields_settings',						//Page to display field
 			'mstw_tr_fields_columns_settings',				//Page section to display field
 			$args											//Callback arguments
@@ -785,7 +688,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_show_number',
 			__( 'Show Number Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
+			'mstw_utl_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -802,7 +705,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_number_label',
 			__( 'Number Column Label:', 'mstw-loc-domain' ),
-			'mstw_tr_text_ctrl',
+			'mstw_utl_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -820,7 +723,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_name_label',
 			__( 'Name Column Label:', 'mstw-loc-domain' ),
-			'mstw_tr_text_ctrl',
+			'mstw_utl_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -836,7 +739,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_show_position',
 			__( 'Show Position Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
+			'mstw_utl_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -852,7 +755,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_position_label',
 			'Position Column Label:',
-			'mstw_tr_text_ctrl',
+			'mstw_utl_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -868,7 +771,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_show_height',
 			'Show Height Column:',
-			'mstw_tr_show_hide_ctrl',
+			'mstw_utl_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -885,7 +788,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_height_label',
 			'Height Column Label:',
-			'mstw_tr_text_ctrl',
+			'mstw_utl_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -901,7 +804,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_show_weight',
 			'Show Weight Column:',
-			'mstw_tr_show_hide_ctrl',
+			'mstw_utl_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -918,7 +821,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_weight_label',
 			'Weight Column Label:',
-			'mstw_tr_text_ctrl',
+			'mstw_utl_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -935,7 +838,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_show_year',
 			__( 'Show Year Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
+			'mstw_utl_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -952,7 +855,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_year_label',
 			'Year Column Label:',
-			'mstw_tr_text_ctrl',
+			'mstw_utl_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -969,7 +872,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_show_experience',
 			__( 'Show Experience Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
+			'mstw_utl_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -986,7 +889,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_experience_label',
 			'Experience Column Label:',
-			'mstw_tr_text_ctrl',
+			'mstw_utl_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -1003,7 +906,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_show_age',
 			__( 'Show Age Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
+			'mstw_utl_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -1020,7 +923,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_age_label',
 			'Age Column Label:',
-			'mstw_tr_text_ctrl',
+			'mstw_utl_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -1037,7 +940,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_show_home_town',
 			__( 'Show Home Town Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
+			'mstw_utl_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -1054,7 +957,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_home_town_label',
 			'Home Town Column Label:',
-			'mstw_tr_text_ctrl',
+			'mstw_utl_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -1071,7 +974,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_show_last_school',
 			__( 'Show Last School Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
+			'mstw_utl_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -1088,7 +991,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_last_school_label',
 			'Last School Column Label:',
-			'mstw_tr_text_ctrl',
+			'mstw_utl_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -1105,7 +1008,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_show_country',
 			__( 'Show Country Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
+			'mstw_utl_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -1122,7 +1025,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_country_label',
 			'Country Column Label:',
-			'mstw_tr_text_ctrl',
+			'mstw_utl_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -1139,7 +1042,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_show_bats_throws',
 			__( 'Show Bats/Throws Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
+			'mstw_utl_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -1156,7 +1059,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_bats_throws_label',
 			'Bats/Throws Column Label:',
-			'mstw_tr_text_ctrl',
+			'mstw_utl_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -1173,7 +1076,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_show_other_info',
 			__( 'Show Other Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
+			'mstw_utl_show_hide_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
@@ -1190,12 +1093,12 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_settings_field(
 			'tr_other_info_label',
 			'Other Column Label:',
-			'mstw_tr_text_ctrl',
+			'mstw_utl_text_ctrl',
 			'mstw_tr_fields_settings',
 			'mstw_tr_fields_columns_settings',
 			$args
 		);
-		
+		//echo '<p>DONE!</p>';
 	}
 
 function mstw_tr_fields_columns_text( ) {
@@ -1203,164 +1106,7 @@ function mstw_tr_fields_columns_text( ) {
 }
 
 /*--------------------------------------------------------------
- *	Input fields for single player page section
- */
- 
-function mstw_tr_sp_content_title_input() {
-	// get option 'sp_content_title' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$sp_content_title = $options['sp_content_title'];
-	// echo the field
-	echo "<input id='sp_content_title' name='mstw_tr_options[sp_content_title]' type='text' value='$sp_content_title' />  (defaults to \"Player Bio\")";
-}
-
-function mstw_tr_sp_image_width_input() {
-	// get option 'sp_image_width' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$sp_image_width = $options['sp_image_width'];
-	// echo the field
-	echo "<input id='sp_image_width' name='mstw_tr_options[sp_image_width]' type='text' value='$sp_image_width' />  (in px defaults to 150)";
-}
-
-function mstw_tr_sp_image_height_input() {
-	// get option 'sp_image_height' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$sp_image_height = $options['sp_image_height'];
-	// echo the field
-	echo "<input id='sp_image_height' name='mstw_tr_options[sp_image_height]' type='text' value='$sp_image_height' /> (in px defaults to 150)";
-}
- 
-function mstw_tr_sp_main_bkgd_color_input() {
-	// get option 'sp_main_bkgd_color' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$sp_main_bkgd_color = $options['sp_main_bkgd_color'];
-	// echo the field
-	echo "<input id='sp_main_bkgd_color' class='sp_main_bkgd_color' name='mstw_tr_options[sp_main_bkgd_color]' type='text' value='$sp_main_bkgd_color' />";
-}
-
-function mstw_tr_sp_main_text_color_input() {
-	// get option 'sp_main_text_color' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$sp_main_text_color = $options['sp_main_text_color'];
-	// echo the field
-	echo "<input id='sp_main_text_color' class='sp_main_text_color' name='mstw_tr_options[sp_main_text_color]' type='text' value='$sp_main_text_color' />";
-}
-
-function mstw_tr_sp_bio_border_color_input() {
-	// get option 'sp_bio_border_color' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$sp_bio_border_color = $options['sp_bio_border_color'];
-	// echo the field
-	echo "<input id='sp_bio_border_color' class='sp_bio_border_color' name='mstw_tr_options[sp_bio_border_color]' type='text' value='$sp_bio_border_color' />";
-}
-
-function mstw_tr_sp_bio_header_color_input() {
-	// get option 'sp_bio_header_color' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$sp_bio_header_color = $options['sp_bio_header_color'];
-	// echo the field
-	echo "<input id='sp_bio_header_color' class='sp_bio_header_color' name='mstw_tr_options[sp_bio_header_color]' type='text' value='$sp_bio_header_color' />";
-}
-
-function mstw_tr_sp_bio_text_color_input() {
-	// get option 'sp_bio_text_color' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$sp_bio_text_color = $options['sp_bio_text_color'];
-	// echo the field
-	echo "<input id='sp_bio_text_color' class='sp_bio_text_color' name='mstw_tr_options[sp_bio_text_color]' type='text' value='$sp_bio_text_color' />";
-}
-
-function mstw_tr_sp_bio_bkgd_color_input() {
-	// get option 'sp_main_text_color' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$sp_bio_bkgd_color = $options['sp_bio_bkgd_color'];
-	// echo the field
-	echo "<input id='sp_bio_bkgd_color' class='sp_bio_bkgd_color' name='mstw_tr_options[sp_bio_bkgd_color]' type='text' value='$sp_bio_bkgd_color' />";
-}
-
-function mstw_tr_gallery_links_color_input() {
-	// get option 'gallery_links_color' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$gallery_links_color = $options['gallery_links_color'];
-	// echo the field
-	echo "<input id='gallery_links_color' class='gallery_links_color' name='mstw_tr_options[gallery_links_color]' type='text' value='$gallery_links_color' />";
-}
-
-function mstw_tr_table_links_color_input() {
-	// get option 'tr_table_links_color' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$tr_table_links_color = $options['tr_table_links_color'];
-	// echo the field
-	echo "<input id='tr_table_links_color' class='tr_table_links_color' name='mstw_tr_options[tr_table_links_color]' type='text' value='$tr_table_links_color' />";
-}
- 
-function mstw_tr_table_head_bkgd_color_input() {
-	// get option 'tr_table_head_bkgd_color' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$tr_table_head_bkgd_color = $options['tr_table_head_bkgd_color'];
-	// echo the field
-	echo "<input id='tr_table_head_bkgd_color' class='tr_table_head_bkgd_color' name='mstw_tr_options[tr_table_head_bkgd_color]' type='text' value='$tr_table_head_bkgd_color' />";
-}
-
-function mstw_tr_table_head_text_color_input() {
-	// get option 'tr_table_head_text_color' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$tr_table_head_text_color = $options['tr_table_head_text_color'];
-	// echo the field
-	echo "<input id='tr_table_head_text_color' name='mstw_tr_options[tr_table_head_text_color]' type='text' class='tr_table_head_text_color' value='$tr_table_head_text_color' />";
-}
-
-function mstw_tr_table_title_text_color_input() {
-	// get option 'tr_table_title_text_color' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$tr_table_title_text_color = $options['tr_table_title_text_color'];
-	// echo the field
-	echo "<input id='tr_table_title_text_color' class='tr_table_title_text_color' name='mstw_tr_options[tr_table_title_text_color]' type='text' value='$tr_table_title_text_color' />";
-}
-
-function mstw_tr_table_even_row_color_input() {
-	// get option 'tr_table_even_row_color' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$tr_table_even_row_color = $options['tr_table_even_row_color'];
-	// echo the field
-	echo "<input id='tr_table_even_row_color' name='mstw_tr_options[tr_table_even_row_color]' type='text' class='tr_table_even_row_color' value='$tr_table_even_row_color' />";
-}
-
-function mstw_tr_table_even_row_bkgd_input() {
-	// get option 'tr_table_even_row_bkgd' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$tr_table_even_row_bkgd = $options['tr_table_even_row_bkgd'];
-	// echo the field
-	echo "<input id='tr_table_even_row_bkgd' name='mstw_tr_options[tr_table_even_row_bkgd]' type='text' class='tr_table_even_row_bkgd' value='$tr_table_even_row_bkgd' />";
-}
-
-function mstw_tr_table_odd_row_color_input() {
-	// get option 'tr_table_odd_row_color' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$tr_table_odd_row_color = $options['tr_table_odd_row_color'];
-	// echo the field
-	echo "<input id='tr_table_odd_row_color' name='mstw_tr_options[tr_table_odd_row_color]' type='text' class='tr_table_odd_row_color' value='$tr_table_odd_row_color' />";
-}
-
-function mstw_tr_table_odd_row_bkgd_input( ) {
-	// get option 'tr_table_odd_row_bkgd' value from the database
-	$options = get_option( 'mstw_tr_options' );
-	$tr_table_odd_row_bkgd = $options['tr_table_odd_row_bkgd'];
-	// echo the field
-	/*$args = array(	'id' 	=> 'tr_table_odd_row_bkgd',
-					'class' => 'tr_table_odd_row_bkgd',
-					'name' 	=> 'mstw_tr_options[tr_table_odd_row_bkgd]',
-					'label' => 'foo',
-					'value' => $tr_table_odd_row_bkgd
-					);
-	*/
-
-	echo "<input id='tr_table_odd_row_bkgd' class='tr_table_odd_row_bkgd' name='mstw_tr_options[tr_table_odd_row_bkgd]' type='text' value='$tr_table_odd_row_bkgd' />";
-		
-}
-
-/*--------------------------------------------------------------
- *	Validate user input (we want text only)
+ *	Validate & sanitize user input
  */
  
 function mstw_tr_validate_fields_options( $input ) {
@@ -1394,8 +1140,7 @@ function mstw_tr_validate_fields_options( $input ) {
 				case 'sp_main_text_color':
 				case 'gallery_links_color':
 					// validate the color for proper hex format
-					
-					$sanitized_color = mstw_tr_sanitize_hex_color( $input[$key] );
+					$sanitized_color = mstw_utl_sanitize_hex_color( $input[$key] );
 					
 					// decide what to do - save new setting 
 					// or display error & revert to last setting
@@ -1412,6 +1157,11 @@ function mstw_tr_validate_fields_options( $input ) {
 											'Invalid hex color entered!',
 											'error');
 					}
+					break;
+				case 'sp_image_width':
+				case 'sp_image_height':
+					$output[$key] = round( $input[$key] );
+					$output[$key] = ( $output[$key] == 0 ) ? '' : $output[$key];
 					break;
 					
 				// Check all other settings
@@ -1453,100 +1203,147 @@ function mstw_tr_validate_fields_options( $input ) {
 		$display_on_page = 'mstw_tr_fields_settings';
 		$page_section = 'mstw_tr_roster_color_settings';
 		
+		$options = get_option( 'mstw_tr_options' );
+		
 		add_settings_section(
-			$page_section, //'mstw_tr_roster_color_settings',							//id attribute of tags
-			'Roster Table Color Settings',			//title of the section
-			'mstw_tr_roster_table_colors_text',		//callback to fill section with desired output - should echo
-			$display_on_page //'mstw_tr_fields_settings'						//menu page slug on which to display
+			$page_section, 						//'mstw_tr_roster_color_settings'
+			'Roster Table Color Settings',		//title of the section
+			'mstw_tr_roster_table_colors_text',	//callback to fill section with desired output - should echo
+			$display_on_page 					//'mstw_tr_fields_settings'
 		);
 
 		// Roster Table Title Color
+		$args = array( 	'id' => 'tr_table_title_text_color',
+						'name' => 'mstw_tr_options[tr_table_title_text_color]',
+						'value' => $options['tr_table_title_text_color'],
+						'label' => ''
+					 );
+					 
 		add_settings_field(
-			'mstw_tr_table_title_text_color', 			//ID attribute of tags
-			'Table Title Text Color:',					//Title of field
-			'mstw_tr_table_title_text_color_input',		//Callback to display field
-			$display_on_page,							//Page to display field
-			$page_section								//Page section to display field
-			//$args										//Callback arguments
+			'tr_table_title_text_color',
+			__( 'Table Title Text Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
 		);
-
+		
 		// Link text color. (Hover effect is underline by default. Use stylesheet to customize.)
+		$args = array( 	'id' => 'tr_table_links_color',
+						'name' => 'mstw_tr_options[tr_table_links_color]',
+						'value' => $options['tr_table_links_color'],
+						'label' => '(Hover effect is underline by default. Use stylesheet to customize.)'
+					 );
+					 
 		add_settings_field(
-			'mstw_tr_table_links_color',
-			'Link text color:',
-			'mstw_tr_table_links_color_input',
-			$display_on_page,							//Page to display field
-			$page_section								//Page section to display field
-			//$args										//Callback arguments
+			'tr_table_links_color',
+			__( 'Table Links Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
 		);
-
+		
 		// Roster Table Header Background Color
+		$args = array( 	'id' => 'tr_table_head_bkgd_color',
+						'name' => 'mstw_tr_options[tr_table_head_bkgd_color]',
+						'value' => $options['tr_table_head_bkgd_color'],
+						'label' => ''
+					 );
+					 
 		add_settings_field(
-			'mstw_tr_table_head_bkgd_color',
-			'Table Header Background Color:',
-			'mstw_tr_table_head_bkgd_color_input',
-			$display_on_page,							//Page to display field
-			$page_section								//Page section to display field
-			//$args										//Callback arguments
+			'tr_table_head_bkgd_color',
+			__( 'Table Header Background Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
 		);
 		
 		// Roster Table Header Text Color
+		$args = array( 	'id' => 'tr_table_head_text_color',
+						'name' => 'mstw_tr_options[tr_table_head_text_color]',
+						'value' => $options['tr_table_head_text_color'],
+						'label' => ''
+					 );
+					 
 		add_settings_field(
-			'mstw_tr_table_head_text_color',
-			'Table Header Text Color:',
-			'mstw_tr_table_head_text_color_input',
-			$display_on_page,							//Page to display field
-			$page_section								//Page section to display field
-			//$args										//Callback arguments
+			'tr_table_head_text_color',
+			__( 'Table Header Text Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
 		);
 		
 		// Roster Table Even Row Text Color
+		$args = array( 	'id' => 'tr_table_even_row_color',
+						'name' => 'mstw_tr_options[tr_table_even_row_color]',
+						'value' => $options['tr_table_even_row_color'],
+						'label' => ''
+					 );
+					 
 		add_settings_field(
-			'mstw_tr_table_even_row_color',
-			'Table Even Row Text Color:',
-			'mstw_tr_table_even_row_color_input',
-			$display_on_page,							//Page to display field
-			$page_section								//Page section to display field
-			//$args										//Callback arguments
+			'tr_table_even_row_color',
+			__( 'Table Even Row Text Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
 		);
 		
 		// Roster Table Even Row Background Color
+		$args = array( 	'id' => 'tr_table_even_row_bkgd',
+						'name' => 'mstw_tr_options[tr_table_even_row_bkgd]',
+						'value' => $options['tr_table_even_row_bkgd'],
+						'label' => ''
+					 );
+					 
 		add_settings_field(
-			'mstw_tr_table_even_row_bkgd',
-			'Table Even Row Background Color:',
-			'mstw_tr_table_even_row_bkgd_input',
-			$display_on_page,							//Page to display field
-			$page_section								//Page section to display field
-			//$args										//Callback arguments
+			'tr_table_even_row_bkgd',
+			__( 'Table Even Row Background Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
 		);
-		
 		
 		// Roster Table Odd Row Text Color
+		$args = array( 	'id' => 'tr_table_odd_row_color',
+						'name' => 'mstw_tr_options[tr_table_odd_row_color]',
+						'value' => $options['tr_table_odd_row_color'],
+						'label' => ''
+					 );
+					 
 		add_settings_field(
-			'mstw_tr_table_odd_row_color',
-			'Table Odd Row Text Color:',
-			'mstw_tr_table_odd_row_color_input',
-			$display_on_page,							//Page to display field
-			$page_section								//Page section to display field
-			//$args										//Callback arguments
+			'tr_table_odd_row_color',
+			__( 'Table Odd Row Text Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
 		);
-		
+			
 		// Roster Table Odd Row Background Color
+		$args = array( 	'id' => 'tr_table_odd_row_bkgd',
+						'name' => 'mstw_tr_options[tr_table_odd_row_bkgd]',
+						'value' => $options['tr_table_odd_row_bkgd'],
+						'label' => ''
+					 );
+					 
 		add_settings_field(
-			'mstw_tr_table_odd_row_bkgd',
-			'Table Odd Row Background Color:',
-			'mstw_tr_table_odd_row_bkgd_input',
-			$display_on_page,							//Page to display field
-			$page_section								//Page section to display field
-			//$args										//Callback arguments
+			'tr_table_odd_row_bkgd',
+			__( 'Table Odd Row Background Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
 		);
-		
-		
 	}
 	
 	// Roster Table Colors section instructions
 	function mstw_tr_roster_table_colors_text( ) {
-		echo '<p>' . __( 'Enter the default team roster table color settings. Note that these settings will apply to all the [shortcode] roster tables, however they can be overridden by stylesheet settings for specific teams.', 'mstw-loc-domain' ) . '</p>';
+		echo '<p>' . __( 'Enter the default team roster table color settings. Note that these settings will apply to all the [shortcode] roster tables, overriding the default styles. However they can be overridden by more specific stylesheet rules for specific teams.', 'mstw-loc-domain' ) . '</p>';
 	}
 	
 	// setup the single player bio page
@@ -1565,130 +1362,166 @@ function mstw_tr_validate_fields_options( $input ) {
 		);
 		
 		// Title for the content (E.g., "Player Bio")
+		$args = array( 	'id' => 'sp_content_title',
+						'name' => 'mstw_tr_options[sp_content_title]',
+						'value' => $options['sp_content_title'],
+						'label' => ''
+					 );
+					 
 		add_settings_field(
-			'mstw_tr_sp_content_title',
-			'Player content title text:',
-			'mstw_tr_sp_content_title_input',
-			$display_on_page,							//Page to display field
-			$page_section								//Page section to display field
-			//$args										//Callback arguments
-		);
+			'sp_content_title',
+			__( 'Player Profile(Bio) Title:', 'mstw-loc-domain' ),
+			'mstw_utl_text_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);	
 		
-		// Player Photo (thumbnail) width
+		/// Player Photo (thumbnail) width
+		$args = array( 	'id' => 'sp_image_width',
+						'name' => 'mstw_tr_options[sp_image_width]',
+						'value' => $options['sp_image_width'],
+						'label' => 'in pixels. Defaults to 150px.'
+					 );
+					 
 		add_settings_field(
-			'mstw_tr_sp_image_width',
-			'Player photo width:',
-			'mstw_tr_sp_image_width_input',
-			$display_on_page,							//Page to display field
-			$page_section								//Page section to display field
-			//$args										//Callback arguments
-		);
+			'sp_image_width',
+			__( 'Player Photo Width:', 'mstw-loc-domain' ),
+			'mstw_utl_text_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);	
 		
 		// Player Photo (thumbnail) height
+		$args = array( 	'id' => 'sp_image_height',
+						'name' => 'mstw_tr_options[sp_image_height]',
+						'value' => $options['sp_image_height'],
+						'label' => 'in pixels. Defaults to 150px.'
+					 );
+					 
 		add_settings_field(
-			'mstw_tr_sp_image_height',
-			'Player photo height:',
-			'mstw_tr_sp_image_height_input',
-			$display_on_page,							//Page to display field
-			$page_section								//Page section to display field
-			//$args										//Callback arguments
+			'sp_image_height',
+			__( 'Player Photo Height:', 'mstw-loc-domain' ),
+			'mstw_utl_text_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
 		);
+	
 		
 		// Background color of main box
+		$args = array( 	'id' => 'sp_main_bkgd_color',
+						'name' => 'mstw_tr_options[sp_main_bkgd_color]',
+						'value' => $options['sp_main_bkgd_color'],
+						'label' => ''
+					 );
+					 
 		add_settings_field(
-			'mstw_tr_sp_main_bkgd_color',
-			'Main Box Background Color:',
-			'mstw_tr_sp_main_bkgd_color_input',
-			$display_on_page,							//Page to display field
-			$page_section								//Page section to display field
-			//$args										//Callback arguments
-		);
+			'sp_main_bkgd_color',
+			__( 'Main Box Background Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);	
 		
 		// Text color of main box
+		$args = array( 	'id' => 'sp_main_text_color',
+						'name' => 'mstw_tr_options[sp_main_text_color]',
+						'value' => $options['sp_main_text_color'],
+						'label' => ''
+					 );
+					 
 		add_settings_field(
-			'mstw_tr_sp_main_text_color',
-			'Main Box Text Color:',
-			'mstw_tr_sp_main_text_color_input',
-			$display_on_page,							//Page to display field
-			$page_section								//Page section to display field
-			//$args										//Callback arguments
-		);
+			'sp_main_text_color',
+			__( 'Main Box Text Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);	
 		
-		// Border color of player bio box
+		// Border color of player profile box
+		$args = array( 	'id' => 'sp_bio_border_color',
+						'name' => 'mstw_tr_options[sp_bio_border_color]',
+						'value' => $options['sp_bio_border_color'],
+						'label' => ''
+					 );
+					 
 		add_settings_field(
 			'sp_bio_border_color',
-			'Player Bio Border Color:',
-			'mstw_tr_sp_bio_border_color_input',
-			$display_on_page,							//Page to display field
-			$page_section								//Page section to display field
-			//$args										//Callback arguments
-		);
+			__( 'Player Profile(Bio) Border Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);	
 		
 		// Header text color of player bio box
+		$args = array( 	'id' => 'sp_bio_header_color',
+						'name' => 'mstw_tr_options[sp_bio_header_color]',
+						'value' => $options['sp_bio_header_color'],
+						'label' => ''
+					 );
+					 
 		add_settings_field(
 			'sp_bio_header_color',
-			'Player Bio Header Color:',
-			'mstw_tr_sp_bio_header_color_input',
-			$display_on_page,							//Page to display field
-			$page_section								//Page section to display field
-			//$args										//Callback arguments
-		);
+			__( 'Player Bio Header Text Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);	
 		
 		// Text color of player bio box
+		$args = array( 	'id' => 'sp_bio_text_color',
+						'name' => 'mstw_tr_options[sp_bio_text_color]',
+						'value' => $options['sp_bio_text_color'],
+						'label' => ''
+					 );
+					 
 		add_settings_field(
 			'sp_bio_text_color',
-			'Player Bio Text Color:',
-			'mstw_tr_sp_bio_text_color_input',
-			$display_on_page,							//Page to display field
-			$page_section								//Page section to display field
-			//$args										//Callback arguments
-		);
+			__( 'Player Bio Text Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);	
 		
 		// Background color of player bio box
+		$args = array( 	'id' => 'sp_bio_bkgd_color',
+						'name' => 'mstw_tr_options[sp_bio_bkgd_color]',
+						'value' => $options['sp_bio_bkgd_color'],
+						'label' => ''
+					 );
+					 
 		add_settings_field(
 			'sp_bio_bkgd_color',
-			'Player Bio Background Color:',
-			'mstw_tr_sp_bio_bkgd_color_input',
-			$display_on_page,							//Page to display field
-			$page_section								//Page section to display field
-			//$args										//Callback arguments
-		);
+			__( 'Player Bio Background Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);	
 		
 		// Gallery links color
+		$args = array( 	'id' => 'gallery_links_color',
+						'name' => 'mstw_tr_options[gallery_links_color]',
+						'value' => $options['gallery_links_color'],
+						'label' => ''
+					 );
+					 
 		add_settings_field(
 			'gallery_links_color',
-			'Gallery Links Color:',
-			'mstw_tr_gallery_links_color_input',
-			$display_on_page,							//Page to display field
-			$page_section								//Page section to display field
-			//$args										//Callback arguments
-		);
-		
-		/* Don't need this as links are now determined by the presence of the
-			single_player.php template in the active theme's main directory.
-			
-		// Add links from Gallery to single player pages
-		$args = array(	'options' => array(	__( 'Add Gallery Links', 'mstw-loc-domain' ) => 1, 
-											__( 'No Gallery Links', 'mstw-loc-domain' ) => 0, 
-											),
-						'id' => 'use_gallery_links',
-						'name' => 'mstw_tr_options[use_gallery_links]',
-						'value' => $options['use_gallery_links'],
-						'label' => __( "Add links from Player Gallery to single player pages. (Default: No Links)", 'mstw-loc-domain') . 'use_gallery_links: ' . $options['use_gallery_links']
-						);	
-			
-			
-		add_settings_field(
-			'use_gallery_links', 									//"id" attribute of tags
-			__( 'Add links to player bios:', 'mstw-loc-domain' ),	//title of the field
-			'mstw_tr_select_option_ctrl',								//Callback to display field
-			$display_on_page,										//Page to display field
-			$page_section,											//Page section to display field
-			$args													//Callback arguments
-		);	
-	*/		
+			__( 'Player Gallery Links Color:', 'mstw-loc-domain' ),
+			'mstw_utl_color_ctrl',
+			$display_on_page,				//Page to display field
+			$page_section, 					//Page section to display field
+			$args
+		);		
 	}
-
 	
 	// Single player section instructions
 	function mstw_tr_bio_gallery_text( ) {
@@ -1975,14 +1808,6 @@ class MSTW_TR_ImporterPlugin {
 		echo '<p>Title: ' . $temp_title . ' Slug: ' . $temp_slug . '</p>';
 		echo '<p>$opt_cat(ID): ' . $opt_cat . '</p>';
 		$term = get_term_by( 'id', $opt_cat, 'teams' );
-		/*if ( $term ) {
-			echo ' Slug: ' . $term->slug . '</p>';
-			//$tax_input = array( 'teams' => array( $term->slug ) );
-			//$tax_input = '';
-		}
-		else {
-			$this->log['error'][] = "Unknown team. Are you sure you selected one?";
-		}*/
 
         $new_post = array(
             'post_title'   => convert_chars( $temp_title ),
