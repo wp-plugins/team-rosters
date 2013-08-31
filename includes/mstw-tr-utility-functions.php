@@ -149,10 +149,12 @@
 				'roster_type'			=> 'custom',
 				//'use_player_links'		=> 0, removed in 3.1
 				//'use_gallery_links'		=> 0, removed in 3.1
-				'use_pg_links'			=> 0,
+				//'use_pg_links'			=> 0, removed in 3.1
 				'sort_order'			=> 'alpha',
 				'name_format'			=> 'last-first',
 				'name_label'			=> __( 'Name', 'mstw-loc-domain' ),
+				'show_photos'			=> 0,
+				'photo_label'			=> __( 'Photo', 'mstw-loc-domain' ),
 				'show_number'			=> 1,
 				'number_label'			=> __( 'Nbr', 'mstw-loc-domain' ),
 				'show_position'			=> 1,
