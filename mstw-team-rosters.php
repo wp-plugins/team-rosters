@@ -633,7 +633,31 @@ function mstw_tr_build_roster( $attribs ) {
 			$row_td = '<td class="' . $row_class . '">'; 
 			
 			// create the row
-			$row_string = $row_tr;			
+			$row_string = $row_tr;	
+
+			// Add the player's photo	
+			if ( $show_photos ) {
+				$row_string .= $row_td;
+				if ( has_post_thumbnail( $post->ID ) ) {
+					if ( file_exists( $single_player_template ) ) {
+						$row_string .= '<a href="' .  get_permalink( $post->ID ) . '">';
+						$row_string .= get_the_post_thumbnail( $post->ID, array($table_photo_width, $table_photo_height) ) .  '</a></td>'; 
+					}
+					else {  //No profile to link to
+						$row_string .= get_the_post_thumbnail( $post->ID, array($table_photo_width, $table_photo_height) ) .  '</td>';
+					}	
+				}
+				else {
+					$photo_file = plugin_dir_path( __FILE__ ) . 'images/default-photo-'. $team . '.jpg';
+					if (file_exists( $photo_file ) ) {
+						$photo_file_url = plugins_url() . '/team-rosters/images/default-photo-' . $team . '.jpg';
+					}
+					else {
+						$photo_file_url = plugins_url() . '/team-rosters/images/default-photo.jpg';	
+					}
+					$row_string .=  '<img width="' . $table_photo_width . '" height="' . $table_photo_height . '" src="' . $photo_file_url . '" class="attachment-64x64 wp-post-image" alt="No photo available"/></td>';
+				}
+			}
 			
 			// column 1: Add the player's number
 			if ( $show_number ) {
