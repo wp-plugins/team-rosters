@@ -86,6 +86,8 @@ table#player-info {
 	font-size: 16px;
 	padding-left: 10px;
 	margin-left: 20px;
+	width: auto;
+	display: table;
 }
 
 table#player-info td {
