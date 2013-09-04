@@ -228,7 +228,7 @@ get_header(); ?>
 					echo $html;
 					?>
 					
-					<header class="player-header player-header-<?php echo( $team_slug ) ?>">
+					<div class="player-header player-header-<?php echo( $team_slug ) ?>">
 						<!-- First, figure out the player's photo -->
 						<div id = "player-photo">
 							<?php 
@@ -308,7 +308,7 @@ get_header(); ?>
 								
 								// If showing both height and weight show them as height/weight
 								// Otherwise show just one or the other
-								if ( $options['show_weight'] and $options['show_weight'] ) {
+								if ( $options['show_height'] and $options['show_weight'] ) {
 									echo $row_start . $options['height_label'] . '/' . $options['weight_label'] . $new_cell .  $height . '/' . $weight . $row_end;
 								} 
 								else  if ( $options['show_weight'] ) {
@@ -354,7 +354,7 @@ get_header(); ?>
 						
 						</div><!-- #player-name-nbr -->
 						
-					</header><!-- #player-header -->
+					</div><!-- #player-header -->
 					
 					<?php if( get_the_content( ) != "" ) { ?>
 						
