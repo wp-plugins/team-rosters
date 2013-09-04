@@ -1228,7 +1228,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		// Show/hide PHOTO
 		$args = array( 	'id' => 'show_photos',
 						'name'	=> 'mstw_tr_options[show_photos]',
-						'value'	=> $options['show_table_photos'],
+						'value'	=> $options['show_photos'],
 						'label'	=> __( 'Shows photos in roster tables. (Default: Hide)', 'mstw-loc-domain' )
 						);
 						
