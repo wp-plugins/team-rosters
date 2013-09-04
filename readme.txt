@@ -88,14 +88,18 @@ The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are ava
 
 = 3.1 =
 * Fixed bug with sort order. Roster table and player gallery views both sort properly by number, first name, and last name.
+* Fixed bug with show_height settings.
+* Fixed minor bug: gallery sometimes linked to players/player-slug/?format='' instead of players/player-slug/?format=custom. This bug may or may not have an affect on a site, depending on formats and usage.
+* Fixed the "Filter by Team" dropdown on the Show All Players admin screen. 
 * Re-enabled the bulk delete menu on the All Players screen.
-* Fixed the "Filter by Team" dropdown on the Show All Players admin screen.
 * Enabled the "Other" field. It may now be used on all 'custom' displays but it is disabled by default.
-* Fixed minor bug: gallery sometimes linked to players/player-slug/?format='' instead of players/player-slug/?format=custom. This bug may or may not have an affect on a site, depending on formats and usage. 
+* Improved responsiveness of single player profile page (single-player.php). Works much better on small screens.
 * Combined `single-player.php` and `content-single-player.php` templates (into the `single-player.php` template. Why? ...
 * The use of links from the players/roster gallery or players/roster table to the single player profile is now determined by the existence of the `single-player.php` template in the active theme's main directory. Removed the 'use_xxx-links' settings, which are now superfluous. If you want links, just put the `single-player.php` template in the right directory. If not, omit it.
 * Re-factored the admin menu code. Added MSTW icon to admin menu and screens.
-* The new WordPress Color Selector has been added to all color settings in the admin settings screen.
+* The WordPress Color Selector has been added to all color settings in the admin settings screen.
+* Added a control to show player photos in the roster tables (shortcode).
+* Added a gallery shortcode. [mstw-tr-gallery team=team-slug]
 
 = 3.0.1 =
 * Tweaked two calls (one in mstw-team-rosters.php and one in includes/mstw-team-rosters-admin.php) to prevent WARNINGS. (Easily fixed by setting WP_DEBUG to false in wp-config.php.) 
