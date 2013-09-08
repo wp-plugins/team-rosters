@@ -493,7 +493,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		//require_once ABSPATH . '/wp-admin/admin.php'; - not needed?
 		$plugin = new MSTW_TR_ImporterPlugin;
 		
-		add_submenu_page(	'edit.php?post_type=league_team',
+		add_submenu_page(	'edit.php?post_type=player',
 							'Import Roster from CSV File',			//page title
 							'CSV Roster Import',					//menu title
 							'manage_options',

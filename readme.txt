@@ -93,7 +93,7 @@ The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are ava
 * Fixed the "Filter by Team" dropdown on the Show All Players admin screen. 
 * Re-enabled the bulk delete menu on the All Players screen.
 * Enabled the "Other" field. It may now be used on all 'custom' displays but it is disabled by default.
-* Improved responsiveness of single player profile page (single-player.php). Works much better on small screens.
+* Improved responsiveness of single player profile page (single-player.php). Looks better on small screens.
 * Combined `single-player.php` and `content-single-player.php` templates (into the `single-player.php` template. Why? ...
 * The use of links from the players/roster gallery or players/roster table to the single player profile is now determined by the existence of the `single-player.php` template in the active theme's main directory. Removed the 'use_xxx-links' settings, which are now superfluous. If you want links, just put the `single-player.php` template in the right directory. If not, omit it.
 * Re-factored the admin menu code. Added MSTW icon to admin menu and screens.

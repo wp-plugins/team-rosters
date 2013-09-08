@@ -35,8 +35,6 @@
 		//echo '<p>format from url: ' . $format . '</p>';
 	}
 	
-	
-	
 	// Get the right settings for the format
 	$settings = mstw_tr_set_fields_by_format( $format );
 	
@@ -56,7 +54,6 @@
 	$term = get_term_by( 'slug', $team_slug, 'teams' );
 	$team_name .= $term->name;
 	?>
-	
 	
 	<section id="primary">
 	<div id="content-player-gallery" role="main" >
@@ -98,6 +95,11 @@
 							  'order' => 'ASC' 
 							));	
 	
+	$output = mstw_tr_build_gallery( $team_slug, $posts, $options, $format );
+	
+	echo $output;
+	
+	/*
 	while ( have_posts() ) : the_post(); 
 
 		$first_name = get_post_meta($post->ID, '_mstw_tr_first_name', true );
@@ -257,7 +259,7 @@
 			</div><!-- .player-info-container --> 	
 		</div><!-- .player-tile -->
 
-	<?php endwhile; ?>
+	<?php endwhile; */?>
 
 	</div><!-- #content -->
 	</section><!-- #primary -->

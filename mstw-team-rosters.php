@@ -97,7 +97,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 // ----------------------------------------------------------------
 // Load the Team Rosters utility functions (once)
 
-	if ( !function_exists( 'mstw_tr_get_defaults' ) ) {
+	if ( !function_exists( 'mstw_tr_utility_fuctions_loaded' ) ) {
 		// we're in wp-admin
 		require_once ( dirname( __FILE__ ) . '/includes/mstw-tr-utility-functions.php' );
     }
@@ -139,7 +139,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		echo "} \n";
 		
 		//Rules for single player
-		echo "header.player-header { \n";
+		echo "div.player-header { \n";
 			echo mstw_tr_build_css_rule( $options, 'sp_main_bkgd_color', 'background-color' );
 		echo "} \n";
 		
@@ -182,6 +182,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		
 		echo ".player-name-number { \n";
 			echo mstw_tr_build_css_rule( $options, 'sp_main_text_color', 'color' );
+			
 		echo "} \n";
 		
 		echo ".player-name-number a { \n";
@@ -418,15 +419,14 @@ function mstw_tr_register_post_type( ) {
 }
 
 // --------------------------------------------------------------------------------------
-// Add the shortcode handler, which will create the a Team Roster table on the user side.
+// Add the table shortcode handler, which will create the a Team Roster table on the user side.
 // Handles the shortcode parameters, if there were any, 
 // then calls mstw_tr_build_roster() to create the output
 // --------------------------------------------------------------------------------------
 
-add_shortcode( 'mstw-tr-roster', 'mstw_tr_shortcode_handler' );
+add_shortcode( 'mstw-tr-roster', 'mstw_tr_table_handler' );
 
-
-function mstw_tr_shortcode_handler( $atts ){
+function mstw_tr_table_handler( $atts ){
 
 	// get the options set in the admin screen
 	$options = get_option( 'mstw_tr_options' );
@@ -447,7 +447,69 @@ function mstw_tr_shortcode_handler( $atts ){
 }
 
 // --------------------------------------------------------------------------------------
-// Called by:	mstw_tr_shortcode_handler
+// Add the gallery shortcode handler, which will create the a Team Gallery on the user side.
+// Handles the shortcode parameters, if there were any, 
+// then calls mstw_tr_build_gallery( ) to create the output
+// --------------------------------------------------------------------------------------
+add_shortcode( 'mstw-tr-gallery', 'mstw_tr_gallery_handler' );
+
+function mstw_tr_gallery_handler( $atts ){
+
+	// get the options set in the admin screen
+	$options = get_option( 'mstw_tr_options' );
+	//$output = '<pre>OPTIONS:' . print_r( $options, true ) . '</pre>';
+	
+	// and merge them with the defaults
+	$args = wp_parse_args( $options, mstw_tr_get_defaults( ) );
+	//$output .= '<pre>ARGS:' . print_r( $args, true ) . '</pre>';
+	
+	// then merge the parameters passed to the shortcode with the result									
+	$attribs = shortcode_atts( $args, $atts );
+	//$output .= '<pre>ATTS:' . print_r( $atts, true ) . '</pre>';
+	//$output .= '<pre>ATTRIBS:' . print_r( $attribs, true ) . '</pre>';
+	
+	$attribs = mstw_tr_set_fields( $attribs['roster_type'], $attribs );
+	
+	//get the team slug
+	if ( $attribs['team'] == 'no-team-specified' )
+		return '<h3>No Team Specified </h3>';
+	else
+		$team_slug = $attribs['team'];
+		
+	// Set the sort order	
+	switch ( $attribs['sort_order'] ) {
+		case'numeric':
+			$sort_key = '_mstw_tr_number';
+			$order_by = 'meta_value_num';
+			break;
+		case 'alpha-first':
+			$sort_key = '_mstw_tr_first_name';
+			$order_by = 'meta_value';
+			break;
+		default: // alpha by last
+			$sort_key = '_mstw_tr_last_name';
+			$order_by = 'meta_value';
+			break;
+	}
+	
+	// Get the posts		
+	$posts = get_posts(array( 'numberposts' => -1,
+							  'post_type' => 'player',
+							  'teams' => $team_slug, 
+							  'orderby' => $order_by, 
+							  'meta_key' => $sort_key,
+							  'order' => 'ASC' 
+							));		
+	
+	//Now gotta grab the posts
+	
+	$mstw_tr_gallery = mstw_tr_build_gallery( $team_slug, $posts, $attribs, $attribs['roster-type'] );
+	
+	return $mstw_tr_gallery;
+}
+
+// --------------------------------------------------------------------------------------
+// Called by:	mstw_tr_table_handler
 // Builds the Team Roster table as a string (to replace the [shortcode] in a page or post).
 // Loops through the Player Custom posts in the "team" category and formats them 
 // into a pretty table.
