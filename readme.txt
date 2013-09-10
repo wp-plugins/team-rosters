@@ -15,12 +15,10 @@ Manages multiple sports team rosters. Displays tabular rosters, a single player 
 
 Welcome to the MSTW Team Rosters Plugin from [Shoal Summit Solutions](http://shoalsummitsolutions.com/).
 
-The MSTW Team Rosters plugin manages rosters for multiple teams. It provides roster tables with built-in formats for high school, college, and professional teams as well as custom roster formats for basball. Players are assigned to team rosters using a Teams custom taxonomy (screenshot-7). The plugin supports as many players and teams as needed. It provides several views of rosters including: a table (via a shortcode), a player gallery (via a custom taxonomy template), and single player bio (via a custom post type template). Samples of all of the above displays are available on the [Shoal Summit Solutions Plugin Development Site](http://shoalsummitsolutions.com/dev).
+The MSTW Team Rosters plugin manages rosters for multiple teams. It provides roster tables with built-in formats for high school, college, and professional teams as well as custom roster formats for basball. Players are assigned to team rosters using a Teams custom taxonomy (screenshot-7). The plugin supports as many players and teams as needed. It provides several views of rosters including: a table (via a shortcode), a player gallery (via both a shortcode and a custom taxonomy template), and single player bio (via a custom post type template). Samples of all of the above displays are available in the screenshots on WordPress.org and on the [Shoal Summit Solutions Plugin Development Site](http://shoalsummitsolutions.com/dev).
 
 
-VERSION 3.1 HAS BEEN UPGRADED SIGNIFICANTLY TO PROVIDE NEW FEATURES AND FIX SOME BUGS AS OUTLINED BELOW. ALSO SEE THE VERSION HISTORY. IF YOU ARE UPGRADING YOU WILL WANT TO READ THE INSTALLATION DOCUMENTATION AND UPGRADE NOTICE CAREFULLY. 
-
-The following features enhance the user experience on both the front and back ends:
+VERSION 3.1 HAS BEEN UPGRADED TO ENHANCE THE USER EXPERIENCE ON BOTH THE FRONT AND BACK ENDS. THE NEW FEATURES AND SOME BUGS FIXES ARE LISTED BELOW. ALSO SEE THE VERSION HISTORY. IF YOU ARE UPGRADING YOU WILL WANT TO READ THE INSTALLATION DOCUMENTATION AND UPGRADE NOTICE CAREFULLY. 
  
 * The filter by team feature on the "All Players" admin screen now works (screenshot-1).
 * Configure table columns and data fields to meet your requirements. You can show/hide all columns (except Player Name) and change the header/label of all columns and data fields (screenshot-5).
@@ -52,7 +50,7 @@ Complete documentation on the following topics is available at the links below:
 * [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/)
 
 **NOTES:**
-The Team Rosters plugin is the third in a set of plugins supporting a framework for sports team websites. Others include Game Locations, Game Schedules, and League Standings, all now available on [WordPress.org](http://wordpress.org/extend/plugins/). Coaching Staffs, Sponsors, Frequently Asked Questions, Users Guide, and more are planned for future development. If you are a developer and there is one you would really like to have, or if you would like to participate in the development of one, please contact me (mark@shoalsummitsolutions.com).
+The Team Rosters plugin is the third in a set of plugins supporting a framework for sports team websites. Others include Game Locations, Game Schedules, Coaching Staffs, and League Standings, all now available on [WordPress.org](http://wordpress.org/extend/plugins/). Statitics, Sponsors, Frequently Asked Questions, and Users Guide are planned for future development. If you are a developer and there is one you would really like to have one, or if you would like to participate in the beta testing of one, please contact me (mark@shoalsummitsolutions.com).
 
 == Installation ==
 
@@ -60,9 +58,9 @@ Complete installation instructions are available on [shoalsummitsolutions.com](h
 
 **NOTES:**
  
-* When upgrading the existing player data will not be deleted.
-* Any changes to the plugin stylesheet (css/mstw-tr-style.css)*will* be overwritten, so if you have customized that file you will want to save it before upgrading.
-* To support the (significant) refactoring of the code in version 3.0, some shortcode arguments and default Display Settings had to be changed. Therefore, it is possible that some customizations of existing Roster Tables via [shortcode arguments], default colors and other display settings, and so forth may have to be replaced. Existing arguments and parameters were preserved to the greatest extent possible, so mileage will vary depending on exactly what arguments and/or settings you were using. 
+* When upgrading the existing player data will NOT be deleted.
+* Any changes to the plugin stylesheet (css/mstw-tr-style.css)*WILL* be overwritten, so if you have customized that file you should save it before upgrading.
+* To support the (significant) refactoring of the code in version 3.0, some shortcode arguments and default Display Settings had to be changed. Therefore, it is possible that some customizations of existing Roster Tables via [shortcode arguments], default colors, display settings, and so forth may have to be replaced. Existing arguments and parameters were preserved to the greatest extent possible, so mileage will vary depending on exactly what arguments and/or settings you were using. 
 
 == Frequently Asked Questions ==
 
