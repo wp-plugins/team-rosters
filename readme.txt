@@ -84,6 +84,9 @@ The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are ava
 
 == Changelog ==
 
+= 3.1.1 =
+* Fixed bug that prevented links to single player profiles from working with CHILD THEMES. If you aren't using a CHILD THEME, you don't need this patch.
+
 = 3.1 =
 * Fixed bug with sort order. Roster table and player gallery views both sort properly by number, first name, and last name.
 * Fixed bug with show_height settings.
@@ -139,11 +142,13 @@ The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are ava
 
 == Upgrade Notice ==
 
-Significant new fuctionality has been added to version 3.0. Admins now have the ability to customize the visibility of and headings for data fields in roster tables, player bios, and player galleries. Admins can also control the display of roster tables in terms of colors and layout on a team-by-team basis in support of leagues and clubs. See the documentation [here](http://shoalsummitsolutions.com/tr-styling/] for more details.
+3.1.1 Fixed bug that prevented links to single player profiles from working with CHILD THEMES. If you aren't using a CHILD THEME, you don't need this patch.
+
+Significant new functionality has been added to version 3.0/3.1. Admins now have the ability to customize the visibility of and headings for data fields in roster tables, player bios, and player galleries. Admins can also control the display of roster tables in terms of colors and layout on a team-by-team basis in support of leagues and clubs. See the documentation [here](http://shoalsummitsolutions.com/tr-styling/] for more details.
 
 * Upgrades of the Team Rosters plugin are designed to *NOT* impact any existing players, rosters, or settings. (But backup your DB before you upgrade, just in case. :) )
 * Any changes to the plugin stylesheet (css/mstw-tr-style.css)*will* be overwritten, so if you have customized that file you will want to save it before upgrading.
 * To support the (significant) refactoring of the code in version 3.0, some shortcode arguments and default Display Settings had to be changed. Therefore, it is possible that some customizations of existing Roster Tables via [shortcode arguments], default colors and other display settings, and so forth may have to be replaced. Existing arguments and parameters were preserved to the greatest extent possible, so mileage will vary depending on exactly what arguments and/or settings you were using. 
 
-The current version of Team Rosters has been developed and tested on WordPress 3.5. If you use older version of WordPress, good luck! (FYI, version 1.0 was developed and tested on WP 3.4.2.) If you are using a newer version, please let me know how the plugin works, especially if you encounter problems.
+Version 3.1 of Team Rosters has been developed and tested on WordPress 3.6. If you use older version of WordPress, good luck! If you are using a newer WP version, please let me know how the plugin works, especially if you encounter problems.
 

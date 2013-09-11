@@ -244,7 +244,7 @@
 						$photo_file_url = plugins_url() . '/team-rosters/images/default-photo' . '.jpg';
 					}
 				}
-				$single_player_template = get_template_directory( ) . '/single-player.php';
+				$single_player_template = get_stylesheet_directory( ) . '/single-player.php';
 				if ( file_exists( $single_player_template ) ) {
 					$output .= '<a href="' . get_permalink( $post->ID ) . '?format=' . $format . '">' . '<img src="' . $photo_file_url . '" alt="' . $alt . '" width="' . $img_width . '" height="' . $img_height . '" /></a>';
 				}

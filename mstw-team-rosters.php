@@ -682,7 +682,7 @@ function mstw_tr_build_roster( $attribs ) {
 		$row_cnt = 1; 
 		
 		// Used to determine whether or not to add links from name & photo to player profiles 
-		$single_player_template = get_template_directory( ) . '/single-player.php';
+		$single_player_template = get_stylesheet_directory( ) . '/single-player.php';
 		
 		// Loop through the posts and make the rows
 		foreach($posts as $post){
