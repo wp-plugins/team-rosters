@@ -64,7 +64,7 @@ Complete installation instructions are available on [shoalsummitsolutions.com](h
 
 == Frequently Asked Questions ==
 
-[Frequently Asked Questions are available here](http://shoalsummitsolutions.com/tr-installation/).
+[Frequently Asked Questions are available here](http://shoalsummitsolutions.com/tr-faq/).
 
 == Usage Notes ==
 *I suggest that you use the test pages on [my plugin development site](http://shoalsummitsolutions.com/dev) as guides to compare what works and what doesn't.*
