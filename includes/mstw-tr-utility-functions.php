@@ -3,7 +3,11 @@
  *	MSTW-TR-UTILITY-FUNCTIONS.PHP
  *	mstr_tr_set_options() - returns the default option settings
  *	mstw_tr_set_fields_by_format() - sets options based on specified format
- *	
+ *
+ * 20130912-MAO:
+ *	(1) Changed call to get_template_directory() to get_stylesheet_directory() to
+ *		fix bug with child themes.
+ * 
  *---------------------------------------------------------*/
  
  /*---------------------------------------------------------------------------------
