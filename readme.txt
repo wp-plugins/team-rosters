@@ -1,5 +1,5 @@
 === Team Rosters ===
-Contributors: Mark O'Donnell
+Contributors: MarkODonnell
 Donate link: http://shoalsummitsolutions.com
 Tags: sports,games,roster,sports teams,team roster,sports roster,sports team roster  
 Requires at least: 3.4.2
