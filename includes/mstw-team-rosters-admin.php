@@ -103,16 +103,16 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 	function mstw_tr_custom_css() { ?>
 		<style type="text/css">
 			#icon-mstw-tr-main-menu.icon32 {
-				background: url('<?php echo plugins_url( '/team-rosters/images/mstw-logo-32x32.png', 'team-rosters' ); ?>') transparent no-repeat;
+				background: url(<?php echo plugins_url( '/team-rosters/images/mstw-logo-32x32.png', 'team-rosters' ); ?>) transparent no-repeat;
 			}
 			#icon-player.icon32 {
-				background: url( ' <?php echo plugins_url( '/team-rosters/images/mstw-logo-32x32.png', 'team-rosters' ); ?> ') transparent no-repeat;
+				background: url(<?php echo plugins_url( '/team-rosters/images/mstw-logo-32x32.png', 'team-rosters' ); ?>) transparent no-repeat;
 			}
 			#icon-edit.icon32-posts-player {
-				background: url( ' <?php echo plugins_url( '/team-rosters/images/mstw-logo-32x32.png', 'team-rosters' );?> ') transparent no-repeat;
+				background: url(<?php echo plugins_url( '/team-rosters/images/mstw-logo-32x32.png', 'team-rosters' );?>) transparent no-repeat;
 			}
 			#menu-posts-player .wp-menu-image {
-				background-image: url('<?php echo plugins_url( '/team-rosters/images/mstw-admin-menu-icon.png', 'team-rosters' );?> ') no-repeat 6px -17px !important;
+				background-image: url(<?php echo plugins_url( '/team-rosters/images/mstw-admin-menu-icon.png', 'team-rosters' );?>) no-repeat 6px -17px !important;
 			}
 			
 		</style>
@@ -1679,7 +1679,8 @@ class MSTW_TR_ImporterPlugin {
 ?>
 
 <div class="wrap">
-    <h2>Import CSV</h2>
+    <?php echo get_screen_icon(); ?>
+	<h2>Import CSV</h2>
     <form class="add:the-list: validate" method="post" enctype="multipart/form-data">
 	
 		<!-- Team taxonomy -->
