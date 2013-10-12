@@ -437,6 +437,14 @@ function mstw_tr_table_handler( $atts ){
 	$options = get_option( 'mstw_tr_options' );
 	//$output = '<pre>OPTIONS:' . print_r( $options, true ) . '</pre>';
 	
+	// Remove all keys with empty values
+	foreach ( $options as $k=>$v ) {
+		if( $v == '' ) {
+			unset( $options[$k] );
+		}
+	}
+	//$output .= '<pre>FILTERED OPTIONS:' . print_r( $options, true ) . '</pre>';
+	
 	// and merge them with the defaults
 	$args = wp_parse_args( $options, mstw_tr_get_defaults( ) );
 	//$output .= '<pre>ARGS:' . print_r( $args, true ) . '</pre>';
@@ -463,6 +471,13 @@ function mstw_tr_gallery_handler( $atts ){
 	// get the options set in the admin screen
 	$options = get_option( 'mstw_tr_options' );
 	//$output = '<pre>OPTIONS:' . print_r( $options, true ) . '</pre>';
+	
+	// Remove all keys with empty values
+	foreach ( $options as $k=>$v ) {
+		if( $v == '' ) {
+			unset( $options[$k] );
+		}
+	}
 	
 	// and merge them with the defaults
 	$args = wp_parse_args( $options, mstw_tr_get_defaults( ) );
@@ -500,7 +515,7 @@ function mstw_tr_gallery_handler( $atts ){
 	// Get the posts		
 	$posts = get_posts(array( 'numberposts' => -1,
 							  'post_type' => 'player',
-							  'teams' => $team_slug, 
+							  'teams' => $teatam_slug, 
 							  'orderby' => $order_by, 
 							  'meta_key' => $sort_key,
 							  'order' => 'ASC' 
