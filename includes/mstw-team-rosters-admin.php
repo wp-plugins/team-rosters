@@ -1917,53 +1917,65 @@ class MSTW_TR_ImporterPlugin {
             // anything that doesn't start with csv_ is a custom field
             if (!preg_match('/^csv_/', $k) && $v != '') {
 				switch ( strtolower( $k ) ) {
-					case __( "first name", "mstw-loc-domain" ):
-					case __( "first", "mstw-loc-domain" ):
+					case __( 'first name', 'mstw-loc-domain' ):
+					case __( 'first', 'mstw-loc-domain' ):
 						$k = '_mstw_tr_first_name';
 						break;
-					case __( "last name", "mstw-loc-domain" ):
-					case __( "last", "mstw-loc-domain" ):
+					case __( 'last name', 'mstw-loc-domain' ):
+					case __( 'last', 'mstw-loc-domain' ):
 						$k = '_mstw_tr_last_name';
 						break;
-					case __( "position", "mstw-loc-domain" ):
-					case __( "pos", "mstw-loc-domain" ):
+					case __( 'position', 'mstw-loc-domain' ):
+					case __( 'pos', 'mstw-loc-domain' ):
 						$k = '_mstw_tr_position';
 						break;
-					case __( "number", "mstw-loc-domain" ):
-					case __( "nbr", "mstw-loc-domain" ):
-					case __( "#", "mstw-loc-domain" ):
+					case __( 'number', 'mstw-loc-domain' ):
+					case __( 'nbr', 'mstw-loc-domain' ):
+					case __( '#', 'mstw-loc-domain' ):
 						$k = '_mstw_tr_number';
 						break;
-					case __( "weight", "mstw-loc-domain" ):
-					case __( "wt", "mstw-loc-domain" ):
+					case __( 'weight', 'mstw-loc-domain' ):
+					case __( 'wt', 'mstw-loc-domain' ):
 						$k = '_mstw_tr_weight';
 						break;
-					case __( "height", "mstw-loc-domain" ):
-					case __( "ht", "mstw-loc-domain" ):
+					case __( 'height', 'mstw-loc-domain' ):
+					case __( 'ht', 'mstw-loc-domain' ):
 						$k = '_mstw_tr_height';
 						break;
-					case __( "age", "mstw-loc-domain" ):
+					case __( 'age', 'mstw-loc-domain' ):
 						$k = '_mstw_tr_age';
 						break;
-					case __( "year", "mstw-loc-domain" ):
-					case __( "yr", "mstw-loc-domain" ):
+					case __( 'year', 'mstw-loc-domain' ):
+					case __( 'yr', 'mstw-loc-domain' ):
 						$k = '_mstw_tr_year';
 						break;
-					case __( "experience", "mstw-loc-domain" ):
-					case __( "exp", "mstw-loc-domain" ):
+					case __( 'experience', 'mstw-loc-domain' ):
+					case __( 'exp', 'mstw-loc-domain' ):
 						$k = '_mstw_tr_experience';
 						break;
-					case __( "home town", "mstw-loc-domain" ):
+					case __( 'home town', 'mstw-loc-domain' ):
 						$k = '_mstw_tr_home_town';
 						break;
-					case __( "country", "mstw-loc-domain" ):
+					case __( 'country', 'mstw-loc-domain' ):
 						$k = '_mstw_tr_country';
 						break;
-					case __( "last school", "mstw-loc-domain" ):
+					case __( 'last school', 'mstw-loc-domain' ):
 						$k = '_mstw_tr_last_school';
 						break;
+					case __( 'bats', 'mstw-loc-domain' ):
+					case __( 'bat', 'mstw-loc-domain' ):
+						$k = '_mstw_tr_bats';
+						break;
+					case __( 'throws', 'mstw-loc-domain' ):
+					case __( 'throw', 'mstw-loc-domain' ):
+					case __( 'thw', 'mstw-loc-domain' ):
+						$k = '_mstw_tr_throws';
+						break;
+					case __( 'other', 'mstw-loc-domain' ):
+						$k = '_mstw_tr_other';
+						break;
 				}
-				
+					
 				$ret = update_post_meta( $post_id, $k, $v );	
 				
 				echo '<p>retval = '. $ret . ' ID: ' . $post_id . ' K: ' . $k . ' V: ' . $v . '</p>';
