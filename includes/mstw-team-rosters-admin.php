@@ -84,7 +84,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 
 	// ----------------------------------------------------------------
 	// Load the MSTW Admin Utility Functions if necessary
-	if ( !function_exists( 'mstw_admin_utils_loaded' ) ) {
+	if ( !function_exists( 'mstw_tr_admin_utils_loaded' ) ) {
 			require_once  plugin_dir_path( __FILE__ ) . 'mstw-admin-utils.php';
 	}
 	// ----------------------------------------------------------------	
@@ -627,7 +627,7 @@ function mstw_tr_validate_fields_options( $input ) {
 				case 'sp_main_text_color':
 				case 'gallery_links_color':
 					// validate the color for proper hex format
-					$sanitized_color = mstw_utl_sanitize_hex_color( $input[$key] );
+					$sanitized_color = mstw_tr_sanitize_hex_color( $input[$key] );
 					
 					// decide what to do - save new setting 
 					// or display error & revert to last setting
@@ -715,7 +715,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_show_number',
 			__( 'Show Number Column:', 'mstw-loc-domain' ),
-			'mstw_utl_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -732,7 +732,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_number_label',
 			__( 'Number Column Label:', 'mstw-loc-domain' ),
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -750,7 +750,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_name_label',
 			__( 'Name Column Label:', 'mstw-loc-domain' ),
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -766,7 +766,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_show_position',
 			__( 'Show Position Column:', 'mstw-loc-domain' ),
-			'mstw_utl_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -782,7 +782,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_position_label',
 			'Position Column Label:',
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -798,7 +798,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_show_height',
 			'Show Height Column:',
-			'mstw_utl_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -815,7 +815,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_height_label',
 			'Height Column Label:',
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -831,7 +831,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_show_weight',
 			'Show Weight Column:',
-			'mstw_utl_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -848,7 +848,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_weight_label',
 			'Weight Column Label:',
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -865,7 +865,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_show_year',
 			__( 'Show Year Column:', 'mstw-loc-domain' ),
-			'mstw_utl_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -882,7 +882,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_year_label',
 			'Year Column Label:',
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -899,7 +899,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_show_experience',
 			__( 'Show Experience Column:', 'mstw-loc-domain' ),
-			'mstw_utl_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -916,7 +916,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_experience_label',
 			'Experience Column Label:',
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -933,7 +933,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_show_age',
 			__( 'Show Age Column:', 'mstw-loc-domain' ),
-			'mstw_utl_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -950,7 +950,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_age_label',
 			'Age Column Label:',
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -967,7 +967,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_show_home_town',
 			__( 'Show Home Town Column:', 'mstw-loc-domain' ),
-			'mstw_utl_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -984,7 +984,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_home_town_label',
 			'Home Town Column Label:',
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -1001,7 +1001,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_show_last_school',
 			__( 'Show Last School Column:', 'mstw-loc-domain' ),
-			'mstw_utl_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -1018,7 +1018,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_last_school_label',
 			'Last School Column Label:',
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -1035,7 +1035,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_show_country',
 			__( 'Show Country Column:', 'mstw-loc-domain' ),
-			'mstw_utl_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -1052,7 +1052,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_country_label',
 			'Country Column Label:',
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -1069,7 +1069,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_show_bats_throws',
 			__( 'Show Bats/Throws Column:', 'mstw-loc-domain' ),
-			'mstw_utl_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -1086,7 +1086,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_bats_throws_label',
 			'Bats/Throws Column Label:',
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -1103,7 +1103,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_show_other_info',
 			__( 'Show Other Column:', 'mstw-loc-domain' ),
-			'mstw_utl_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -1120,7 +1120,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_other_info_label',
 			'Other Column Label:',
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -1155,7 +1155,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'show_title',
 			__( 'Show Roster Table Titles:', 'mstw-loc-domain' ),
-			'mstw_utl_show_hide_ctrl',						//Callback to display field
+			'mstw_tr_show_hide_ctrl',						//Callback to display field
 			$display_on_page,							//Page to display field
 			$page_section,					//Page section to display field
 			$args												//Callback arguments
@@ -1179,7 +1179,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'roster_type',										//ID attribute of tags
 			__('Roster Table Format:', 'mstw-loc-domain' ),		//Title of field
-			'mstw_utl_select_option_ctrl',							//Callback to display field
+			'mstw_tr_select_option_ctrl',							//Callback to display field
 			$display_on_page,							//Page to display field
 			$page_section,					//Page section to display field
 			$args												//Callback arguments
@@ -1198,7 +1198,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field( 
 			'sort_order',									//ID attribute of tags
 			__( 'Sort Roster by:', 'mstw-loc-domain' ), 	//Title of field
-			'mstw_utl_select_option_ctrl',						//Callback to display field
+			'mstw_tr_select_option_ctrl',						//Callback to display field
 			$display_on_page,						//Page to display field
 			$page_section,				//Page section to display field
 			$args											//Callback arguments
@@ -1219,7 +1219,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field( 
 			'name_format',									//ID attribute of tags
 			__( 'Display Players by:', 'mstw-loc-domain' ), 	//Title of field
-			'mstw_utl_select_option_ctrl',						//Callback to display field
+			'mstw_tr_select_option_ctrl',						//Callback to display field
 			$display_on_page,						//Page to display field
 			$page_section,				//Page section to display field
 			$args											//Callback arguments
@@ -1235,7 +1235,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'show_photos',
 			__( 'Show Player Photos:', 'mstw-loc-domain' ),
-			'mstw_utl_show_hide_ctrl',
+			'mstw_tr_show_hide_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -1251,7 +1251,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'photo_label',
 			'Photo Column Label:',
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,
 			$page_section,
 			$args
@@ -1267,7 +1267,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'table_photo_width',
 			__( 'Table Photo Width:', 'mstw-loc-domain' ),
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,					//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1283,7 +1283,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'table_photo_height',
 			__( 'Table Photo Height:', 'mstw-loc-domain' ),
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,					//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1299,7 +1299,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_table_title_text_color',
 			__( 'Table Title Text Color:', 'mstw-loc-domain' ),
-			'mstw_utl_color_ctrl',
+			'mstw_tr_color_ctrl',
 			$display_on_page,				//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1315,7 +1315,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_table_links_color',
 			__( 'Table Links Color:', 'mstw-loc-domain' ),
-			'mstw_utl_color_ctrl',
+			'mstw_tr_color_ctrl',
 			$display_on_page,				//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1331,7 +1331,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_table_head_bkgd_color',
 			__( 'Table Header Background Color:', 'mstw-loc-domain' ),
-			'mstw_utl_color_ctrl',
+			'mstw_tr_color_ctrl',
 			$display_on_page,				//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1347,7 +1347,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_table_head_text_color',
 			__( 'Table Header Text Color:', 'mstw-loc-domain' ),
-			'mstw_utl_color_ctrl',
+			'mstw_tr_color_ctrl',
 			$display_on_page,				//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1363,7 +1363,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_table_even_row_color',
 			__( 'Table Even Row Text Color:', 'mstw-loc-domain' ),
-			'mstw_utl_color_ctrl',
+			'mstw_tr_color_ctrl',
 			$display_on_page,				//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1379,7 +1379,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_table_even_row_bkgd',
 			__( 'Table Even Row Background Color:', 'mstw-loc-domain' ),
-			'mstw_utl_color_ctrl',
+			'mstw_tr_color_ctrl',
 			$display_on_page,				//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1395,7 +1395,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_table_odd_row_color',
 			__( 'Table Odd Row Text Color:', 'mstw-loc-domain' ),
-			'mstw_utl_color_ctrl',
+			'mstw_tr_color_ctrl',
 			$display_on_page,				//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1411,7 +1411,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'tr_table_odd_row_bkgd',
 			__( 'Table Odd Row Background Color:', 'mstw-loc-domain' ),
-			'mstw_utl_color_ctrl',
+			'mstw_tr_color_ctrl',
 			$display_on_page,				//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1448,7 +1448,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'sp_content_title',
 			__( 'Player Profile(Bio) Title:', 'mstw-loc-domain' ),
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,				//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1464,7 +1464,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'sp_image_width',
 			__( 'Player Photo Width:', 'mstw-loc-domain' ),
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,				//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1480,7 +1480,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'sp_image_height',
 			__( 'Player Photo Height:', 'mstw-loc-domain' ),
-			'mstw_utl_text_ctrl',
+			'mstw_tr_text_ctrl',
 			$display_on_page,				//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1497,7 +1497,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'sp_main_bkgd_color',
 			__( 'Main Box Background Color:', 'mstw-loc-domain' ),
-			'mstw_utl_color_ctrl',
+			'mstw_tr_color_ctrl',
 			$display_on_page,				//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1513,7 +1513,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'sp_main_text_color',
 			__( 'Main Box Text Color:', 'mstw-loc-domain' ),
-			'mstw_utl_color_ctrl',
+			'mstw_tr_color_ctrl',
 			$display_on_page,				//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1529,7 +1529,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'sp_bio_border_color',
 			__( 'Player Profile(Bio) Border Color:', 'mstw-loc-domain' ),
-			'mstw_utl_color_ctrl',
+			'mstw_tr_color_ctrl',
 			$display_on_page,				//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1545,7 +1545,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'sp_bio_header_color',
 			__( 'Player Bio Header Text Color:', 'mstw-loc-domain' ),
-			'mstw_utl_color_ctrl',
+			'mstw_tr_color_ctrl',
 			$display_on_page,				//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1561,7 +1561,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'sp_bio_text_color',
 			__( 'Player Bio Text Color:', 'mstw-loc-domain' ),
-			'mstw_utl_color_ctrl',
+			'mstw_tr_color_ctrl',
 			$display_on_page,				//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1577,7 +1577,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'sp_bio_bkgd_color',
 			__( 'Player Bio Background Color:', 'mstw-loc-domain' ),
-			'mstw_utl_color_ctrl',
+			'mstw_tr_color_ctrl',
 			$display_on_page,				//Page to display field
 			$page_section, 					//Page section to display field
 			$args
@@ -1593,7 +1593,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		add_settings_field(
 			'gallery_links_color',
 			__( 'Player Gallery Links Color:', 'mstw-loc-domain' ),
-			'mstw_utl_color_ctrl',
+			'mstw_tr_color_ctrl',
 			$display_on_page,				//Page to display field
 			$page_section, 					//Page section to display field
 			$args
