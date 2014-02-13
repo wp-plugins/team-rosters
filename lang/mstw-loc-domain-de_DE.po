@@ -1,0 +1,740 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Team Rosters\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-12-22 12:44-0800\n"
+"PO-Revision-Date: Tue Feb 11 2014 21:04:45 GMT+0100 (Mitteleuropäische Zeit)\n"
+"Last-Translator: Anders Lind <lind@erding-mallards.de>\n"
+"Language-Team: \n"
+"Language: German\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Loco - https://localise.biz/\n"
+"X-Poedit-KeywordsList: _:1;gettext:1;dgettext:2;ngettext:1,2;dngettext:2,3;__:1;"
+"_e:1;_c:1;_n:1,2;_n_noop:1,2;_nc:1,2;__ngettext:1,2;__ngettext_noop:1,2;_x:1,2c;"
+"_ex:1,2c;_nx:1,2,4c;_nx_noop:1,2,3c;_n_js:1,2;_nx_js:1,2,3c;esc_attr__:1;"
+"esc_html__:1;esc_attr_e:1;esc_html_e:1;esc_attr_x:1,2c;esc_html_x:1,2c;"
+"comments_number_link:2,3;t:1;st:1;trans:1;transChoice:1,2\n"
+"X-Poedit-Basepath: c:\\users\\mark\\documents\\shoal summit consulting\\web "
+"presence\\development site\\wp-content\\plugins\\mstw-team-rosters\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: ./includes\n"
+"X-Poedit-SearchPath-2: ./theme-templates\n"
+"X-Loco-Target-Locale: de_DE"
+
+#: ../includes/mstw-team-rosters-admin.php:1166
+msgid "Pro"
+msgstr ""
+
+#: ../includes/mstw-team-rosters-admin.php:1167
+msgid "College"
+msgstr ""
+
+#: ../includes/mstw-team-rosters-admin.php:1168
+msgid "High School"
+msgstr ""
+
+#: ../includes/mstw-team-rosters-admin.php:1169
+msgid "Pro Baseball"
+msgstr ""
+
+#: ../includes/mstw-team-rosters-admin.php:1170
+msgid "College Baseball"
+msgstr ""
+
+#: ../includes/mstw-team-rosters-admin.php:1171
+msgid "High School Baseball"
+msgstr ""
+
+#: ../theme-templates/single-player.php:22
+msgid "Post navigation"
+msgstr "Navigation Beiträge"
+
+#: ../theme-templates/single-player.php:31
+msgid "<span class=\"meta-nav\">&larr;</span> Previous"
+msgstr "<span class=\"meta-nav\">&larr;</span> Vorherige"
+
+#: ../theme-templates/single-player.php:33
+msgid "Next <span class=\"meta-nav\">&rarr;</span>"
+msgstr "Nächste <span class=\"meta-nav\">&rarr;</span>"
+
+#: ../mstw-team-rosters.php:268 ../mstw-team-rosters.php:283
+msgid "Teams"
+msgstr "Mannschaften"
+
+#: ../mstw-team-rosters.php:269 ../includes/mstw-team-rosters-admin.php:403
+msgid "Team"
+msgstr "Mannschaft"
+
+#: ../mstw-team-rosters.php:270
+msgid "Search Teams"
+msgstr "Mannschaften durchsuchen"
+
+#: ../mstw-team-rosters.php:272
+msgid "All Teams"
+msgstr "Alle Mannschaften"
+
+#: ../mstw-team-rosters.php:275
+msgid "Edit Team"
+msgstr "Mannschaft bearbeiten"
+
+#: ../mstw-team-rosters.php:276
+msgid "Update Team"
+msgstr "Mannschaft aktualisieren"
+
+#: ../mstw-team-rosters.php:277
+msgid "Add New Team"
+msgstr "Mannschaft hinzufügen"
+
+#: ../mstw-team-rosters.php:278
+msgid "New Team Name"
+msgstr "Neuer Mannschaftsname"
+
+#: ../mstw-team-rosters.php:279
+msgid "Separate Teams with commas"
+msgstr "Mannschaften mit Kommas trennen"
+
+#: ../mstw-team-rosters.php:280
+msgid "Add or Remove Teams"
+msgstr "Mannschaften hinzufügen oder entfernen"
+
+#: ../mstw-team-rosters.php:281
+msgid "Choose from the most used Teams"
+msgstr "Wähle von den meistbenutzten Mannschaften"
+
+#: ../mstw-team-rosters.php:282
+msgid "No Teams found"
+msgstr "Keine Mannschaften gefunden"
+
+#: ../mstw-team-rosters.php:393 ../mstw-team-rosters.php:397
+msgid "Players"
+msgstr "Spieler"
+
+#: ../mstw-team-rosters.php:394 ../includes/mstw-team-rosters-admin.php:181
+msgid "Player"
+msgstr "Spieler"
+
+#: ../mstw-team-rosters.php:395
+msgid "Team Rosters"
+msgstr "Mannschaftslisten"
+
+#: ../mstw-team-rosters.php:396 ../mstw-team-rosters.php:406
+msgid "All Players"
+msgstr "Alle Spieler"
+
+#: ../mstw-team-rosters.php:398 ../mstw-team-rosters.php:399
+msgid "Add New Player"
+msgstr "Neuer Spieler hinzufügen"
+
+#: ../mstw-team-rosters.php:400
+msgid "Edit Player"
+msgstr "Spieler bearbeiten"
+
+#: ../mstw-team-rosters.php:401
+msgid "New Player"
+msgstr "Neuer Spieler"
+
+#: ../mstw-team-rosters.php:402
+msgid "View Player"
+msgstr "Spieler anzeigen"
+
+#: ../mstw-team-rosters.php:403
+msgid "Search Players"
+msgstr "Spieler suchen"
+
+#: ../mstw-team-rosters.php:404
+msgid "No player found"
+msgstr "Keine Spieler gefunden"
+
+#: ../mstw-team-rosters.php:405
+msgid "No player found in trash"
+msgstr "Keine Spieler im Papierkorb gefunden"
+
+#: ../includes/mstw-tr-utility-functions.php:168
+msgid "Name"
+msgstr "Name"
+
+#: ../includes/mstw-tr-utility-functions.php:170
+msgid "Photo"
+msgstr "Bild"
+
+#: ../includes/mstw-tr-utility-functions.php:172
+msgid "Nbr"
+msgstr "Nr."
+
+#: ../includes/mstw-tr-utility-functions.php:174
+msgid "Pos"
+msgstr "Pos."
+
+#: ../includes/mstw-tr-utility-functions.php:176
+msgid "Hgt"
+msgstr "Gr."
+
+#: ../includes/mstw-tr-utility-functions.php:178
+msgid "Wgt"
+msgstr "Gew."
+
+#: ../includes/mstw-tr-utility-functions.php:180 ../includes/mstw-team-rosters-admin.php:410
+msgid "Year"
+msgstr "Jahr"
+
+#: ../includes/mstw-tr-utility-functions.php:182
+msgid "Exp"
+msgstr "Erf."
+
+#: ../includes/mstw-tr-utility-functions.php:184
+msgid "Age"
+msgstr "Alter"
+
+#: ../includes/mstw-tr-utility-functions.php:186
+msgid "Home Town"
+msgstr "Heimatort"
+
+#: ../includes/mstw-tr-utility-functions.php:188
+msgid "Last School"
+msgstr "Letzte Schule"
+
+#: ../includes/mstw-tr-utility-functions.php:190
+msgid "Country"
+msgstr "Land"
+
+#: ../includes/mstw-tr-utility-functions.php:192
+msgid "Bat/Thw"
+msgstr "Schlag/Wurf"
+
+#: ../includes/mstw-tr-utility-functions.php:194
+msgid "Other"
+msgstr "Sonstiges"
+
+#: ../includes/mstw-team-rosters-admin.php:194 ../includes/mstw-team-rosters-admin.php:199
+msgid "R"
+msgstr "Rechts"
+
+#: ../includes/mstw-team-rosters-admin.php:195 ../includes/mstw-team-rosters-admin.php:200
+msgid "L"
+msgstr "Links"
+
+#: ../includes/mstw-team-rosters-admin.php:196
+msgid "B"
+msgstr "Beides"
+
+#: ../includes/mstw-team-rosters-admin.php:241 ../includes/mstw-team-rosters-admin.php:404
+msgid "First Name"
+msgstr "Vorname"
+
+#: ../includes/mstw-team-rosters-admin.php:246 ../includes/mstw-team-rosters-admin.php:405
+msgid "Last Name"
+msgstr "Familienname"
+
+#: ../includes/mstw-team-rosters-admin.php:402
+msgid "Title"
+msgstr "Titel"
+
+#: ../includes/mstw-team-rosters-admin.php:406
+msgid "Number"
+msgstr "Rückennummer"
+
+#: ../includes/mstw-team-rosters-admin.php:407
+msgid "Position"
+msgstr "Spielerposition"
+
+#: ../includes/mstw-team-rosters-admin.php:408
+msgid "Height"
+msgstr "Größe"
+
+#: ../includes/mstw-team-rosters-admin.php:409
+msgid "Weight"
+msgstr "Gewicht"
+
+#: ../includes/mstw-team-rosters-admin.php:411
+msgid "Experience"
+msgstr "Erfahrung"
+
+#. parent slug
+#: ../includes/mstw-team-rosters-admin.php:486
+msgid "Team Rosters Display Settings"
+msgstr "Darstellungsoptionen Mannschaftslisten"
+
+#. page title
+#. page title
+#: ../includes/mstw-team-rosters-admin.php:487 ../includes/mstw-team-rosters-admin.php:519
+msgid "Display Settings"
+msgstr "Darstellungsoptionen"
+
+#. parent slug
+#: ../includes/mstw-team-rosters-admin.php:518
+msgid "Team Rosters Settings"
+msgstr "Einstellungen Mannschaftslisten"
+
+#: ../includes/mstw-team-rosters-admin.php:552
+msgid "Save Changes"
+msgstr "Änderungen speichern"
+
+#: ../includes/mstw-team-rosters-admin.php:554
+msgid "Reset Default Values"
+msgstr "Auf Vorgabewerte zurückstellen"
+
+#: ../includes/mstw-team-rosters-admin.php:555
+msgid "WARNING! Reset Default Values will do so without further warning!"
+msgstr "WARNUNG: Auf Vorgabewerte zurückstellen wird ohne weitere Hinweise ausgeführt!"
+
+#: ../includes/mstw-team-rosters-admin.php:592
+msgid ""
+"Enter the default settings for Rosters Table columns, as well as the Single "
+"Player and Player Gallery data fields. These settings will apply to the "
+"[shortcode] roster tables, where they can be overridden by [shortcode] "
+"arguments, as well as the single player and player gallery pages."
+msgstr ""
+"Gib die Vorgabewerte für die Mannschaftstabellen-Spalten, sowie für die "
+"Datenfelder für einzelne Spieler und Spielergalerien ein. Diese Einstellungen "
+"werden für den [shortcode] der Mannschaftsaufstellungs-Tabellen werwendet und "
+"können mit [shortcode]-Argumente verändert werden. Ebenfalls können die "
+"EInstellungen auf die Seiten für einzelne Spieler und Spielergalerien geändert "
+"werden."
+
+#: ../includes/mstw-team-rosters-admin.php:592
+msgid ""
+"IF YOU WANT THESE SETTINGS TO APPLY, THE SPECIFIED FORMAT MUST BE \"CUSTOM\" OR "
+"BLANK. IF A SPECIFIC FORMAT, SUCH AS \"HIGH-SCHOOL\" IS SPECIFIED, IT WILL "
+"OVERRIDE THESE SETTINGS."
+msgstr ""
+"FALLS DU DIESE EINSTELLUNGEN VERWENDEN MÖCHTEST, MUSS DAS ANGEGEBENE FORMAT "
+"\"BENUTZERDEFINIERT\" ODER LEER SEIN. FALLS EIN ANDERES FORMAT, WIE Z.B. \"HIGH-"
+"SCHOOL\" EINGEGEBEN WIRD, WERDEN DIESE EINSTELLUNGEN IGNORIERT."
+
+#. id attribute of tags
+#: ../includes/mstw-team-rosters-admin.php:702
+msgid "Data Field and Table Column Settings"
+msgstr "Einstellungen für Datenfelder und Tabellenspalten."
+
+#: ../includes/mstw-team-rosters-admin.php:711
+msgid "Show or hide the Number field/column. (Default: Show)"
+msgstr "Zeige oder verstecke Feld/Spalte Nummer. (Vorgabe: zeigen)"
+
+#: ../includes/mstw-team-rosters-admin.php:717
+msgid "Show Number Column:"
+msgstr "Spalte Nummer zeigen:"
+
+#: ../includes/mstw-team-rosters-admin.php:728
+msgid "Set Heading for Number data field or column. (Default: \"Number\")"
+msgstr "Überschrift für Feld/Spalte Nummer. (Vorgabe: \"Nr.\")"
+
+#: ../includes/mstw-team-rosters-admin.php:734
+msgid "Number Column Label:"
+msgstr "Beschriftung Spalte Nummer:"
+
+#: ../includes/mstw-team-rosters-admin.php:746
+msgid "Set Heading for Name data field or column. (Default: \"Name\")"
+msgstr "Überschrift für Feld/Spalte Name. (Vorgabe: \"Name\")"
+
+#: ../includes/mstw-team-rosters-admin.php:752
+msgid "Name Column Label:"
+msgstr "Beschriftung Spalte Name:"
+
+#: ../includes/mstw-team-rosters-admin.php:763
+msgid "Show or hide the Position field/column. (Default: Show)"
+msgstr "Zeige oder verstecke Feld/Spalte Position. (Vorgabe: zeigen)"
+
+#: ../includes/mstw-team-rosters-admin.php:768
+msgid "Show Position Column:"
+msgstr "Spalte Position zeigen:"
+
+#: ../includes/mstw-team-rosters-admin.php:779
+msgid "Set Heading for Position data field or column. (Default: \"Pos\")"
+msgstr "Überschrift für Feld/Spalte Position. (Vorgabe: \"Pos.\")"
+
+#: ../includes/mstw-team-rosters-admin.php:811
+msgid "Set Heading for Height data field or column. (Default: \"Height\")"
+msgstr "Überschrift für Feld/Spalte Größe. (Vorgabe: \"Größe\")"
+
+#: ../includes/mstw-team-rosters-admin.php:844
+msgid "Set Heading for Weight data field or column. (Default: \"Weight\")"
+msgstr "Überschrift für Feld/Spalte Gewicht. (Vorgabe: \"Gewicht\")"
+
+#: ../includes/mstw-team-rosters-admin.php:861
+msgid "Show or hide the Year field/column. (Default: Hide)"
+msgstr "Zeige oder verstecke Feld/Spalte Jahr. (Vorgabe: verstecken)"
+
+#: ../includes/mstw-team-rosters-admin.php:867
+msgid "Show Year Column:"
+msgstr "Spalte Jahr zeigen:"
+
+#: ../includes/mstw-team-rosters-admin.php:878
+msgid "Set Heading for Year data field or column. (Default: \"Year\")"
+msgstr "Überschrift für Feld/Spalte Jahr. (Vorgabe: \"Jahr\")"
+
+#: ../includes/mstw-team-rosters-admin.php:895
+msgid "Show or hide the Experience field/column. (Default: Hide)"
+msgstr "Zeige oder verstecke Feld/Spalte Erfahrung. (Vorgabe: verstecken)"
+
+#: ../includes/mstw-team-rosters-admin.php:901
+msgid "Show Experience Column:"
+msgstr "Spalte Erfahrung zeigen:"
+
+#: ../includes/mstw-team-rosters-admin.php:912
+msgid "Set Heading for Experience data field or column. (Default: \"Exp\")"
+msgstr "Überschrift für Feld/Spalte Erfahrung. (Vorgabe: \"Erf.\")"
+
+#: ../includes/mstw-team-rosters-admin.php:929
+msgid "Show or hide the Age field/column. (Default: Hide)"
+msgstr "Zeige oder verstecke Feld/Spalte Alter. (Vorgabe: verstecken)"
+
+#: ../includes/mstw-team-rosters-admin.php:935
+msgid "Show Age Column:"
+msgstr "Spalte Alter zeigen:"
+
+#: ../includes/mstw-team-rosters-admin.php:946
+msgid "Set Heading for Age data field or column. (Default: \"Age\")"
+msgstr "Überschrift für Feld/Spalte Alter. (Vorgabe: \"Alter\")"
+
+#: ../includes/mstw-team-rosters-admin.php:963
+msgid "Show or hide the Home Town field/column. (Default: Hide)"
+msgstr "Zeige oder verstecke Feld/Spalte Heimartort. (Vorgabe: verstecken)"
+
+#: ../includes/mstw-team-rosters-admin.php:969
+msgid "Show Home Town Column:"
+msgstr "Spalte Heimatort zeigen:"
+
+#: ../includes/mstw-team-rosters-admin.php:980
+msgid "Set Heading for Home Town data field or column. (Default: \"Home Town\")"
+msgstr "Überschrift für Feld/Spalte Heimatort. (Vorgabe: \"Heimatort.\")"
+
+#: ../includes/mstw-team-rosters-admin.php:997
+msgid "Show or hide the Last School field/column. (Default: Hide)"
+msgstr "Zeige oder verstecke Feld/Spalte Letzte Schule. (Vorgabe: verstecken)"
+
+#: ../includes/mstw-team-rosters-admin.php:1003
+msgid "Show Last School Column:"
+msgstr "Spalte Letzte Schule zeigen:"
+
+#: ../includes/mstw-team-rosters-admin.php:1014
+msgid "Set Heading for Last School data field or column. (Default: \"Last School\")"
+msgstr "Überschrift für Feld/Spalte Letzte Schule. (Vorgabe: \"Letzte Schule\")"
+
+#: ../includes/mstw-team-rosters-admin.php:1031
+msgid "Show or hide the Country field/column. (Default: Hide)"
+msgstr "Zeige oder verstecke Feld/Spalte Land. (Vorgabe: verstecken)"
+
+#: ../includes/mstw-team-rosters-admin.php:1037
+msgid "Show Country Column:"
+msgstr "Spalte Land zeigen:"
+
+#: ../includes/mstw-team-rosters-admin.php:1048
+msgid "Set Heading for Country data field or column. (Default: \"Country\")"
+msgstr "Überschrift für Feld/Spalte Land. (Vorgabe: \"Land\")"
+
+#: ../includes/mstw-team-rosters-admin.php:1065
+msgid "Show or hide the Bats/Throws field/column. (Default: Hide)"
+msgstr "Zeige oder verstecke Feld/Spalte Schlag/Wurf. (Vorgabe: verstecken)"
+
+#: ../includes/mstw-team-rosters-admin.php:1071
+msgid "Show Bats/Throws Column:"
+msgstr "Spalte Schlag/Wurf zeigen:"
+
+#: ../includes/mstw-team-rosters-admin.php:1082
+msgid "Set Heading for Bats/Throws data field or column. (Default: \"Bat/Thw\")"
+msgstr "Überschrift für Feld/Spalte Schlag/Wurf. (Vorgabe: \"Schlag/Wurf\")"
+
+#: ../includes/mstw-team-rosters-admin.php:1099
+msgid "Show or hide the Other field/column. (Default: Hide)"
+msgstr "Zeige oder verstecke Feld/Spalte Sonstiges. (Vorgabe: verstecken)"
+
+#: ../includes/mstw-team-rosters-admin.php:1105
+msgid "Show Other Column:"
+msgstr "Spalte Sonstiges zeigen:"
+
+#: ../includes/mstw-team-rosters-admin.php:1116
+msgid "Set Heading for Other data field or column. (Default: \"Other\")"
+msgstr "Überschrift für Feld/Spalte Sonstiges. (Vorgabe: \"Sonstiges\")"
+
+#: ../includes/mstw-team-rosters-admin.php:1152
+msgid "Show Roster Table Titles (as \"Team Name Roster\")"
+msgstr ""
+"Zeige Überschriften der Mannschaftslisten-Tabellen (als \\\"Aufstellung Team "
+"Name\\\")"
+
+#: ../includes/mstw-team-rosters-admin.php:1157
+msgid "Show Roster Table Titles:"
+msgstr "Zeige Überschriften der Mannschaftslisten:"
+
+#: ../includes/mstw-team-rosters-admin.php:1165
+msgid "Custom"
+msgstr "Benutzerdefiniert"
+
+#: ../includes/mstw-team-rosters-admin.php:1176
+msgid "Roster Table format. (Default: Custom)"
+msgstr "Listenformat. (Vorgabe: Benutzerdefiniert)"
+
+#. ID attribute of tags
+#: ../includes/mstw-team-rosters-admin.php:1181
+msgid "Roster Table Format:"
+msgstr "Listenformat:"
+
+#: ../includes/mstw-team-rosters-admin.php:1189
+msgid "Sort by Last Name"
+msgstr "Nach Nachname sortieren"
+
+#: ../includes/mstw-team-rosters-admin.php:1190
+msgid "Sort by First Name"
+msgstr "Nach Vorname sortieren"
+
+#: ../includes/mstw-team-rosters-admin.php:1191
+msgid "Sort by Number"
+msgstr "Nach Nummer sortieren"
+
+#: ../includes/mstw-team-rosters-admin.php:1196
+msgid "Roster table sort order. (Default: Last Name)"
+msgstr "Sortierreihenfolge der Mannschaftsliste. (Vorgabe: Nachname)"
+
+#. ID attribute of tags
+#: ../includes/mstw-team-rosters-admin.php:1200
+msgid "Sort Roster by:"
+msgstr "Sortiere Liste nach:"
+
+#: ../includes/mstw-team-rosters-admin.php:1208
+msgid "Last, First"
+msgstr "Nachname, Vorname"
+
+#: ../includes/mstw-team-rosters-admin.php:1209
+msgid "First Last"
+msgstr "Vorname Nachname"
+
+#: ../includes/mstw-team-rosters-admin.php:1210
+msgid "First Name Only"
+msgstr "Nur Vorname"
+
+#: ../includes/mstw-team-rosters-admin.php:1211
+msgid "Last Name Only"
+msgstr "Nur Nachname"
+
+#: ../includes/mstw-team-rosters-admin.php:1216
+msgid "Select display format for Player Name. (Default: Last, First)"
+msgstr "Wähle Darstellung für Spielernamen. (Vorgabe: Nachname, Vorname)"
+
+#. ID attribute of tags
+#: ../includes/mstw-team-rosters-admin.php:1221
+msgid "Display Players by:"
+msgstr "Spieler zeigen nach:"
+
+#: ../includes/mstw-team-rosters-admin.php:1232
+msgid "Shows photos in roster tables. (Default: Hide)"
+msgstr "Bilder in die Listentabellen zeigen (Vorgabe: verstecken)"
+
+#: ../includes/mstw-team-rosters-admin.php:1237
+msgid "Show Player Photos:"
+msgstr "Spielerbilder zeigen:"
+
+#: ../includes/mstw-team-rosters-admin.php:1248
+msgid "(Default: \"Photo\")"
+msgstr "(Vorgabe: \"Bild\")"
+
+#: ../includes/mstw-team-rosters-admin.php:1264
+msgid "Set width in pixels for table photos, if shown. (Default: 64px)"
+msgstr "Breite in Pixels für Bilder in Tabellen, falls dargestellt. (Vorgabe: 64px)"
+
+#: ../includes/mstw-team-rosters-admin.php:1269
+msgid "Table Photo Width:"
+msgstr "Bilderbreite in Tabellen:"
+
+#: ../includes/mstw-team-rosters-admin.php:1280
+msgid "Set height in pixels for table photos, if shown. (Default: 64px)"
+msgstr "Höhe in Pixels für Bilder in Tabellen, falls dargestellt. (Vorgabe: 64px)"
+
+#: ../includes/mstw-team-rosters-admin.php:1285
+msgid "Table Photo Height:"
+msgstr "Bilderhöhe in Tabellen:"
+
+#: ../includes/mstw-team-rosters-admin.php:1301
+msgid "Table Title Text Color:"
+msgstr "Textfarbe für Tabellenüberschriften:"
+
+#: ../includes/mstw-team-rosters-admin.php:1317
+msgid "Table Links Color:"
+msgstr "Farbe für Tabellenlinks:"
+
+#: ../includes/mstw-team-rosters-admin.php:1333
+msgid "Table Header Background Color:"
+msgstr "Hintergrundfarbe für Tabellenüberschriften:"
+
+#: ../includes/mstw-team-rosters-admin.php:1349
+msgid "Table Header Text Color:"
+msgstr "Textfarbe für Tabellenkopfzeilen:"
+
+#: ../includes/mstw-team-rosters-admin.php:1365
+msgid "Table Even Row Text Color:"
+msgstr "Textfarbe für geraden Tabellenzeilen:"
+
+#: ../includes/mstw-team-rosters-admin.php:1381
+msgid "Table Even Row Background Color:"
+msgstr "Hintergrundfarbe für geraden Tabellenzeilen:"
+
+#: ../includes/mstw-team-rosters-admin.php:1397
+msgid "Table Odd Row Text Color:"
+msgstr "Textfarbe für ungeraden Tabellenzeilen:"
+
+#: ../includes/mstw-team-rosters-admin.php:1413
+msgid "Table Odd Row Background Color:"
+msgstr "Hintergrundfarbe für ungeraden Tabellenzeilen:"
+
+#: ../includes/mstw-team-rosters-admin.php:1423
+msgid ""
+"Enter the default team roster table settings. Note that these settings will "
+"apply to all the [shortcode] roster tables, overriding the default styles. "
+"However they can be overridden by more specific stylesheet rules for specific "
+"teams."
+msgstr ""
+"Gib die Standardeinstellungen für die Listen-Tabellen ein. Diese werden dann "
+"für alle [shortcode] Mannschaftslisten verwendet, statt die Standard-"
+"Darstellungen. Sie können allerdings mit Stylesheet-Regeln für einzelne Teams "
+"überschrieben werden."
+
+#: ../includes/mstw-team-rosters-admin.php:1450
+msgid "Player Profile(Bio) Title:"
+msgstr "Überschrift Spieler-Biografie:"
+
+#: ../includes/mstw-team-rosters-admin.php:1466
+msgid "Player Photo Width:"
+msgstr "Breite Spielerbild:"
+
+#: ../includes/mstw-team-rosters-admin.php:1482
+msgid "Player Photo Height:"
+msgstr "Höhe Spielerbild:"
+
+#: ../includes/mstw-team-rosters-admin.php:1499
+msgid "Main Box Background Color:"
+msgstr "Hintergrundfarbe Hauptkasten:"
+
+#: ../includes/mstw-team-rosters-admin.php:1515
+msgid "Main Box Text Color:"
+msgstr "Textfarbe Hauptkasten:"
+
+#: ../includes/mstw-team-rosters-admin.php:1531
+msgid "Player Profile(Bio) Border Color:"
+msgstr "Randfarbe Spieler-Biografie:"
+
+#: ../includes/mstw-team-rosters-admin.php:1547
+msgid "Player Bio Header Text Color:"
+msgstr "Textfarbe Kopfzeile Spieler-Biografie:"
+
+#: ../includes/mstw-team-rosters-admin.php:1563
+msgid "Player Bio Text Color:"
+msgstr "Textfarbe Spieler-Biografie:"
+
+#: ../includes/mstw-team-rosters-admin.php:1579
+msgid "Player Bio Background Color:"
+msgstr "Hintergrundfarbe Spieler-Biografie:"
+
+#: ../includes/mstw-team-rosters-admin.php:1595
+msgid "Player Gallery Links Color:"
+msgstr "Linkfarbe Spieler-Galerie:"
+
+#: ../includes/mstw-team-rosters-admin.php:1605
+msgid ""
+"Enter your single player and player gallery page settings. Unless otherwise "
+"noted, these settings will apply to both the pages."
+msgstr ""
+"Gib die Einstellungen für Einzelspieler und Spielergalerien ein. Wenn nichts "
+"anders vermerkt ist, gelten die Angaben für beiden Seitentypen."
+
+#: ../includes/mstw-team-rosters-admin.php:1881
+msgid "No first or last name"
+msgstr "Kein Vorname oder Nachname"
+
+#: ../includes/mstw-team-rosters-admin.php:1919
+msgid "first name"
+msgstr "Vorname"
+
+#: ../includes/mstw-team-rosters-admin.php:1920
+msgid "first"
+msgstr "Vorname"
+
+#: ../includes/mstw-team-rosters-admin.php:1923
+msgid "last name"
+msgstr "Nachname"
+
+#: ../includes/mstw-team-rosters-admin.php:1924
+msgid "last"
+msgstr "Nachname"
+
+#: ../includes/mstw-team-rosters-admin.php:1927
+msgid "position"
+msgstr "Position"
+
+#: ../includes/mstw-team-rosters-admin.php:1928
+msgid "pos"
+msgstr "Pos."
+
+#: ../includes/mstw-team-rosters-admin.php:1931
+msgid "number"
+msgstr "Nummer"
+
+#: ../includes/mstw-team-rosters-admin.php:1932
+msgid "nbr"
+msgstr "Nr."
+
+#: ../includes/mstw-team-rosters-admin.php:1933
+msgid "#"
+msgstr "#"
+
+#: ../includes/mstw-team-rosters-admin.php:1936
+msgid "weight"
+msgstr "Gewicht"
+
+#: ../includes/mstw-team-rosters-admin.php:1937
+msgid "wt"
+msgstr "Gew."
+
+#: ../includes/mstw-team-rosters-admin.php:1940
+msgid "height"
+msgstr "Höhe"
+
+#: ../includes/mstw-team-rosters-admin.php:1941
+msgid "ht"
+msgstr "Höhe"
+
+#: ../includes/mstw-team-rosters-admin.php:1944
+msgid "age"
+msgstr "Alter"
+
+#: ../includes/mstw-team-rosters-admin.php:1947
+msgid "year"
+msgstr "Jahr"
+
+#: ../includes/mstw-team-rosters-admin.php:1948
+msgid "yr"
+msgstr "Jahr"
+
+#: ../includes/mstw-team-rosters-admin.php:1951
+msgid "experience"
+msgstr "Erfahrung"
+
+#: ../includes/mstw-team-rosters-admin.php:1952
+msgid "exp"
+msgstr "Erf."
+
+#: ../includes/mstw-team-rosters-admin.php:1955
+msgid "home town"
+msgstr "Heimatort"
+
+#: ../includes/mstw-team-rosters-admin.php:1958
+msgid "country"
+msgstr "Land"
+
+#: ../includes/mstw-team-rosters-admin.php:1961
+msgid "last school"
+msgstr "Letzte Schule"
+
+#: ../includes/mstw-admin-utils.php:135
+msgid "Show"
+msgstr "Zeigen"
+
+#: ../includes/mstw-admin-utils.php:136
+msgid "Hide"
+msgstr "Verstecken"
+
+#: ../theme-templates/single-player.php:363 ../theme-templates/content-single-player.php:345
+msgid "Player Bio"
+msgstr "Spieler-Biografie"
