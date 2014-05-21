@@ -338,57 +338,64 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 	add_action( 'save_post', 'mstw_tr_save_meta' );
 
 	function mstw_tr_save_meta( $post_id ) {
-		global $mstw_tr_msg_str;
-		global $mstw_tr_debug_str;
-		
-		//First verify the required metadata is set and valid. If not, set default or return error
+		//
+		//Just return on an autosave
+		//
+		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) 
+			return $post_id;
+			
+		//	
+		// check that the post type is 'player', if so, process the data
+		//
+		if( isset( $_POST['post_type'] ) ) {		
+			if ( $_POST['post_type'] == 'player' ) {
+				update_post_meta( $post_id, '_mstw_tr_first_name', 
+						strip_tags( $_POST['mstw_tr_first_name'] ) );
+						
+				update_post_meta( $post_id, '_mstw_tr_last_name', 
+						strip_tags( $_POST['mstw_tr_last_name'] ) );
+						
+				update_post_meta( $post_id, '_mstw_tr_number', 
+						strip_tags( $_POST['mstw_tr_number'] ) );
+						
+				update_post_meta( $post_id, '_mstw_tr_position', 
+						strip_tags( $_POST['mstw_tr_position'] ) );		
+						
+				update_post_meta( $post_id, '_mstw_tr_height', 
+						strip_tags( $_POST['mstw_tr_height'] ) );
+						
+				update_post_meta( $post_id, '_mstw_tr_weight',  
+						strip_tags( $_POST['mstw_tr_weight'] ) );
+						
+				update_post_meta( $post_id, '_mstw_tr_year',  
+						strip_tags( $_POST['mstw_tr_year'] ) );
+						
+				update_post_meta( $post_id, '_mstw_tr_experience',
+						strip_tags( $_POST['mstw_tr_experience'] ) );
 				
-		update_post_meta( $post_id, '_mstw_tr_first_name', 
-				strip_tags( $_POST['mstw_tr_first_name'] ) );
-				
-		update_post_meta( $post_id, '_mstw_tr_last_name', 
-				strip_tags( $_POST['mstw_tr_last_name'] ) );
-				
-		update_post_meta( $post_id, '_mstw_tr_number', 
-				strip_tags( $_POST['mstw_tr_number'] ) );
-				
-		update_post_meta( $post_id, '_mstw_tr_position', 
-				strip_tags( $_POST['mstw_tr_position'] ) );		
-				
-		update_post_meta( $post_id, '_mstw_tr_height', 
-				strip_tags( $_POST['mstw_tr_height'] ) );
-				
-		update_post_meta( $post_id, '_mstw_tr_weight',  
-				strip_tags( $_POST['mstw_tr_weight'] ) );
-				
-		update_post_meta( $post_id, '_mstw_tr_year',  
-				strip_tags( $_POST['mstw_tr_year'] ) );
-				
-		update_post_meta( $post_id, '_mstw_tr_experience',
-				strip_tags( $_POST['mstw_tr_experience'] ) );
-		
-		update_post_meta( $post_id, '_mstw_tr_age', 
-				strip_tags( $_POST['mstw_tr_age'] ) );
-				
-		update_post_meta( $post_id, '_mstw_tr_home_town',
-				strip_tags( $_POST['mstw_tr_home_town'] ) );
-				
-		update_post_meta( $post_id, '_mstw_tr_last_school',
-				strip_tags( $_POST['mstw_tr_last_school'] ) );
-				
-		update_post_meta( $post_id, '_mstw_tr_country',
-				strip_tags( $_POST['mstw_tr_country'] ) );
-				
-		update_post_meta( $post_id, '_mstw_tr_bats',
-				strip_tags( $_POST['mstw_tr_bats'] ) );
-				
-		update_post_meta( $post_id, '_mstw_tr_throws',
-				strip_tags( $_POST['mstw_tr_throws'] ) );
-				
-		update_post_meta( $post_id, '_mstw_tr_other',
-				strip_tags( $_POST['mstw_tr_other'] ) );
-		
-	}
+				update_post_meta( $post_id, '_mstw_tr_age', 
+						strip_tags( $_POST['mstw_tr_age'] ) );
+						
+				update_post_meta( $post_id, '_mstw_tr_home_town',
+						strip_tags( $_POST['mstw_tr_home_town'] ) );
+						
+				update_post_meta( $post_id, '_mstw_tr_last_school',
+						strip_tags( $_POST['mstw_tr_last_school'] ) );
+						
+				update_post_meta( $post_id, '_mstw_tr_country',
+						strip_tags( $_POST['mstw_tr_country'] ) );
+						
+				update_post_meta( $post_id, '_mstw_tr_bats',
+						strip_tags( $_POST['mstw_tr_bats'] ) );
+						
+				update_post_meta( $post_id, '_mstw_tr_throws',
+						strip_tags( $_POST['mstw_tr_throws'] ) );
+						
+				update_post_meta( $post_id, '_mstw_tr_other',
+						strip_tags( $_POST['mstw_tr_other'] ) );
+			} //End: if ( $_POST['post_type'] == 'player' )
+		} //End: if( isset( $_POST['post_type'] ) )
+	} //End: function mstw_tr_save_meta
 
 	// ----------------------------------------------------------------
 	// Set up the Team Roster 'view all' columns
