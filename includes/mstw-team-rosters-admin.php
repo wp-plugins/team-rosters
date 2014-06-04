@@ -662,16 +662,17 @@ function mstw_tr_validate_fields_options( $input ) {
 					break;
 					
 				// 0-1 stuff
+				/*
 				case 'show_title':
 				case 'show_photos':
 					if ( $input[$key] == 1 ) {
 						$output[$key] = 1;
 					}
 					else {
-						$input[$key] = 0;
+						$output[$key] = 0;
 					}
 					break;
-					
+				*/	
 				// Check all other settings
 				default:
 					$output[$key] = sanitize_text_field( $input[$key] );
@@ -1150,10 +1151,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		);
 		
 		// Show Roster Table title
-		$args = array(	//'options' => array(	__( 'Show Title', 'mstw-loc-domain' ) => 1, 
-						//					__( 'Hide Title', 'mstw-loc-domain' ) => 0, 
-						//					),
-						'id' => 'show_title',
+		$args = array(	'id' => 'show_title',
 						'name' => 'mstw_tr_options[show_title]',
 						'value' => $options['show_title'],
 						'label' => __( 'Show Roster Table Titles (as "Team Name Roster")', 'mstw-loc-domain')

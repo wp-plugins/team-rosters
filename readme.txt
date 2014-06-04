@@ -84,6 +84,9 @@ The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are ava
 
 == Changelog ==
 
+= 3.1.2 =
+* Fixed bug with the show/hide table title setting - titles could not be hidden with the display setting. Corrected and tested.
+
 = 3.1.1 =
 * Fixed bug that prevented links to single player profiles from working with CHILD THEMES. If you aren't using a CHILD THEME, you don't need this patch.
 

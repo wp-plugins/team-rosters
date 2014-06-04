@@ -558,7 +558,7 @@ function mstw_tr_build_roster( $attribs ) {
 	}
 	
 	$output = "";
-	
+		
 	// Settings from the admin page
 	// THIS IS OKAY ... ATTRIBS HAVE ALREADY BEEN EXTRACTED
 	$options = get_option( 'mstw_tr_options' );
