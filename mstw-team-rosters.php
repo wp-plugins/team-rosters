@@ -515,7 +515,7 @@ function mstw_tr_gallery_handler( $atts ){
 	// Get the posts		
 	$posts = get_posts(array( 'numberposts' => -1,
 							  'post_type' => 'player',
-							  'teams' => $teatam_slug, 
+							  'teams' => $team_slug, 
 							  'orderby' => $order_by, 
 							  'meta_key' => $sort_key,
 							  'order' => 'ASC' 
