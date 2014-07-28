@@ -3,14 +3,14 @@
 Plugin Name: Team Rosters
 Plugin URI: http://wordpress.org/extend/plugins/team-rosters/
 Description: The Team Rosters Plugin defines a custom type - Player - for use in the MySportTeamWebite framework. It generates a roster table view and player bio view.
-Version: 3.1.1
+Version: 3.1.2
 Author: Mark O'Donnell
 Author URI: http://shoalsummitsolutions.com
 */
 
 /*
 Team Rosters (Wordpress Plugin)
-Copyright (C) 2012-13 Mark O'Donnell
+Copyright (C) 2012-14 Mark O'Donnell
 Contact me at http://shoalsummitsolutions.com
 
 This program is free software: you can redistribute it and/or modify
@@ -32,21 +32,6 @@ GPLv2 (or later) license from Smackcoders.
 Code from the File_CSV_DataSource class was re-used unchanged under
 that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel. 
 */
-
-/* ------------------------------------------------------------------------
- * CHANGE LOG:
- * 20121208-MAO: 
- *	Added code to pre_get_posts() to sort alphabetically by last name or
- *	numerically	by number based on the admin setting.
- *
- * 20130803-MAO: 
- *	Corrected code that generated warnings in 3.0.
- *
- * 20130912-MAO:
- *	(1) Changed call to get_template_directory() to get_stylesheet_directory() 
- *		to fix bug with child themes.
- *
- * ------------------------------------------------------------------------*/
 
 /* ------------------------------------------------------------------------
 // PLUGIN PREFIX:                                                          
