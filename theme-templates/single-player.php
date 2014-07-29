@@ -10,8 +10,9 @@
  * @subpackage Team_Rosters
  * @since Team Rosters 1.0
  */
+ ?>
 
-get_header(); ?>
+	<?php get_header(); ?>
 
 		<div id="primary">
 			<div id="content" role="main">
@@ -21,21 +22,15 @@ get_header(); ?>
 					<nav id="nav-single">
 						<h3 class="assistive-text"><?php _e( 'Post navigation', 'twentyeleven' ); ?></h3>
 						<span class="nav-previous">
-						<?php $back =$_SERVER['HTTP_REFERER'];
-						if( isset( $back ) && $back != '' ) { 
-							echo '<a href="' . $back . '"><span class="meta-nav">&larr;</span>Return to roster</a>';
-						}?>
-							
-							
-						<!--
-						<?php previous_post_link( '%link', __( '<span class="meta-nav">&larr;</span> Previous', 'twentyeleven' ) ); ?></span>
-						
-						<span class="nav-next"><?php next_post_link( '%link', __( 'Next <span class="meta-nav">&rarr;</span>', 'twentyeleven' ) ); ?></span>
-						-->
+							<?php $back =$_SERVER['HTTP_REFERER'];
+							if( isset( $back ) && $back != '' ) { 
+								echo '<a href="' . $back . '">';?>
+								<span class="meta-nav">&larr;</span>Return to roster</a>
+							<?php
+							}?>
+						</span> <!-- .nav-previous -->	
 					</nav><!-- #nav-single -->
 
-					<?php //get_template_part( 'content', 'single-player' ); ?>
-<!-- This is the old content-single-player.php file --------------------------->					
 					<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 					<?php
@@ -228,7 +223,7 @@ get_header(); ?>
 					echo $html;
 					?>
 					
-					<header class="player-header player-header-<?php echo( $team_slug ) ?>">
+					<div class="player-header player-header-<?php echo( $team_slug ) ?>">
 						<!-- First, figure out the player's photo -->
 						<div id = "player-photo">
 							<?php 
@@ -308,7 +303,7 @@ get_header(); ?>
 								
 								// If showing both height and weight show them as height/weight
 								// Otherwise show just one or the other
-								if ( $options['show_weight'] and $options['show_weight'] ) {
+								if ( $options['show_height'] and $options['show_weight'] ) {
 									echo $row_start . $options['height_label'] . '/' . $options['weight_label'] . $new_cell .  $height . '/' . $weight . $row_end;
 								} 
 								else  if ( $options['show_weight'] ) {
@@ -354,7 +349,7 @@ get_header(); ?>
 						
 						</div><!-- #player-name-nbr -->
 						
-					</header><!-- #player-header -->
+					</div><!-- #player-header -->
 					
 					<?php if( get_the_content( ) != "" ) { ?>
 						
@@ -372,10 +367,10 @@ get_header(); ?>
 					<?php } // end of if ( get_the_content() ) ?>
 
 				</article><!-- #post-<?php the_ID(); ?> -->			
-<!-- End of the old content-single-player.php file --------------------------->
+
 				<?php endwhile; // end of the loop. ?>
 
 			</div><!-- #content -->
 		</div><!-- #primary -->
 
-<?php get_footer(); ?>
+	<?php get_footer();?>

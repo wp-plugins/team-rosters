@@ -1,10 +1,10 @@
 === Team Rosters ===
-Contributors: Mark O'Donnell
+Contributors: MarkODonnell
 Donate link: http://shoalsummitsolutions.com
 Tags: sports,games,roster,sports teams,team roster,sports roster,sports team roster  
 Requires at least: 3.4.2
-Tested up to: 3.5
-Stable tag: 3.0.1
+Tested up to: 3.9.1
+Stable tag: 3.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,14 +13,12 @@ Manages multiple sports team rosters. Displays tabular rosters, a single player 
 
 == Description ==
 
-Welcome to the MSTW Team Rosters Plugin from [Shoal Summit Solutions](http://shoalsummitsolutions.com/).
+VERSION 3.1.2 FIXES TWO MINOR BUGS. SEE THE CHANGE LOG FOR MORE INFORMATION.
 
-The MSTW Team Rosters plugin manages rosters for multiple teams. It provides roster tables with built-in formats for high school, college, and professional teams as well as custom roster formats for basball. Players are assigned to team rosters using a Teams custom taxonomy (screenshot-7). The plugin supports as many players and teams as needed. It provides several views of rosters including: a table (via a shortcode), a player gallery (via a custom taxonomy template), and single player bio (via a custom post type template). Samples of all of the above displays are available on the [Shoal Summit Solutions Plugin Development Site](http://shoalsummitsolutions.com/dev).
+The MSTW Team Rosters plugin manages rosters for multiple teams. It provides roster tables with built-in formats for high school, college, and professional teams as well as custom roster formats for basball. Players are assigned to team rosters using a Teams custom taxonomy (screenshot-7). The plugin supports as many players and teams as needed. It provides several views of rosters including: a table (via a shortcode), a player gallery (via both a shortcode and a custom taxonomy template), and single player bio (via a custom post type template). Samples of all of the above displays are available in the screenshots on WordPress.org and on the [Shoal Summit Solutions Plugin Development Site](http://shoalsummitsolutions.com/dev).
 
 
-VERSION 3.1 HAS BEEN UPGRADED SIGNIFICANTLY TO PROVIDE NEW FEATURES AND FIX SOME BUGS AS OUTLINED BELOW. ALSO SEE THE VERSION HISTORY. IF YOU ARE UPGRADING YOU WILL WANT TO READ THE INSTALLATION DOCUMENTATION AND UPGRADE NOTICE CAREFULLY. 
-
-The following features enhance the user experience on both the front and back ends:
+VERSION 3.1 HAS BEEN UPGRADED TO ENHANCE THE USER EXPERIENCE ON BOTH THE FRONT AND BACK ENDS. THE NEW FEATURES AND SOME BUGS FIXES ARE LISTED BELOW. ALSO SEE THE VERSION HISTORY. IF YOU ARE UPGRADING YOU WILL WANT TO READ THE INSTALLATION DOCUMENTATION AND UPGRADE NOTICE CAREFULLY. 
  
 * The filter by team feature on the "All Players" admin screen now works (screenshot-1).
 * Configure table columns and data fields to meet your requirements. You can show/hide all columns (except Player Name) and change the header/label of all columns and data fields (screenshot-5).
@@ -52,7 +50,7 @@ Complete documentation on the following topics is available at the links below:
 * [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/)
 
 **NOTES:**
-The Team Rosters plugin is the third in a set of plugins supporting a framework for sports team websites. Others include Game Locations, Game Schedules, and League Standings, all now available on [WordPress.org](http://wordpress.org/extend/plugins/). Coaching Staffs, Sponsors, Frequently Asked Questions, Users Guide, and more are planned for future development. If you are a developer and there is one you would really like to have, or if you would like to participate in the development of one, please contact me (mark@shoalsummitsolutions.com).
+The Team Rosters plugin is the third in a set of plugins supporting a framework for sports team websites. Others include Game Locations, Game Schedules, Coaching Staffs, and League Standings, all now available on [WordPress.org](http://wordpress.org/extend/plugins/). Statitics, Sponsors, Frequently Asked Questions, and Users Guide are planned for future development. If you are a developer and there is one you would really like to have one, or if you would like to participate in the beta testing of one, please contact me (mark@shoalsummitsolutions.com).
 
 == Installation ==
 
@@ -60,13 +58,13 @@ Complete installation instructions are available on [shoalsummitsolutions.com](h
 
 **NOTES:**
  
-* When upgrading the existing player data will not be deleted.
-* Any changes to the plugin stylesheet (css/mstw-tr-style.css)*will* be overwritten, so if you have customized that file you will want to save it before upgrading.
-* To support the (significant) refactoring of the code in version 3.0, some shortcode arguments and default Display Settings had to be changed. Therefore, it is possible that some customizations of existing Roster Tables via [shortcode arguments], default colors and other display settings, and so forth may have to be replaced. Existing arguments and parameters were preserved to the greatest extent possible, so mileage will vary depending on exactly what arguments and/or settings you were using. 
+* When upgrading the existing player data will NOT be deleted.
+* Any changes to the plugin stylesheet (css/mstw-tr-style.css)*WILL* be overwritten, so if you have customized that file you should save it before upgrading.
+* To support the (significant) refactoring of the code in version 3.0, some shortcode arguments and default Display Settings had to be changed. Therefore, it is possible that some customizations of existing Roster Tables via [shortcode arguments], default colors, display settings, and so forth may have to be replaced. Existing arguments and parameters were preserved to the greatest extent possible, so mileage will vary depending on exactly what arguments and/or settings you were using. 
 
 == Frequently Asked Questions ==
 
-[Frequently Asked Questions are available here](http://shoalsummitsolutions.com/tr-installation/).
+[Frequently Asked Questions are available here](http://shoalsummitsolutions.com/tr-faq/).
 
 == Usage Notes ==
 *I suggest that you use the test pages on [my plugin development site](http://shoalsummitsolutions.com/dev) as guides to compare what works and what doesn't.*
@@ -86,16 +84,27 @@ The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are ava
 
 == Changelog ==
 
+= 3.1.2 =
+* Fixed a bug (a typo) that prevented the team gallery shortcode from behaving correctly.
+* Fixed bug with the show/hide table title setting - titles could not be hidden with the display setting. Corrected and tested.
+
+= 3.1.1 =
+* Fixed bug that prevented links to single player profiles from working with CHILD THEMES. If you aren't using a CHILD THEME, you don't need this patch.
+
 = 3.1 =
 * Fixed bug with sort order. Roster table and player gallery views both sort properly by number, first name, and last name.
+* Fixed bug with show_height settings.
+* Fixed minor bug: gallery sometimes linked to players/player-slug/?format='' instead of players/player-slug/?format=custom. This bug may or may not have an affect on a site, depending on formats and usage.
+* Fixed the "Filter by Team" dropdown on the Show All Players admin screen. 
 * Re-enabled the bulk delete menu on the All Players screen.
-* Fixed the "Filter by Team" dropdown on the Show All Players admin screen.
 * Enabled the "Other" field. It may now be used on all 'custom' displays but it is disabled by default.
-* Fixed minor bug: gallery sometimes linked to players/player-slug/?format='' instead of players/player-slug/?format=custom. This bug may or may not have an affect on a site, depending on formats and usage. 
+* Improved responsiveness of single player profile page (single-player.php). Looks better on small screens.
 * Combined `single-player.php` and `content-single-player.php` templates (into the `single-player.php` template. Why? ...
 * The use of links from the players/roster gallery or players/roster table to the single player profile is now determined by the existence of the `single-player.php` template in the active theme's main directory. Removed the 'use_xxx-links' settings, which are now superfluous. If you want links, just put the `single-player.php` template in the right directory. If not, omit it.
 * Re-factored the admin menu code. Added MSTW icon to admin menu and screens.
-* The new WordPress Color Selector has been added to all color settings in the admin settings screen.
+* The WordPress Color Selector has been added to all color settings in the admin settings screen.
+* Added a control to show player photos in the roster tables (shortcode).
+* Added a gallery shortcode. [mstw-tr-gallery team=team-slug]
 
 = 3.0.1 =
 * Tweaked two calls (one in mstw-team-rosters.php and one in includes/mstw-team-rosters-admin.php) to prevent WARNINGS. (Easily fixed by setting WP_DEBUG to false in wp-config.php.) 
@@ -137,11 +146,13 @@ The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are ava
 
 == Upgrade Notice ==
 
-Significant new fuctionality has been added to version 3.0. Admins now have the ability to customize the visibility of and headings for data fields in roster tables, player bios, and player galleries. Admins can also control the display of roster tables in terms of colors and layout on a team-by-team basis in support of leagues and clubs. See the documentation [here](http://shoalsummitsolutions.com/tr-styling/] for more details.
+3.1.1 Fixed bug that prevented links to single player profiles from working with CHILD THEMES. If you aren't using a CHILD THEME, you don't need this patch.
+
+Significant new functionality has been added to version 3.0/3.1. Admins now have the ability to customize the visibility of and headings for data fields in roster tables, player bios, and player galleries. Admins can also control the display of roster tables in terms of colors and layout on a team-by-team basis in support of leagues and clubs. See the documentation [here](http://shoalsummitsolutions.com/tr-styling/] for more details.
 
 * Upgrades of the Team Rosters plugin are designed to *NOT* impact any existing players, rosters, or settings. (But backup your DB before you upgrade, just in case. :) )
 * Any changes to the plugin stylesheet (css/mstw-tr-style.css)*will* be overwritten, so if you have customized that file you will want to save it before upgrading.
 * To support the (significant) refactoring of the code in version 3.0, some shortcode arguments and default Display Settings had to be changed. Therefore, it is possible that some customizations of existing Roster Tables via [shortcode arguments], default colors and other display settings, and so forth may have to be replaced. Existing arguments and parameters were preserved to the greatest extent possible, so mileage will vary depending on exactly what arguments and/or settings you were using. 
 
-The current version of Team Rosters has been developed and tested on WordPress 3.5. If you use older version of WordPress, good luck! (FYI, version 1.0 was developed and tested on WP 3.4.2.) If you are using a newer version, please let me know how the plugin works, especially if you encounter problems.
+Version 3.1 of Team Rosters has been developed and tested on WordPress 3.6. If you use older version of WordPress, good luck! If you are using a newer WP version, please let me know how the plugin works, especially if you encounter problems.
 

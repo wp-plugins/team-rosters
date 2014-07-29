@@ -13,23 +13,17 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
  *------------------------------------------------------*/
  
 /* player-header contains player photo and information */
-header.player-header {
-	/* admin settings will override these first two colors */
-	/*background-color: #ffc831; 			/*MC Football - yellow */
-	/*color: #b8202e; 						/*MC Football - red */
-	/*background-color: #5899E6; 			/*MCS Athletics - carolina blue */
-	/*color: #00004f; 						/*MCS Athletics - navy blue */
+div.player-header {
 	background-color: #dce6f1; 				/*MS default - very light blue*/
 	color: #000;							/*MS default - black*/
 	width: 100%;
-	height: 162px;
+	/*height: 162px;*/
+	float: left;
 	font-size: 12px;
 	padding: 10px 0;
 }
 
 h1.player-head-title {
-	/*color: #b8202e; 					/*MC Football - red */
-	color: #5899E6; 					/*MCS Athletics - carolina blue */
 	color: #000;						/*MS default */
 	font-size: 24px;
 	font-weight: bold;
@@ -51,7 +45,7 @@ h1.player-head-title {
 
 #player-name-nbr {
 	float: left;
-	position: absolute;
+	/*position: absolute;*/
 	padding: 18px 0 20px 20px;
 	display: inline;
 }
@@ -154,10 +148,10 @@ td.rt-col {
  *------------------------------------------------------*/
 
 h1.mstw_tr_roster_title {
-	/*color: #b8202e;				/*MC Football - red */ 
-	/*color: #5899e6;				/*MCS Athletics - carolina blue */
 	color: inherit;
 	font-size: 24px;
+	margin-top: 24px;
+	margin-bottom: 0px;
 }
  
 table.mstw-tr-table {
@@ -172,11 +166,13 @@ tr.mstw-tr-table-head { 				/* Can be overridden by settings in UI */
 	/*background-color: #000;		/*MC Football - black */
 	color: #fff; 					/*MS default */
 	/*color: #fff;					/*MC Football - white */
+	vertical-align: middle;
 	}
  
  tr.mstw-tr-table-head th {
 	/*Padding is pretty important and should match the table body setings below */
 	padding-left: 5px;  
+	vertical-align: middle;
 	/* got to grow your own border styles in the header */
 	/*border: #000 solid 1px;				/*MC Football - sample */
 	/*border: #00004f solid 1px;			/*MCS Athletics - sample */
@@ -188,6 +184,7 @@ th.mstw-tr-table-head {
 	}
 
 tr.mstw-tr-odd {
+	vertical-align: middle;
 	background-color: #dce6f1;		/*MS default */
 	/*background-color: #ffc831;	/*MC Football - sample */
 	color: #000;					/*MS default */
@@ -195,6 +192,7 @@ tr.mstw-tr-odd {
 }
 
 tr.mstw-tr-even {
+	vertical-align: middle;
 	background-color: fff; 			/*MS default */
 	/* background-color: #b8202e;	/*MC Football - sample */
 	/*background-color: #B7DEF7; 	/*MCS-sample lt blue*/
@@ -207,12 +205,14 @@ tr.mstw-tr-odd a {	/* you have finer control here than you do with the admin set
 	/*color: #00f; 					/* MS default */
 	color: #1982d1; 				/*Twentyeleven default blue */
 	/*color: #666;					/*MC Football - sample */
+	vertical-align: middle;
 }
 
 tr.mstw-tr-even a {	/* you can set different link colors for even and odd rows */
 	/*color: #00f; 					/* MS default */
 	color: #1982d1; 				/*Twentyeleven default blue */
 	/*color: #bbb;					/*MC Football - sample */
+	vertical-align: middle;
 }
 	
 tr.mstw-tr-odd td, tr.mstw-tr-even td {
@@ -221,6 +221,16 @@ tr.mstw-tr-odd td, tr.mstw-tr-even td {
 	border-top: #95b3d7 solid 1px;  		/* MS default */
 	/*border: #000 solid 1px;				/*MC Football - sample */
 	/*border: #00004f solid 1px;			/*MCS Athletics - sample */
+	vertical-align: middle;
+}
+
+.mstw-tr-table td img {
+	border: 1px solid #BBB;
+	padding: 5px;
+	background-color: #EEE;
+	margin-left: 10px;
+	height: 64px;
+	width: 64px;
 }
  
 /*-------------------------------------------------------	
@@ -234,7 +244,7 @@ tr.mstw-tr-odd td, tr.mstw-tr-even td {
 
 h1.team-head-title {
 	font-size: 28px;
-	color: #5899E6;						/*MCS Athletics - sample */
+	color: #5899E6;
 }
 
 .player-tile {
@@ -269,13 +279,20 @@ h1.team-head-title {
  
 .player-info-container table.player-info {
 	padding: 0 5px 5px 5px;
+	margin: 0;
 	layout: fixed;
 	width: 100%;
 	font-size: 12px;
+	border: 0 solid #fff;
 }
  
 .player-info-container .player-name-number {
 	padding: 0 5px 5px 5px;
+}
+
+table.player-info tr td {
+	border: 0 solid blue;
+	padding: 0px 5px 5px 5px;
 }
 
 /*-------------------------------------------------------	
@@ -309,7 +326,7 @@ h1.team-head-title {
 	}
 
 /*sf-giants single player bio page*/	
-header.player-header.player-header-sf-giants {
+div.player-header.player-header-sf-giants {
 	background-color: #f59e19;  /*orange*/
 	color: #000;
 }
@@ -395,6 +412,10 @@ h1.team-head-title.team-head-title-sf-giants {
 	border-bottom: 1px solid #A2AAAD;
 	}
 	
+h1.mstw_tr_roster_title.mstw_tr_roster_title_cal-bears {
+	color: #002D62; /*blue*/;
+}
+	
  .mstw-tr-table.mstw-tr-table-cal-bears th.mstw-tr-table-head {
 	color: #FEC524; /*gold*/
 	background-color: #002D62; /*blue*/
@@ -418,7 +439,7 @@ h1.team-head-title.team-head-title-sf-giants {
 	}
 	
 /*cal-bears single player bio page*/	
-header.player-header.player-header-cal-bears {
+div.player-header.player-header-cal-bears {
 	background-color: #002D62; /*blue*/
 	color: #FEC524; /*gold*/
 }

@@ -1,7 +1,7 @@
 <?php
 /*
  * mstw-admin-utils.php
- * 	Utility functions for MSTW Plugin Admin
+ * 	Utility functions for MSTW TEAM ROSTERS Plugin Admin
  *
  *	MSTW Wordpress Plugins
  *	Copyright (C) 2013 Mark O'Donnell
@@ -26,16 +26,16 @@
  *		This function is used by the require_once statement to figure
  *		out whether or not to load the utils.
  *---------------------------------------------------------------*/
-	function mstw_admin_utils_loaded( ) {
+	function mstw_tr_admin_utils_loaded( ) {
 		return( true );
 	}
 
 
  /*----------------------------------------------------------------	
- *	MSTW_UTL_BUILD_CSS_RULE
+ *	MSTW_TR_BUILD_CSS_RULE
  *		Simple convenience function to build css rules from $options.
  *---------------------------------------------------------------*/	
-	function mstw_utl_build_css_rule( $options_array, $option_name, $css_rule ) {
+/*	function mstw_tr_build_css_rule( $options_array, $option_name, $css_rule ) {
 		if ( isset( $options_array[$option_name] ) and !empty( $options_array[$option_name] ) ) {
 			return $css_rule . ":" . $options_array[$option_name] . "; \n";	
 		} 
@@ -43,8 +43,9 @@
 			return "";
 		}
 	}
+*/
  /*----------------------------------------------------------------	
- *	MSTW_UTL_COLOR_CTRL
+ *	MSTW_TR_COLOR_CTRL
  *	Builds color selector controls for the admin UI
  *
  * 	Arguments:
@@ -56,7 +57,7 @@
  *
  *	return - none. Control is displayed.
  *---------------------------------------------------------------*/
-	function mstw_utl_color_ctrl( $args ) { 
+	function mstw_tr_color_ctrl( $args ) { 
 		$id = $args['id'];
 		$name = $args['name'];
 		//$class = $args['class'];
@@ -66,10 +67,10 @@
 		echo "<input type='text' id='$id' name='$name' value='$value' /> \n";
 		//echo "<label for='$id'>$label</label> \n";
 
-	} //End: mstw_utl_color_ctrl
+	} //End: mstw_tr_color_ctrl
  
  /*----------------------------------------------------------------	
- *	MSTW_UTL_TEXT_CTRL
+ *	MSTW_TR_TEXT_CTRL
  *	Builds text format controls for the admin UI
  *
  * 	Arguments:
@@ -80,7 +81,7 @@
  *
  *	return - none. Control is displayed.
  *---------------------------------------------------------------*/
-	function mstw_utl_text_ctrl( $args ) { 
+	function mstw_tr_text_ctrl( $args ) { 
 		$id = $args['id'];
 		$name = $args['name'];
 		$value = $args['value'];
@@ -89,10 +90,10 @@
 		echo "<input type='text' id='$id' name='$name' value='$value' /> \n";
 		echo "<label for='$id'>$label</label> \n";
 		
-	} //End: mstw_utl_text_ctrl
+	} //End: mstw_tr_text_ctrl
 	
 /*----------------------------------------------------------------	
- *	MSTW_UTL_CHECKBOX_CTRL
+ *	MSTW_TR_CHECKBOX_CTRL
  *	Builds checkbox format controls for the admin UI
  *
  * 	Arguments:
@@ -105,7 +106,7 @@
  *
  *	Return - none. Control is displayed.
  *---------------------------------------------------------------*/
-	function mstw_utl_checkbox_ctrl( $args ) { 
+	function mstw_tr_checkbox_ctrl( $args ) { 
 		$id = 		$args['id'];
 		$name = 	$args['name'];
 		$value = 	$args['value'];
@@ -115,7 +116,7 @@
 				checked( '1', $value, false ) . "/> \n";  
 		echo "<label for='$id'>$label</label> \n";
 		
-	}	//End: mstw_utl_checkbox_ctrl
+	}	//End: mstw_tr_checkbox_ctrl
 	
 /*----------------------------------------------------------------	
  *	Shortcut to build 'Show-Hide' Select-Option controls for the admin UI
@@ -130,7 +131,7 @@
  *
  *	Return - none. Output is echoed.
  *---------------------------------------------------------------*/	
-	function mstw_utl_show_hide_ctrl( $args ) {
+	function mstw_tr_show_hide_ctrl( $args ) {
 	
 		$new_args = array(	'options' => array(	__( 'Show', 'mstw-loc-domain' ) => 1, 
 											__( 'Hide', 'mstw-loc-domain' ) => 0, 
@@ -141,9 +142,9 @@
 						'label' => $args['label']
 						);
 		
-		mstw_utl_select_option_ctrl( $new_args );
+		mstw_tr_select_option_ctrl( $new_args );
 		
-	}  //End: mstw_utl_show_hide_ctrl
+	}  //End: mstw_tr_show_hide_ctrl
 	
 /*----------------------------------------------------------------	
  *	Builds Select-Option controls for the admin UI
@@ -157,7 +158,7 @@
  *
  *	Return - none. Output is echoed.
  *---------------------------------------------------------------*/
-	function mstw_utl_select_option_ctrl( $args ) {
+	function mstw_tr_select_option_ctrl( $args ) {
 		
 		$options = $args['options'];
 		$name = $args['name'];
@@ -175,13 +176,13 @@
 		//echo "<label for='$id'>". $label . "</label> \n";
 		echo "<label for='$id'>$label</label> \n";
 		
-	}  //End: mstw_utl_select_option_ctrl
+	}  //End: mstw_tr_select_option_ctrl
 
 
 /*----------------------------------------------------------------	
  *	Sanitization Functions
  *---------------------------------------------------------------*/	
-	function mstw_utl_sanitize_hex_color( $color ) {
+	function mstw_tr_sanitize_hex_color( $color ) {
 		// Check $color for proper hex color format (3 or 6 digits) or the empty string.
 		// Returns corrected string if valid hex color, returns null otherwise
 		
@@ -195,7 +196,7 @@
 		return null;
 	}
 
-	function mstw_utl_sanitize_number( $number ) {
+	function mstw_tr_sanitize_number( $number ) {
 
 	}
 ?>
