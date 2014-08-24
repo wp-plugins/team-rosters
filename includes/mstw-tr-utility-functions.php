@@ -15,8 +15,10 @@
  *		It does nothing EXCEPT indicate whether or not the file is loaded!!
  *-------------------------------------------------------------------------------*/
  
- function mstw_tr_utility_functions_loaded( ) {
-	return true;
+ if ( !function_exists( 'mstw_tr_utility_functions_loaded' ) ) {
+	 function mstw_tr_utility_functions_loaded( ) {
+		return true;
+	 }
  }
 
 /*---------------------------------------------------------------------------------
@@ -26,7 +28,8 @@
  *		to the admin options. The defaults specified on the admin page are used
  *-------------------------------------------------------------------------------*/
 
- function mstw_tr_set_fields_by_format( $format ) {
+if ( !function_exists( 'mstw_tr_set_fields_by_format' ) ) {
+	function mstw_tr_set_fields_by_format( $format ) {
 		switch ( $format) {
 			case 'baseball-high-school':
 			case 'baseball-college':
@@ -149,12 +152,13 @@
 				break;
 		}
 		return $settings;
-	}
-
+	} //End: mstw_tr_set_fields_by_format()
+}
 /*---------------------------------------------------------------------------------
  *	mstw_tr_get_defaults: returns the array of option defaults
  *-------------------------------------------------------------------------------*/	
-		function mstw_tr_get_defaults( ) {
+if ( !function_exists( 'mstw_tr_get_defaults' ) ) {
+	function mstw_tr_get_defaults( ) {
 		//Base defaults
 		$defaults = array(	
 				'team'					=> 'no-team-specified',
@@ -195,8 +199,10 @@
 				);
 				
 		return $defaults;
-	}
-	
+	} //End: mstw_tr_get_defaults()
+}
+
+if ( !function_exists( 'mstw_tr_build_gallery' ) ) {
 	function mstw_tr_build_gallery( $team_slug, $posts, $options, $format ) {	
 		
 		//$output = "<div class='mstw_tr_gallery'>\n";
@@ -372,5 +378,7 @@
 		
 		//$output .= "</div> <!--end .mstw_tr_gallery -->";
 		return $output;
-	}
-	?>
+		
+	} //End: mstw_tr_build_gallery()
+}
+?>

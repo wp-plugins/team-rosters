@@ -84,6 +84,9 @@ The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are ava
 
 == Changelog ==
 
+= Next Release =
+* Added if ( !function_exists( 'function_name' ) ) wrappers to mstw_tr_utility_functions.php.
+
 = 3.1.2 =
 * Fixed a bug (a typo) that prevented the team gallery shortcode from behaving correctly.
 * Fixed bug with the show/hide table title setting - titles could not be hidden with the display setting. Corrected and tested.
