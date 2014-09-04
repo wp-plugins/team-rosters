@@ -310,7 +310,7 @@
 										echo $row_start . $options['weight_label'] . $new_cell .  $weight . $row_end;
 								} 
 								else if ( $options['show_height'] ) {
-										echo $row_start . $options['height_label'] . $new_cell .  $weight . $row_end;
+										echo $row_start . $options['height_label'] . $new_cell .  $height . $row_end;
 								}		
 								
 								//Year
