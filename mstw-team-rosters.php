@@ -1,51 +1,38 @@
 <?php
 /*
-Plugin Name: Team Rosters
-Plugin URI: http://wordpress.org/extend/plugins/team-rosters/
-Description: The Team Rosters Plugin defines a custom type - Player - for use in the MySportTeamWebite framework. It generates a roster table view and player bio view.
-Version: 3.1.2
-Author: Mark O'Donnell
-Author URI: http://shoalsummitsolutions.com
+	Plugin Name: Team Rosters
+	Plugin URI: http://wordpress.org/extend/plugins/team-rosters/
+	Description: The Team Rosters Plugin defines a custom type - Player - for use in the MySportTeamWebite framework. It generates a roster table view and player bio view.
+	Version: 3.1.2
+	Author: Mark O'Donnell
+	Author URI: http://shoalsummitsolutions.com
+	Text Domain: mstw-team-rosters
+	Domain Path: /lang
 */
 
 /*
-Team Rosters (Wordpress Plugin)
-Copyright (C) 2012-14 Mark O'Donnell
-Contact me at http://shoalsummitsolutions.com
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-Code from the CSV Importer plugin was modified under that plugin's 
-GPLv2 (or later) license from Smackcoders. 
-
-Code from the File_CSV_DataSource class was re-used unchanged under
-that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel. 
-*/
-
-/* ------------------------------------------------------------------------
-// PLUGIN PREFIX:                                                          
-// 'mstw_tr_'  and 'mstw-tr-' derived from "mysportsteamwebsite team roster"
-// -----------------------------------------------------------------------*/ 
+ *	Team Rosters (Wordpress Plugin)
+ *	Copyright (C) 2012-14 Mark O'Donnell
+ *	Contact me at mark@shoalsummitsolutions.com
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 // ----------------------------------------------------------------
 // Set up global variables
-	
-// Debug messages - used during development	
-	$mstw_tr_debug_str = '';
-	
-//	Who knows?	
-	$mstw_tr_msg_str = '';
+//	
+// NONE ??
 
 
 // ----------------------------------------------------------------
@@ -83,17 +70,34 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		// we're in wp-admin
 		require_once ( dirname( __FILE__ ) . '/includes/mstw-team-rosters-admin.php' );
     }
+	
+// ----------------------------------------------------------------
+// filter so single-player template does  not need to be in the theme directory
+//
+	add_filter( "single_template", "mstw_tr_single_player_template" );
+	
+	function mstw_tr_single_player_template( $single_template ) {
+		 global $post;
+
+		 if ($post->post_type == 'player') {
+			  $single_template = dirname( __FILE__ ) . '/theme-templates/single-player.php';
+			  //echo '$single_template= ' . $single_template;
+			  //die;
+		 }
+		 
+		 return $single_template;
+		 
+	} //End: mstw_tr_single_player_template()	
 
 // ----------------------------------------------------------------
 // Load the Team Rosters utility functions (once)
-
-	if ( !function_exists( 'mstw_tr_utility_fuctions_loaded' ) ) {
-		// we're in wp-admin
-		require_once ( dirname( __FILE__ ) . '/includes/mstw-tr-utility-functions.php' );
-    }
+//	functions are wrapped
+//
+	require_once ( dirname( __FILE__ ) . '/includes/mstw-tr-utility-functions.php' );
 	
 // ----------------------------------------------------------------
 // Add the CSS code to the header
+//
 
 	add_filter( 'wp_head', 'mstw_tr_add_css');
 		
