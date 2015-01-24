@@ -86,7 +86,17 @@ The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are ava
 
 = Next Release =
 * Added if ( !function_exists( 'function_name' ) ) wrappers to mstw_tr_utility_functions.php.
+* Integrated mstw_utility_functions (replace tr_utility_functions where possible
+* Completely re-wrote display settings
+* Re-orgainized Edit Player screen
+* Cleaned up many details in admin UI
+* Cleaned up WP internationalization/translation. Domain was changed from mstw-loc-domain to mstw-team-rosters.
+* Added field to link Team taxonomy to MSTW Schedules & Scoreboards Teams DB.
+* Changed CPT & taxonomy names to prevent collisions with themes and other plugs. THIS HAS A MAJOR IMPACT ON UPGRADES FROM PREVIOUS VERSIONS. READ HOW TO DO IT RIGHT HERE.
+
+
 * Corrected the display of height/weight in the single-player.php template
+* Uses the single-player.php template from the plugin's /theme-templates directory so the template no longer needs to be copied to the theme's (or child theme's) directory
 
 = 3.1.2 =
 * Fixed a bug (a typo) that prevented the team gallery shortcode from behaving correctly.
