@@ -1,33 +1,85 @@
 <?php
-/*----------------------------------------------------------
+/*-----------------------------------------------------------
  *	MSTW-TR-UTILITY-FUNCTIONS.PHP
- *	mstr_tr_set_options() - returns the default option settings
- *	mstw_tr_set_fields_by_format() - sets options based on specified format
+ *		Utility or convenience functions used in both the front and back ends
  *
- * 20130912-MAO:
- *	(1) Changed call to get_template_directory() to get_stylesheet_directory() to
- *		fix bug with child themes.
- * 
- *---------------------------------------------------------*/
+ *	1. mstw_tr_get_defaults() - returns the default option settings
+ *	2. mstw_tr_set_fields_by_format() - sets options based on specified roster format
+ *	3. mstw_tr_build_gallery: Builds the player gallery on the front end.
+ *
+ *
+ *	Team Rosters (Wordpress Plugin)
+ *	Copyright (C) 2012-14 Mark O'Donnell
+ *	Contact me at mark@shoalsummitsolutions.com
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *-----------------------------------------------------------*/
  
- /*---------------------------------------------------------------------------------
- *	mstw_tr_utility_fuctions_loaded: DO NOT DELETE
- *		It does nothing EXCEPT indicate whether or not the file is loaded!!
- *-------------------------------------------------------------------------------*/
- 
- if ( !function_exists( 'mstw_tr_utility_functions_loaded' ) ) {
-	 function mstw_tr_utility_functions_loaded( ) {
-		return true;
-	 }
- }
+ //-----------------------------------------------------------
+ //	mstw_tr_get_defaults: returns the array of option defaults
+ //	
+ if ( !function_exists( 'mstw_tr_get_defaults' ) ) {
+	function mstw_tr_get_defaults( ) {
+		//Base defaults
+		$defaults = array(	
+				'team'					=> 'no-team-specified',
+				'show_title'			=> 1,
+				'roster_type'			=> 'custom',
+				//'use_player_links'		=> 0, removed in 3.1
+				//'use_gallery_links'		=> 0, removed in 3.1
+				//'use_pg_links'			=> 0, removed in 3.1
+				'sort_order'			=> 'alpha',
+				'name_format'			=> 'last-first',
+				'name_label'			=> __( 'Name', 'mstw-team-rosters' ),
+				'show_photos'			=> 0,
+				'photo_label'			=> __( 'Photo', 'mstw-team-rosters' ),
+				'show_number'			=> 1,
+				'number_label'			=> __( 'Nbr', 'mstw-team-rosters' ),
+				'show_position'			=> 1,
+				'position_label'		=> __( 'Pos', 'mstw-team-rosters' ),
+				'show_height'			=> 1,
+				'height_label'			=> __( 'Hgt', 'mstw-team-rosters' ),
+				'show_weight'			=> 1,
+				'weight_label'			=> __( 'Wgt', 'mstw-team-rosters' ),
+				'show_year'				=> 0,
+				'year_label'			=> __( 'Year', 'mstw-team-rosters' ),
+				'show_experience'		=> 0,
+				'experience_label'		=> __( 'Exp', 'mstw-team-rosters' ),
+				'show_age'				=> 0,
+				'age_label'				=> __( 'Age', 'mstw-team-rosters' ),
+				'show_home_town'		=> 0,
+				'home_town_label'		=> __( 'Home Town', 'mstw-team-rosters' ),
+				'show_last_school'		=> 0,
+				'last_school_label'		=> __( 'Last School', 'mstw-team-rosters' ),
+				'show_country'			=> 0,
+				'country_label'			=> __( 'Country', 'mstw-team-rosters' ),
+				'show_bats_throws'		=> 0,
+				'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-team-rosters' ),
+				'show_other_info'		=> 0,
+				'other_info_label'		=> __( 'Other', 'mstw-team-rosters' ),
+				);
+				
+		return $defaults;
+	} //End: mstw_tr_get_defaults()
+}
 
-/*---------------------------------------------------------------------------------
- *	mstw_tr_set_options_by_format: Sets the options based on the specified format
- *		high-school, college, pro, baseball-high-school, 
- *		baseball-college, or baseball-pro. "custom" caused no change 
- *		to the admin options. The defaults specified on the admin page are used
- *-------------------------------------------------------------------------------*/
-
+//-----------------------------------------------------------
+//	mstw_tr_set_options_by_format: Sets the options based on the 
+//		format argument: custom, high-school, college, pro, 
+//		baseball-high-school, baseball-college, or baseball-pro. 
+//		"custom" causes the Settings admin page defaults to be used
+//
 if ( !function_exists( 'mstw_tr_set_fields_by_format' ) ) {
 	function mstw_tr_set_fields_by_format( $format ) {
 		switch ( $format) {
@@ -50,30 +102,30 @@ if ( !function_exists( 'mstw_tr_set_fields_by_format' ) ) {
 					//'show_title'			=> 1,
 					//'sort_order'			=> 'alpha',
 					//'name_format'			=> 'last-first',
-					//'name_label'			=> __( 'Name', 'mstw-loc-domain' ),
+					//'name_label'			=> __( 'Name', 'mstw-team-rosters' ),
 					'show_number'			=> 1,
-					//'number_label'			=> __( 'Number', 'mstw-loc-domain' ),
+					//'number_label'			=> __( 'Number', 'mstw-team-rosters' ),
 					'show_position'			=> 1,
 					'show_height'			=> 1,
-					//'height_label'			=> __( 'Height', 'mstw-loc-domain' ),
+					//'height_label'			=> __( 'Height', 'mstw-team-rosters' ),
 					//'show_weight'			=> 1,
-					//'weight_label'			=> __( 'Weight', 'mstw-loc-domain' ),
+					//'weight_label'			=> __( 'Weight', 'mstw-team-rosters' ),
 					'show_year'				=> 1,
-					//'year_label'			=> __( 'Year', 'mstw-loc-domain' ),
+					//'year_label'			=> __( 'Year', 'mstw-team-rosters' ),
 					'show_experience'		=> 0,
-					//'experience_label'		=> __( 'Exp', 'mstw-loc-domain' ),
+					//'experience_label'		=> __( 'Exp', 'mstw-team-rosters' ),
 					'show_age'				=> 0,
-					//'age_label'				=> __( 'Age', 'mstw-loc-domain' ),
+					//'age_label'				=> __( 'Age', 'mstw-team-rosters' ),
 					'show_home_town'		=> 0,
-					//'home_town_label'		=> __( 'Home Town', 'mstw-loc-domain' ),
+					//'home_town_label'		=> __( 'Home Town', 'mstw-team-rosters' ),
 					'show_last_school'		=> 0,
-					//'last_school_label'		=> __( 'Last School', 'mstw-loc-domain' ),
+					//'last_school_label'		=> __( 'Last School', 'mstw-team-rosters' ),
 					'show_country'			=> 0,
-					//'country_label'			=> __( 'Country', 'mstw-loc-domain' ),
+					//'country_label'			=> __( 'Country', 'mstw-team-rosters' ),
 					'show_bats_throws'		=> $show_bats_throws,
-					//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-loc-domain' ),
+					//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-team-rosters' ),
 					'show_other_info'		=> 0,
-					//'other_info_label'		=> __( 'Other', 'mstw-loc-domain' ),
+					//'other_info_label'		=> __( 'Other', 'mstw-team-rosters' ),
 				);
 				break;
 				
@@ -85,30 +137,30 @@ if ( !function_exists( 'mstw_tr_set_fields_by_format' ) ) {
 					//'show_title'			=> 1,
 					//'sort_order'			=> 'alpha',
 					//'name_format'			=> 'last-first',
-					//'name_label'			=> __( 'Name', 'mstw-loc-domain' ),
+					//'name_label'			=> __( 'Name', 'mstw-team-rosters' ),
 					'show_number'			=> 1,
-					//'number_label'			=> __( 'Number', 'mstw-loc-domain' ),
+					//'number_label'			=> __( 'Number', 'mstw-team-rosters' ),
 					'show_position'			=> 1,
 					'show_height'			=> 1,
-					//'height_label'			=> __( 'Height', 'mstw-loc-domain' ),
+					//'height_label'			=> __( 'Height', 'mstw-team-rosters' ),
 					//'show_weight'			=> 1,
-					//'weight_label'			=> __( 'Weight', 'mstw-loc-domain' ),
+					//'weight_label'			=> __( 'Weight', 'mstw-team-rosters' ),
 					'show_year'				=> 1,
-					//'year_label'			=> __( 'Year', 'mstw-loc-domain' ),
+					//'year_label'			=> __( 'Year', 'mstw-team-rosters' ),
 					'show_experience'		=> 1,
-					//'experience_label'		=> __( 'Exp', 'mstw-loc-domain' ),
+					//'experience_label'		=> __( 'Exp', 'mstw-team-rosters' ),
 					'show_age'				=> 0,
-					//'age_label'				=> __( 'Age', 'mstw-loc-domain' ),
+					//'age_label'				=> __( 'Age', 'mstw-team-rosters' ),
 					'show_home_town'		=> 1,
-					//'home_town_label'		=> __( 'Home Town', 'mstw-loc-domain' ),
+					//'home_town_label'		=> __( 'Home Town', 'mstw-team-rosters' ),
 					'show_last_school'		=> 1,
-					//'last_school_label'		=> __( 'Last School', 'mstw-loc-domain' ),
+					//'last_school_label'		=> __( 'Last School', 'mstw-team-rosters' ),
 					'show_country'			=> 0,
-					//'country_label'			=> __( 'Country', 'mstw-loc-domain' ),
+					//'country_label'			=> __( 'Country', 'mstw-team-rosters' ),
 					'show_bats_throws'		=> $show_bats_throws,
-					//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-loc-domain' ),
+					//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-team-rosters' ),
 					'show_other_info'		=> 0,
-					//'other_info_label'		=> __( 'Other', 'mstw-loc-domain' ),
+					//'other_info_label'		=> __( 'Other', 'mstw-team-rosters' ),
 				);		
 				break;
 			
@@ -120,30 +172,30 @@ if ( !function_exists( 'mstw_tr_set_fields_by_format' ) ) {
 					//'show_title'			=> 1,
 					//'sort_order'			=> 'alpha',
 					//'name_format'			=> 'last-first',
-					//'name_label'			=> __( 'Name', 'mstw-loc-domain' ),
+					//'name_label'			=> __( 'Name', 'mstw-team-rosters' ),
 					'show_number'			=> 1,
-					//'number_label'			=> __( 'Number', 'mstw-loc-domain' ),
+					//'number_label'			=> __( 'Number', 'mstw-team-rosters' ),
 					'show_position'			=> 1,
 					'show_height'			=> 1,
-					//'height_label'			=> __( 'Height', 'mstw-loc-domain' ),
+					//'height_label'			=> __( 'Height', 'mstw-team-rosters' ),
 					//'show_weight'			=> 1,
-					//'weight_label'			=> __( 'Weight', 'mstw-loc-domain' ),
+					//'weight_label'			=> __( 'Weight', 'mstw-team-rosters' ),
 					'show_year'				=> 0,
-					//'year_label'			=> __( 'Year', 'mstw-loc-domain' ),
+					//'year_label'			=> __( 'Year', 'mstw-team-rosters' ),
 					'show_experience'		=> 1,
-					//'experience_label'		=> __( 'Exp', 'mstw-loc-domain' ),
+					//'experience_label'		=> __( 'Exp', 'mstw-team-rosters' ),
 					'show_age'				=> 1,
-					//'age_label'				=> __( 'Age', 'mstw-loc-domain' ),
+					//'age_label'				=> __( 'Age', 'mstw-team-rosters' ),
 					'show_home_town'		=> 0,
-					//'home_town_label'		=> __( 'Home Town', 'mstw-loc-domain' ),
+					//'home_town_label'		=> __( 'Home Town', 'mstw-team-rosters' ),
 					'show_last_school'		=> 1,
-					//'last_school_label'		=> __( 'Last School', 'mstw-loc-domain' ),
+					//'last_school_label'		=> __( 'Last School', 'mstw-team-rosters' ),
 					'show_country'			=> 1,
-					//'country_label'			=> __( 'Country', 'mstw-loc-domain' ),
+					//'country_label'			=> __( 'Country', 'mstw-team-rosters' ),
 					'show_bats_throws'		=> $show_bats_throws,
-					//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-loc-domain' ),
+					//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-team-rosters' ),
 					'show_other_info'		=> 0,
-					//'other_info_label'		=> __( 'Other', 'mstw-loc-domain' ),
+					//'other_info_label'		=> __( 'Other', 'mstw-team-rosters' ),
 				);
 				break;
 				
@@ -154,54 +206,11 @@ if ( !function_exists( 'mstw_tr_set_fields_by_format' ) ) {
 		return $settings;
 	} //End: mstw_tr_set_fields_by_format()
 }
-/*---------------------------------------------------------------------------------
- *	mstw_tr_get_defaults: returns the array of option defaults
- *-------------------------------------------------------------------------------*/	
-if ( !function_exists( 'mstw_tr_get_defaults' ) ) {
-	function mstw_tr_get_defaults( ) {
-		//Base defaults
-		$defaults = array(	
-				'team'					=> 'no-team-specified',
-				'show_title'			=> 1,
-				'roster_type'			=> 'custom',
-				//'use_player_links'		=> 0, removed in 3.1
-				//'use_gallery_links'		=> 0, removed in 3.1
-				//'use_pg_links'			=> 0, removed in 3.1
-				'sort_order'			=> 'alpha',
-				'name_format'			=> 'last-first',
-				'name_label'			=> __( 'Name', 'mstw-loc-domain' ),
-				'show_photos'			=> 0,
-				'photo_label'			=> __( 'Photo', 'mstw-loc-domain' ),
-				'show_number'			=> 1,
-				'number_label'			=> __( 'Nbr', 'mstw-loc-domain' ),
-				'show_position'			=> 1,
-				'position_label'		=> __( 'Pos', 'mstw-loc-domain' ),
-				'show_height'			=> 1,
-				'height_label'			=> __( 'Hgt', 'mstw-loc-domain' ),
-				'show_weight'			=> 1,
-				'weight_label'			=> __( 'Wgt', 'mstw-loc-domain' ),
-				'show_year'				=> 0,
-				'year_label'			=> __( 'Year', 'mstw-loc-domain' ),
-				'show_experience'		=> 0,
-				'experience_label'		=> __( 'Exp', 'mstw-loc-domain' ),
-				'show_age'				=> 0,
-				'age_label'				=> __( 'Age', 'mstw-loc-domain' ),
-				'show_home_town'		=> 0,
-				'home_town_label'		=> __( 'Home Town', 'mstw-loc-domain' ),
-				'show_last_school'		=> 0,
-				'last_school_label'		=> __( 'Last School', 'mstw-loc-domain' ),
-				'show_country'			=> 0,
-				'country_label'			=> __( 'Country', 'mstw-loc-domain' ),
-				'show_bats_throws'		=> 0,
-				'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-loc-domain' ),
-				'show_other_info'		=> 0,
-				'other_info_label'		=> __( 'Other', 'mstw-loc-domain' ),
-				);
-				
-		return $defaults;
-	} //End: mstw_tr_get_defaults()
-}
 
+//---------------------------------------------------------------------------------
+//	mstw_tr_build_gallery: Builds the player gallery on the front end. Called by both
+//		the gallery shortcode and the player taxonomy page template.
+//
 if ( !function_exists( 'mstw_tr_build_gallery' ) ) {
 	function mstw_tr_build_gallery( $team_slug, $posts, $options, $format ) {	
 		
@@ -209,8 +218,8 @@ if ( !function_exists( 'mstw_tr_build_gallery' ) ) {
 	
 		if( !empty( $posts ) ) {
 		
-			/* 	Do we really want to set the default here?
-				Or let the stylesheet handle it? */
+			// 	Do we really want to set the default here?
+			//	Or let the stylesheet handle it? 
 			$img_width = ( $options['sp_image_width'] == '' ) ? 150 : $options['sp_image_width'];
 			$img_height = ( $options['sp_image_height'] == '' ) ? 150 : $options['sp_image_height'];
 			
@@ -378,7 +387,8 @@ if ( !function_exists( 'mstw_tr_build_gallery' ) ) {
 			} //end foreach( $posts as $post )
 		} //end if( have_posts( ) )
 		else {
-			$output .= "<h1>Sorry, no players were found for " . $team_slug . ".</h1>";
+			$so_sorry = sprintf( __( 'Sorry, no players were found for %s', 'mstw-team-rosters' ), $team_slug );
+			$output .= "<h1>$so_sorry</h1>";
 		}
 		
 		//$output .= "</div> <!--end .mstw_tr_gallery -->";
