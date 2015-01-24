@@ -254,7 +254,12 @@ if ( !function_exists( 'mstw_tr_build_gallery' ) ) {
 						$photo_file_url = plugins_url() . '/team-rosters/images/default-photo' . '.jpg';
 					}
 				}
-				$single_player_template = get_stylesheet_directory( ) . '/single-player.php';
+				//$single_player_template = get_stylesheet_directory( ) . '/single-player.php';
+				$single_player_template = plugin_dir_path( __DIR__ ) . 'theme-templates/single-player.php';
+				if ( !file_exists( $single_player_template ) ) {
+					$single_player_template = get_stylesheet_directory( ) . '/single-player.php';
+				}
+				
 				if ( file_exists( $single_player_template ) ) {
 					$output .= '<a href="' . get_permalink( $post->ID ) . '?format=' . $format . '">' . '<img src="' . $photo_file_url . '" alt="' . $alt . '" width="' . $img_width . '" height="' . $img_height . '" /></a>';
 				}
