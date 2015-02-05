@@ -8,15 +8,14 @@
  *	3. mstw_tr_build_gallery: Builds the player gallery on the front end.
  *
  *
- *	Team Rosters (Wordpress Plugin)
- *	Copyright (C) 2012-14 Mark O'Donnell
- *	Contact me at mark@shoalsummitsolutions.com
+ *	MSTW Wordpress Plugins (http://shoalsummitsolutions.com)
+ *	Copyright 2014 Mark O'Donnell (mark@shoalsummitsolutions.com)
  *
  *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
  *	the Free Software Foundation, either version 3 of the License, or
  *	(at your option) any later version.
- *
+
  *	This program is distributed in the hope that it will be useful,
  *	but WITHOUT ANY WARRANTY; without even the implied warranty of
  *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
@@ -24,21 +23,34 @@
  *
  *	You should have received a copy of the GNU General Public License
  *	along with this program. If not, see <http://www.gnu.org/licenses/>.
- *-----------------------------------------------------------*/
+ *-------------------------------------------------------------------------*/
  
  //-----------------------------------------------------------
- //	mstw_tr_get_defaults: returns the array of option defaults
+ //	mstw_tr_get_defaults: returns the array of ALL option defaults
  //	
  if ( !function_exists( 'mstw_tr_get_defaults' ) ) {
 	function mstw_tr_get_defaults( ) {
 		//Base defaults
+		$defaults = array_merge( mstw_tr_get_data_fields_columns_defaults( ),
+								 mstw_tr_get_roster_table_defaults( ),
+								 mstw_tr_get_roster_table_colors_defaults( ),
+								 mstw_tr_get_bio_gallery_defaults( )
+								 );
+				
+		return $defaults;
+	} //End: mstw_tr_get_defaults()
+}
+
+ //-----------------------------------------------------------
+ //	mstw_tr_get_data_fields_columns_defaults: returns the array 
+ //		defaults for the data fields & columns options (ONLY)
+ //
+ if ( !function_exists( 'mstw_tr_get_data_fields_columns_defaults' ) ) {
+	function mstw_tr_get_data_fields_columns_defaults( ) {
 		$defaults = array(	
 				'team'					=> 'no-team-specified',
 				'show_title'			=> 1,
 				'roster_type'			=> 'custom',
-				//'use_player_links'		=> 0, removed in 3.1
-				//'use_gallery_links'		=> 0, removed in 3.1
-				//'use_pg_links'			=> 0, removed in 3.1
 				'sort_order'			=> 'alpha',
 				'name_format'			=> 'last-first',
 				'name_label'			=> __( 'Name', 'mstw-team-rosters' ),
@@ -49,9 +61,9 @@
 				'show_position'			=> 1,
 				'position_label'		=> __( 'Pos', 'mstw-team-rosters' ),
 				'show_height'			=> 1,
-				'height_label'			=> __( 'Hgt', 'mstw-team-rosters' ),
+				'height_label'			=> __( 'Ht', 'mstw-team-rosters' ),
 				'show_weight'			=> 1,
-				'weight_label'			=> __( 'Wgt', 'mstw-team-rosters' ),
+				'weight_label'			=> __( 'Wt', 'mstw-team-rosters' ),
 				'show_year'				=> 0,
 				'year_label'			=> __( 'Year', 'mstw-team-rosters' ),
 				'show_experience'		=> 0,
@@ -71,8 +83,77 @@
 				);
 				
 		return $defaults;
-	} //End: mstw_tr_get_defaults()
-}
+	} //End: mstw_tr_get_data_fields_columns_defaults
+ }
+ 
+ //-----------------------------------------------------------
+ //	mstw_tr_get_data_fields_columns_defaults: returns the array 
+ //		defaults for the data fields & columns options (ONLY)
+ //
+ if ( !function_exists( 'mstw_tr_get_roster_table_defaults' ) ) {
+	function mstw_tr_get_roster_table_defaults( ) {
+		$defaults = array(	
+				'show_title'			=> 0,
+				'roster_format'			=> 'custom',
+				'links_to_profiles'		=> 0,
+				'sort_order'			=> 'alpha', //sort by last name
+				'name_format'			=> 'last-first',
+				'show_photos'			=> 0,
+				'photo_label'			=>  __( 'Photo', 'mstw-team-rosters' ),
+				'table_photo_width'		=> '',
+				'table_photo_height'	=> '',
+				);
+				
+		return $defaults;
+	} //End: mstw_tr_get_roster_table_defaults
+ }
+
+ //-----------------------------------------------------------
+ //	mstw_tr_get_roster_table_colors_defaults: returns the array 
+ //		defaults for the data fields & columns options (ONLY)
+ //
+ if ( !function_exists( 'mstw_tr_get_roster_table_colors_defaults' ) ) {
+	function mstw_tr_get_roster_table_colors_defaults( ) {
+		$defaults = array(	
+				'table_title_color'		=> '',
+				'table_links_color'		=> '',
+				'table_head_bkgd'		=> '',
+				'table_head_text'		=> '',
+				'table_even_row_bkgd'	=> '',
+				'table_even_row_text'	=> '',
+				'table_odd_row_bkgd'	=> '',
+				'table_odd_row_text'	=> '',
+				'table_border_color'	=> '',
+				);
+				
+		return $defaults;
+	} //End: mstw_tr_get_roster_table_colors_defaults
+ }
+ 
+ 
+ //-----------------------------------------------------------
+ //	mstw_tr_get_bio_gallery_defaults: returns the array 
+ //		defaults for the player profile & team gallery (ONLY)
+ //
+ if ( !function_exists( 'mstw_tr_get_bio_gallery_defaults' ) ) {
+	function mstw_tr_get_bio_gallery_defaults( ) {
+		$defaults = array(
+				'sp_content_title'		=> 'Bio',
+				'sp_image_width'		=> '',
+				'sp_image_height'		=> '',
+		
+				'sp_main_bkgd_color'	=> '',
+				'sp_main_text_color'	=> '',
+				'sp_bio_border_color'	=> '',
+				'sp_bio_header_color'	=> '',
+				'sp_bio_bkgd_color'		=> '',
+				'sp_bio_text_color'		=> '',
+				'gallery_links_color'	=> '',
+				);
+				
+		return $defaults;
+	} //End: mstw_tr_get_bio_gallery_defaults( )
+ }
 
 //-----------------------------------------------------------
 //	mstw_tr_set_options_by_format: Sets the options based on the 

@@ -27,46 +27,6 @@ Code from the File_CSV_DataSource class was re-used unchanged under
 that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel. 
 -----------------------------------------------------------------------------------*/
 
-/*-------------------------------------------------------------------------
- * CHANGE LOG:
- *
- * 20121202-MAO: 
- *	(1)	Added settings section for the taxonomy (player gallery) page
- * 20121211-MAO: 
- *	(1)	Added setting for title of content ("Player Bio") on single page
- * 
- * 20130125-MAO: 
- *	(1)	Added new admin page for CSV import - no page content/controls yet
- * 20130126-MAO: 
- *	(1)	Added content/controls for CSV import page 
- 
- * 20130129-MAO: 
- *	(1)	Added theme support for thumbnails
- *
- * 20130202-MAO: 
- *	(1)	Added content/controls for baseball formats
- *
- * 20130615-MAO:
- *	Many changes to support:
- *	(1) New WordPress color selector
- *	(2)	Admin settings for show/hide columns and data fields
- *	(3) Admin settings for changing column and date field labels
- *	(4) Added Filter by Team button to View All Players screen
- *	(5) Removed Bulk Edit button from View All Players screen
- *
- * 20130803-MAO:
- *	(1) Corrections to eliminate debug warnings.
- *	(2) Corrections to prevent conflicts with including mstw-admin-utility-functions.php.
- *		Now requires mstw-tr-admin-utility-functions.php
- *
- * 20130822-MAO:
- *	(1) Re-enabled the bulk edit menu for delete only. 
- *		(really only needed quick actions menu removed)
- * 	(2) Removed link options. Taxonomy template and table 
- *		shortcode now detect the single-player.php 
- *		template and add the links automagically.
- * *-------------------------------------------------------------------------*/
-
 // --------------------------------------------------------------------------------------
 // Set-up Action and Filter Hooks for the Settings on the admin side
 // --------------------------------------------------------------------------------------
@@ -83,18 +43,146 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 //
 
 	// ----------------------------------------------------------------
-	// Load the MSTW Admin Utility Functions if necessary
-	if ( !function_exists( 'mstw_tr_admin_utils_loaded' ) ) {
-			require_once  plugin_dir_path( __FILE__ ) . 'mstw-admin-utils.php';
+	// Load the stuff admin needs
+	// This is called from the init hook in mstw-team-rosters.php
+	//
+	if ( is_admin( ) ) {
+		// initialize the admin UI. MOVE ALL THE OTHER ACTIONS TO mstw_tr_admin_init ??
+		add_action( 'admin_init', 'mstw_tr_admin_init' );
+		add_action( 'admin_notices', 'mstw_tr_admin_notices' );
+		//
+		// Hide the publishing actions on the edit and new CPT screens
+		//
+		add_action( 'admin_head-post.php', 'mstw_tr_hide_publishing_actions' );
+		add_action( 'admin_head-post-new.php', 'mstw_tr_hide_publishing_actions' );
+		//
+		// Hide the list icons on the CPT edit (all) screens
+		//
+		add_action( 'admin_head-edit.php', 'mstw_tr_hide_list_icons' );	
+		// 
+		// Remove Quick Edit Menu
+		//
+		add_filter( 'post_row_actions', 'mstw_tr_remove_quick_edit', 10, 2 );
+		// 
+		// Remove the Bulk Actions pull-down
+		//
+		add_filter( 'bulk_actions-edit-mstw_tr_player', 'mstw_tr_bulk_actions' );
+	} else {
+		die( __( 'You is no admin. You a cheater!', 'mstw-team-rosters' ) );
 	}
-	// ----------------------------------------------------------------	
-	// Add styles and scripts for the color picker. 
-	add_action( 'admin_enqueue_scripts', 'mstw_tr_enqueue_color_picker' );
 	
-	function mstw_tr_enqueue_color_picker( $hook_suffix ) {
-		wp_enqueue_style( 'wp-color-picker' );
-		wp_enqueue_script( 'mstw-tr-color-picker', plugins_url( 'team-rosters/js/tr-color-settings.js' ), array( 'wp-color-picker' ), false, true ); 
+	// ----------------------------------------------------------------
+	// Register and define the settings
+	// ----------------------------------------------------------------
+	if( !function_exists( 'mstw_tr_admin_init' ) ) {
+		function mstw_tr_admin_init( ){
+		
+			//THIS INCLUDE SHOULD GO AWAY! Use mstw-utility-functions.php instead.
+			require_once  'mstw-admin-utils.php';
+			
+			include_once 'mstw-tr-settings.php';
+			
+			if ( false == get_option( 'mstw_tr_options' ) ) {
+				add_option( 'mstw_tr_options' );
+			}
+	
+			// Settings for the fields and columns display and label controls.
+			register_setting(
+				'mstw_tr_settings',
+				'mstw_tr_options',
+				'mstw_tr_validate_settings'
+			);
+		
+		} //End: mstw_tr_admin_init()
 	}
+	
+	//----------------------------------------------------------------
+	// Hide the publishing actions on the edit and new CPT screens
+	// Callback for admin_head-post.php & admin_head-post-new.php actions
+	//
+	if ( !function_exists( 'mstw_tr_hide_publishing_actions' ) ) {
+		function mstw_tr_hide_publishing_actions( ) {
+
+			$post_type = mstw_get_current_post_type( );
+			
+			//mstw_log_msg( 'in ... mstw_tr_hide_publishing_actions' );
+			//mstw_log_msg( $post_type );
+			
+			if( $post_type == 'mstw_tr_player' ) {	
+				//echo '
+				?>
+					<style type="text/css">
+						#misc-publishing-actions,
+						#minor-publishing-actions{
+							display:none;
+						}
+						div.view-switch {
+							display: none;
+						
+						}
+						div.tablenav-pages.one-page {
+							display: none;
+						}
+						
+					</style>
+				<?php
+				//';					
+			}
+		} //End: mstw_tr_hide_publishing_actions( )
+	}
+	
+	//----------------------------------------------------------------
+	// Hide the list icons on the CPT edit (all) screens
+	// Callback for admin_head-edit action
+	if ( !function_exists( 'mstw_tr_hide_list_icons' ) ) {
+		function mstw_tr_hide_list_icons( ) {
+
+			$post_type = mstw_get_current_post_type( );
+			//mstw_log_msg( 'in ... mstw_tr_hide_list_icons' );
+			//mstw_log_msg( $post_type );
+			
+			if( $post_type == 'mstw_tr_player' ) {
+				//echo '
+				?>
+					<style type="text/css">
+			
+						div.view-switch {
+							display: none;
+						}
+						
+					</style>
+				<?php
+				//';
+			}
+		} //End: mstw_tr_hide_list_icons( )
+	}
+	
+	// ----------------------------------------------------------------	
+	// Add admin scripts: color picker, media manager, reset confirm dialog
+	//
+	add_action( 'admin_enqueue_scripts', 'mstw_tr_admin_enqueue_scripts' );
+	
+	function mstw_tr_admin_enqueue_scripts( $hook_suffix ) {
+		// enqueue the color-picker script & stylesheet
+		// enqueue settings reset confirm script
+		// only if it's the settings page
+		
+		//mstw_log_msg( 'in mstw_tr_admin_enqueue_scripts ... ' );
+		//mstw_log_msg( '$hook_suffix = '. $hook_suffix );
+		//mstw_log_msg( 'confirm java script = ' . plugins_url( 'team-rosters/js/tr-color-settings.js' ) );
+		
+		//$pre_time = microtime( true );
+		
+		if ( $hook_suffix == 'team-rosters_page_mstw-tr-settings' ) {
+			wp_enqueue_style( 'wp-color-picker' );
+			wp_enqueue_script( 'mstw-tr-color-picker', plugins_url( 'team-rosters/js/tr-color-settings.js' ), array( 'wp-color-picker' ), false, true ); 
+			wp_enqueue_script( 'mstw-tr-confirm-reset', plugins_url( 'team-rosters/js/tr-confirm-reset.js' ), array( 'wp-color-picker' ), false, true ); 
+		}
+		
+		//$load_time = microtime( true ) - $pre_time;
+		//mstw_log_msg( 'load time: ' . $load_time );
+
+	} //End: mstw_tr_admin_enqueue_scripts()
 	
 	// ----------------------------------------------------------------
 	// Add the custom MSTW icon to CPT pages
@@ -120,43 +208,43 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 	
 	// ----------------------------------------------------------------
 	// Remove Quick Edit Menu	
-	add_filter( 'post_row_actions', 'mstw_tr_remove_quick_edit', 10, 2 );
-
-	function mstw_tr_remove_quick_edit( $actions, $post ) {
-		if( $post->post_type == 'player' ) {
-			unset( $actions['inline hide-if-no-js'] );
-		}
-		return $actions;
+	//
+	if( !function_exists( 'mstw_tr_remove_quick_edit' ) ) {
+		function mstw_tr_remove_quick_edit( $actions, $post ) {
+			if( $post->post_type == 'mstw_tr_player' ) {
+				//unset( $actions['inline hide-if-no-js'] );
+			}
+			return $actions;
+		} //End: mstw_tr_remove_quick_edit()
 	}
-
+	
 	// ----------------------------------------------------------------
 	// Remove the Bulk Actions pull-down
-	// 20130822-MAO: No reason to remove this. Really just wanted
-	// 		the quick edit menu removed.
-	add_filter( 'bulk_actions-edit-player', 'mstw_tr_bulk_actions' );
-
-    function mstw_tr_bulk_actions( $actions ){
-        unset( $actions['edit'] );
-        return $actions;
-    }
+	//
+	if( !function_exists( 'mstw_tr_bulk_actions' ) ) {	
+		function mstw_tr_bulk_actions( $actions ){
+			unset( $actions['edit'] );
+			return $actions;
+		} //End: mstw_tr_bulk_actions()
+	}
 		
 	// ----------------------------------------------------------------
 	// Add a filter the All Teams screen based on the Leagues Taxonomy
-	add_action('restrict_manage_posts','mstw_tr_restrict_manage_posts');
+	//add_action('restrict_manage_posts','mstw_tr_restrict_manage_posts');
 	
 	function mstw_tr_restrict_manage_posts( ) {
 		global $typenow;
 
-		if ( $typenow=='player' ){
+		if ( $typenow=='mstw_tr_player' ){
 			// Trying to find current selection
-			$selected = isset( $_REQUEST[$teams] ) ? $_REQUEST[$teams] : '';
+			$selected = isset( $_REQUEST[$mstw_tr_team] ) ? $_REQUEST[$mstw_tr_team] : '';
 				
 			$args = array(
 						'show_option_all' => 'All Teams',
-						'taxonomy' => 'teams',
-						'name' => 'teams',
+						'taxonomy' => 'mstw_tr_team',
+						'name' => 'mstw_tr_team',
 						'orderby' => 'name',
-						'selected' => $_GET['teams'],
+						'selected' => $_GET['mstw_tr_team'],
 						'show_count' => true,
 						'hide_empty' => true,
 						);
@@ -166,8 +254,11 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 	
 	add_action( 'request', 'mstw_tr_request' );
 	function mstw_tr_request( $request ) {
-		if ( is_admin( ) && $GLOBALS['PHP_SELF'] == '/wp-admin/edit.php' && isset( $request['post_type'] ) && $request['post_type']=='player' ) {
-			$request['term'] = get_term( $request['teams'], 'teams' )->name;
+		//mstw_log_msg( 'in ... mstw_tr_request' );
+		//mstw_log_msg( $request );
+		
+		if ( is_admin( ) && $GLOBALS['PHP_SELF'] == '/wp-admin/edit.php' && isset( $request['post_type'] ) && $request['post_type']=='mstw_tr_player' ) {
+			$request['term'] = get_term( $request['mstw_tr_player'], 'mstw_tr_team', OBJECT )->name;
 		}
 		return $request;
 	}
@@ -180,7 +271,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		add_meta_box(	'mstw-tr-meta', 
 						__('Player', 'mstw-loc-domain'), 
 						'mstw_tr_create_ui', 
-						'player', 
+						'mstw_tr_player', 
 						'normal', 
 						'high' );		
 	}
@@ -345,10 +436,10 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 			return $post_id;
 			
 		//	
-		// check that the post type is 'player', if so, process the data
+		// check that the post type is 'mstw_tr_player', if so, process the data
 		//
 		if( isset( $_POST['post_type'] ) ) {		
-			if ( $_POST['post_type'] == 'player' ) {
+			if ( $_POST['post_type'] == 'mstw_tr_player' ) {
 				update_post_meta( $post_id, '_mstw_tr_first_name', 
 						strip_tags( $_POST['mstw_tr_first_name'] ) );
 						
@@ -393,14 +484,14 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 						
 				update_post_meta( $post_id, '_mstw_tr_other',
 						strip_tags( $_POST['mstw_tr_other'] ) );
-			} //End: if ( $_POST['post_type'] == 'player' )
+			} //End: if ( $_POST['post_type'] == 'mstw_tr_player' )
 		} //End: if( isset( $_POST['post_type'] ) )
 	} //End: function mstw_tr_save_meta
 
 	// ----------------------------------------------------------------
 	// Set up the Team Roster 'view all' columns
 
-	add_filter( 'manage_edit-player_columns', 'mstw_tr_edit_columns' ) ;
+	add_filter( 'manage_edit-mstw_tr_player_columns', 'mstw_tr_edit_columns' ) ;
 
 	function mstw_tr_edit_columns( $columns ) {
 
@@ -424,7 +515,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 	// ----------------------------------------------------------------
 	// Display the Team Roster 'view all' columns
 
-	add_action( 'manage_player_posts_custom_column', 'mstw_tr_manage_columns', 10, 2 );
+	add_action( 'manage_mstw_tr_player_posts_custom_column', 'mstw_tr_manage_columns', 10, 2 );
 
 	function mstw_tr_manage_columns( $column, $post_id ) {
 		global $post;
@@ -433,7 +524,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 
 		switch( $column ) {
 			case 'team' :
-				$taxonomy = 'teams';
+				$taxonomy = 'mstw_tr_team';
 				
 				$teams = get_the_terms( $post_id, $taxonomy );
 				if ( is_array( $teams) ) {
@@ -488,19 +579,45 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 
 	function mstw_tr_register_menu_pages( ) {
 	
-		// Add the columns/fields page to the Players menu
-		$page = add_submenu_page( 	'edit.php?post_type=player', 				//parent slug
-							__( 'Team Rosters Display Settings', 'mstw-loc-domain' ), 	//page title
-							__( 'Display Settings', 'mstw-loc-domain' ),	//menu title
-							'manage_options', 									//user capability required to access
-							'mstw_tr_fields_settings', 							//unique menu slug
-							'mstw_tr_fields_columns_page' );					//callback to display page
+
+		//Top Level Menu
+		
+		add_menu_page( __( 'Team Rosters', 'mstw-team-rosters' ), //$page_title, 
+					   __( 'Team Rosters', 'mstw-team-rosters' ), //$menu_title, 
+					   'read', //$capability, 
+					   'edit.php?post_type=mstw_tr_player', 
+					   null, 
+					   plugins_url( 'images/mstw-admin-menu-icon.png', dirname( __FILE__ ) ), //$menu_icon
+					   "58.75" //menu order
+					 );
+		//Players			 
+		add_submenu_page( 	'edit.php?post_type=mstw_tr_player', 
+								__( 'Players', 'mstw-team-rosters' ), //page title
+								__( 'Players', 'mstw-team-rosters' ), //menu title
+								'read', // Capability required to see this option.
+								'edit.php?post_type=mstw_tr_player', // Slug name to refer to this menu
+								null							
+						); // Callback to output content
+						
+		// Settings
+		$settings_page = add_submenu_page( 	'edit.php?post_type=mstw_tr_player', 				//parent slug
+							__( 'Settings', 'mstw-team-rosters' ), 	//page title
+							__( 'Settings', 'mstw-team-rosters' ),	//menu title
+							'read', 									//user capability required to access
+							'mstw-tr-settings', 							//unique menu slug
+							'mstw_tr_settings_page' );					//callback to display page
+							
+		//
+		// Load the settings help pages
+		//
+		add_action( "load-$settings_page", 'mstw_tr_settings_help' );
+		
 							
 
 		//require_once ABSPATH . '/wp-admin/admin.php'; - not needed?
 		$plugin = new MSTW_TR_ImporterPlugin;
 		
-		add_submenu_page(	'edit.php?post_type=player',
+		add_submenu_page(	'edit.php?post_type=mstw_tr_player',
 							'Import Roster from CSV File',			//page title
 							'CSV Roster Import',					//menu title
 							'manage_options',
@@ -510,918 +627,28 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 							
 		// Now also add action to load java scripts ONLY when you're on this page
 	}
-					 
-					 
-	// --------------------------------------------------------------------------------------
-	// Add a menu for our option page
-	//add_action('admin_menu', 'mstw_tr_add_pages');
-
-	function mstw_tr_add_pages(  ) {
-		//The next line adds the settings page to the Settings menu
-		//add_options_page( 'Team Rosters Settings', 'Team Rosters Settings', 'manage_options', 'mstw_tr_settings', 'mstw_tr_option_page' );
-							
-		// Add the columns/fields page to the Players menu
-		$page = add_submenu_page( 	'edit.php?post_type=player', 				//parent slug
-							__( 'Team Rosters Settings', 'mstw-loc-domain' ), 	//page title
-							__( 'Display Settings', 'mstw-loc-domain' ),	//menu title
-							'manage_options', 									//user capability required to access
-							'mstw_tr_fields_settings', 							//unique menu slug
-							'mstw_tr_fields_columns_page' );					//callback to display page
-							
-
-		//require_once ABSPATH . '/wp-admin/admin.php'; - not needed?
-		$plugin = new MSTW_TR_ImporterPlugin;
-		
-		add_submenu_page(	'edit.php?post_type=player',
-							'Import Roster from CSV File',			//page title
-							'CSV Roster Import',					//menu title
-							'manage_options',
-							'mstw_tr_csv_import',
-							array( $plugin, 'form' )
-						);
-							
-		// Now also add action to load java scripts ONLY when you're on this page
-	}
-
-	// ----------------------------------------------------------------
-	// Render the fields/columns control page
-	// ----------------------------------------------------------------
-	function mstw_tr_fields_columns_page( ) {
-		?>
-		<div class="wrap">
-			<?php screen_icon( ); ?>
-			<h2>Team Rosters Settings</h2>
-			<?php //settings_errors(); ?>
-			<form action="options.php" method="post">
-				<?php settings_fields( 'mstw_tr_fields_options' ); ?>
-				<?php do_settings_sections( 'mstw_tr_fields_settings' ); ?>
-				<p>
-				<input name="submit" type="submit" class="button-primary" value=<?php _e( "Save Changes", "mstw-loc-domain" ); ?> />
-				
-				<input type="submit" name="mstw_tr_options[reset]" value=<?php _e( "Reset Default Values", "mstw-loc-domain" ) ?> />
-					<strong><?php _e( "WARNING! Reset Default Values will do so without further warning!", "mstw-loc-domain" ); ?></strong>
-				</p>
-			</form>
-		</div>
-		<?php
-	}
 
 
-	// ----------------------------------------------------------------
-	// Register and define the settings
-	// ----------------------------------------------------------------
-	add_action('admin_init', 'mstw_tr_admin_init');
-
-	function mstw_tr_admin_init(){
-		$options = get_option( 'mstw_tr_options' );
-		$options = wp_parse_args( $options, mstw_tr_get_defaults( ) );
-		//print_r ($options);
-		
-		// Settings for the fields and columns display and label controls.
-		register_setting(
-			'mstw_tr_fields_options',
-			'mstw_tr_options',
-			'mstw_tr_validate_fields_options'
-		);
-		
-		/* Roster Table [shortcode] settings */
-		mstw_tr_roster_data_fields_setup( );
-		
-		// setup the colors
-		mstw_tr_roster_table_setup( );
-		
-		// setup the single player bio page
-		mstw_tr_single_player_bio_setup( );
-	
-	}
 
 function mstw_tr_fields_columns_text( ) {
 	echo '<p>' . __( 'Enter the default settings for Rosters Table columns, as well as the Single Player and Player Gallery data fields. These settings will apply to the [shortcode] roster tables, where they can be overridden by [shortcode] arguments, as well as the single player and player gallery pages.', 'mstw-loc-domain' ) .  '</p><p>' . __('IF YOU WANT THESE SETTINGS TO APPLY, THE SPECIFIED FORMAT MUST BE "CUSTOM" OR BLANK. IF A SPECIFIC FORMAT, SUCH AS "HIGH-SCHOOL" IS SPECIFIED, IT WILL OVERRIDE THESE SETTINGS.', 'mstw-loc-domain' ) .  '</p>';
 }
 
-/*--------------------------------------------------------------
- *	Validate & sanitize user input
- */
- 
-function mstw_tr_validate_fields_options( $input ) {
-	// Create our array for storing the validated options
-	$output = array();
-	// Pull the previous (good) options
-	$options = get_option( 'mstw_tr_options' );
-	
-	if ( array_key_exists( 'reset', $input ) ) {
-		if ( $input['reset'] ) {
-				$output = mstw_tr_get_defaults( );
-				return $output;
-		}
-	}
-	
-	// Loop through each of the incoming options
-	foreach( $input as $key => $value ) {
-		// Check to see if the current option has a value. If so, process it.
-		if( isset( $input[$key] ) ) {
-			switch ( $key ) {
-				// add the hex colors
-				case 'tr_table_head_text_color':
-				case 'tr_table_head_bkgd_color':
-				case 'tr_table_title_text_color':
-				case 'tr_table_links_color':
-				case 'tr_table_even_row_color':
-				case 'tr_table_even_row_bkgd':
-				case 'tr_table_odd_row_color':
-				case 'tr_table_odd_row_bkgd':
-				case 'sp_main_bkgd_color':
-				case 'sp_main_text_color':
-				case 'gallery_links_color':
-					// validate the color for proper hex format
-					$sanitized_color = mstw_tr_sanitize_hex_color( $input[$key] );
-					
-					// decide what to do - save new setting 
-					// or display error & revert to last setting
-					if ( isset( $sanitized_color ) ) {
-						// blank input is valid
-						$output[$key] = $sanitized_color;
-					}
-					else  {
-						// there's an error. Reset to the last stored value
-						$output[$key] = $options[$key];
-						// add error message
-						add_settings_error( 'mstw_tr_' . $key,
-											'mstw_tr_hex_color_error',
-											'Invalid hex color entered!',
-											'error');
-					}
-					break;
-					
-				case 'sp_image_width':
-				case 'sp_image_height':
-				case 'table_photo_width':
-				case 'table_photo_height':
-					$output[$key] = round( $input[$key] );
-					$output[$key] = ( $output[$key] == 0 ) ? '' : $output[$key];
-					break;
-					
-				// 0-1 stuff
-				/*
-				case 'show_title':
-				case 'show_photos':
-					if ( $input[$key] == 1 ) {
-						$output[$key] = 1;
-					}
-					else {
-						$output[$key] = 0;
-					}
-					break;
-				*/	
-				// Check all other settings
-				default:
-					$output[$key] = sanitize_text_field( $input[$key] );
-					// There should not be user/accidental errors in these fields
-					break;
-				
-			} // end switch
-		} // end if
-	} // end foreach
-	return $output;
-}
-
 	//------------------------------------------------------------------
 	// Add admin_notices action - need to look at this more someday
+	//
+	//add_action( 'admin_notices', 'mstw_tr_admin_notices' );
 	
-	add_action( 'admin_notices', 'mstw_tr_admin_notices' );
-	
-	function mstw_tr_admin_notices() {
-		settings_errors( );
+	function mstw_tr_admin_notices( ) {
+		mstw_admin_notice( 'mstw_tr_admin_messages' );
 	}
 
 // ------------------------------------------------------------------------
 // Setup the UI
 // ------------------------------------------------------------------------	
-	function mstw_tr_roster_data_fields_setup( ) {
-		// Roster Table data fields/columns -- show/hide and labels
-		$display_on_page = 'mstw_tr_fields_settings';
-		$page_section = 'mstw_tr_fields_columns_settings';
-		
-		$options = get_option( 'mstw_tr_options' );
-		
-		
-		add_settings_section(
-			$page_section,  	//id attribute of tags
-			__( 'Data Field and Table Column Settings', 'mstw-loc-domain' ),	//title of the section
-			'mstw_tr_fields_columns_text',			//callback to fill section with desired output - should echo
-			$display_on_page						//menu page slug on which to display
-		);
-		
-		// Show/hide NUMBER column
-		$args = array( 	'id' => 'show_number',
-						'name'	=> 'mstw_tr_options[show_number]',
-						'value'	=> $options['show_number'],
-						'label'	=> __( 'Show or hide the Number field/column. (Default: Show)', 'mstw-loc-domain' )
-						//'label' => 'show_number: ' . $options['show_number'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_show_number',
-			__( 'Show Number Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);		
-			
-		// NUMBER column label
-		$args = array( 	'id' => 'number_label',
-						'name'	=> 'mstw_tr_options[number_label]',
-						'value'	=> $options['number_label'],
-						'label'	=> __( 'Set Heading for Number data field or column. (Default: "Number")', 'mstw-loc-domain' )
-						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_number_label',
-			__( 'Number Column Label:', 'mstw-loc-domain' ),
-			'mstw_tr_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-				
-		
-		// NAME column label
-		$args = array( 	'id' => 'name_label',
-						'name'	=> 'mstw_tr_options[name_label]',
-						'value'	=> $options['name_label'],
-						'label'	=> __( 'Set Heading for Name data field or column. (Default: "Name")', 'mstw-loc-domain' )
-						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_name_label',
-			__( 'Name Column Label:', 'mstw-loc-domain' ),
-			'mstw_tr_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// Show/hide POSITION column
-		$args = array( 	'id' => 'show_position',
-						'name'	=> 'mstw_tr_options[show_position]',
-						'value'	=> $options['show_position'],
-						'label'	=> __( 'Show or hide the Position field/column. (Default: Show)', 'mstw-loc-domain' )
-						);
-						
-		add_settings_field(
-			'tr_show_position',
-			__( 'Show Position Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);		
-			
-		// POSITION column label
-		$args = array( 	'id' => 'position_label',
-						'name'	=> 'mstw_tr_options[position_label]',
-						'value'	=> $options['position_label'],
-						'label'	=> __( 'Set Heading for Position data field or column. (Default: "Pos")', 'mstw-loc-domain' )
-						);
-						
-		add_settings_field(
-			'tr_position_label',
-			'Position Column Label:',
-			'mstw_tr_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-			
-		// Show/hide HEIGHT column
-		$args = array( 	'id' => 'show_height',
-						'name'	=> 'mstw_tr_options[show_height]',
-						'value'	=> $options['show_height'],
-						'label'	=> 'Show or hide the Height field/column. (Default: Show)'
-						//'label' => 'show_height: ' . $options['show_height'] . '::'
-						);
-		add_settings_field(
-			'tr_show_height',
-			'Show Height Column:',
-			'mstw_tr_show_hide_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// HEIGHT column label
-		$args = array( 	'id' => 'height_label',
-						'name'	=> 'mstw_tr_options[height_label]',
-						'value'	=> $options['height_label'],
-						'label'	=> __( 'Set Heading for Height data field or column. (Default: "Height")', 'mstw-loc-domain' )
-						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_height_label',
-			'Height Column Label:',
-			'mstw_tr_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-			
-		// Show/hide WEIGHT column
-		$args = array( 	'id' => 'show_weight',
-						'name'	=> 'mstw_tr_options[show_weight]',
-						'value'	=> $options['show_weight'],
-						'label'	=> 'Show or hide the Weight field/column. (Default: Show)'
-						);
-						
-		add_settings_field(
-			'tr_show_weight',
-			'Show Weight Column:',
-			'mstw_tr_show_hide_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// WEIGHT column label
-		$args = array( 	'id' => 'weight_label',
-						'name'	=> 'mstw_tr_options[weight_label]',
-						'value'	=> $options['weight_label'],
-						'label'	=> __( 'Set Heading for Weight data field or column. (Default: "Weight")', 'mstw-loc-domain' )
-						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_weight_label',
-			'Weight Column Label:',
-			'mstw_tr_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// Show/hide YEAR column
-		$args = array( 	'id' => 'show_year',
-						'name'	=> 'mstw_tr_options[show_year]',
-						'value'	=> $options['show_year'],
-						'label'	=> __( 'Show or hide the Year field/column. (Default: Hide)', 'mstw-loc-domain' )
-						//'label' => 'show_height: ' . $options['show_height'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_show_year',
-			__( 'Show Year Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// YEAR column label
-		$args = array( 	'id' => 'year_label',
-						'name'	=> 'mstw_tr_options[year_label]',
-						'value'	=> $options['year_label'],
-						'label'	=> __( 'Set Heading for Year data field or column. (Default: "Year")', 'mstw-loc-domain' )
-						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_year_label',
-			'Year Column Label:',
-			'mstw_tr_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-			
-		// Show/hide EXPERIENCE column
-		$args = array( 	'id' => 'show_experience',
-						'name'	=> 'mstw_tr_options[show_experience]',
-						'value'	=> $options['show_experience'],
-						'label'	=> __( 'Show or hide the Experience field/column. (Default: Hide)', 'mstw-loc-domain' )
-						//'label' => 'show_height: ' . $options['show_height'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_show_experience',
-			__( 'Show Experience Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// EXPERIENCE column label
-		$args = array( 	'id' => 'experience_label',
-						'name'	=> 'mstw_tr_options[experience_label]',
-						'value'	=> $options['experience_label'],
-						'label'	=> __( 'Set Heading for Experience data field or column. (Default: "Exp")', 'mstw-loc-domain' )
-						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_experience_label',
-			'Experience Column Label:',
-			'mstw_tr_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// Show/hide AGE column
-		$args = array( 	'id' => 'show_age',
-						'name'	=> 'mstw_tr_options[show_age]',
-						'value'	=> $options['show_age'],
-						'label'	=> __( 'Show or hide the Age field/column. (Default: Hide)', 'mstw-loc-domain' )
-						//'label' => 'show_height: ' . $options['show_height'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_show_age',
-			__( 'Show Age Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// AGE column label
-		$args = array( 	'id' => 'age_label',
-						'name'	=> 'mstw_tr_options[age_label]',
-						'value'	=> $options['age_label'],
-						'label'	=> __( 'Set Heading for Age data field or column. (Default: "Age")', 'mstw-loc-domain' )
-						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_age_label',
-			'Age Column Label:',
-			'mstw_tr_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// Show/hide HOME TOWN column
-		$args = array( 	'id' => 'show_home_town',
-						'name'	=> 'mstw_tr_options[show_home_town]',
-						'value'	=> $options['show_home_town'],
-						'label'	=> __( 'Show or hide the Home Town field/column. (Default: Hide)', 'mstw-loc-domain' )
-						//'label' => 'show_height: ' . $options['show_height'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_show_home_town',
-			__( 'Show Home Town Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// HOME TOWN column label
-		$args = array( 	'id' => 'home_town_label',
-						'name'	=> 'mstw_tr_options[home_town_label]',
-						'value'	=> $options['home_town_label'],
-						'label'	=> __( 'Set Heading for Home Town data field or column. (Default: "Home Town")', 'mstw-loc-domain' )
-						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_home_town_label',
-			'Home Town Column Label:',
-			'mstw_tr_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// Show/hide LAST SCHOOL column
-		$args = array( 	'id' => 'show_last_school',
-						'name'	=> 'mstw_tr_options[show_last_school]',
-						'value'	=> $options['show_last_school'],
-						'label'	=> __( 'Show or hide the Last School field/column. (Default: Hide)', 'mstw-loc-domain' )
-						//'label' => 'show_height: ' . $options['show_height'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_show_last_school',
-			__( 'Show Last School Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// LAST SCHOOL column label
-		$args = array( 	'id' => 'last_school_label',
-						'name'	=> 'mstw_tr_options[last_school_label]',
-						'value'	=> $options['last_school_label'],
-						'label'	=> __( 'Set Heading for Last School data field or column. (Default: "Last School")', 'mstw-loc-domain' )
-						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_last_school_label',
-			'Last School Column Label:',
-			'mstw_tr_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// Show/hide COUNTRY column
-		$args = array( 	'id' => 'show_country',
-						'name'	=> 'mstw_tr_options[show_country]',
-						'value'	=> $options['show_country'],
-						'label'	=> __( 'Show or hide the Country field/column. (Default: Hide)', 'mstw-loc-domain' )
-						//'label' => 'show_height: ' . $options['show_height'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_show_country',
-			__( 'Show Country Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// COUNTRY column label
-		$args = array( 	'id' => 'country_label',
-						'name'	=> 'mstw_tr_options[country_label]',
-						'value'	=> $options['country_label'],
-						'label'	=> __( 'Set Heading for Country data field or column. (Default: "Country")', 'mstw-loc-domain' )
-						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_country_label',
-			'Country Column Label:',
-			'mstw_tr_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// Show/hide BATS/THROWS column
-		$args = array( 	'id' => 'show_bats_throws',
-						'name'	=> 'mstw_tr_options[show_bats_throws]',
-						'value'	=> $options['show_bats_throws'],
-						'label'	=> __( 'Show or hide the Bats/Throws field/column. (Default: Hide)', 'mstw-loc-domain' )
-						//'label' => 'show_height: ' . $options['show_height'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_show_bats_throws',
-			__( 'Show Bats/Throws Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// BATS/THROWS column label
-		$args = array( 	'id' => 'bats_throws_label',
-						'name'	=> 'mstw_tr_options[bats_throws_label]',
-						'value'	=> $options['bats_throws_label'],
-						'label'	=> __( 'Set Heading for Bats/Throws data field or column. (Default: "Bat/Thw")', 'mstw-loc-domain' )
-						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_bats_throws_label',
-			'Bats/Throws Column Label:',
-			'mstw_tr_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// Show/hide OTHER column
-		$args = array( 	'id' => 'show_other_info',
-						'name'	=> 'mstw_tr_options[show_other_info]',
-						'value'	=> $options['show_other_info'],
-						'label'	=> __( 'Show or hide the Other field/column. (Default: Hide)', 'mstw-loc-domain' )
-						//'label' => 'show_height: ' . $options['show_height'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_show_other_info',
-			__( 'Show Other Column:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// OTHER column label
-		$args = array( 	'id' => 'other_info_label',
-						'name'	=> 'mstw_tr_options[other_info_label]',
-						'value'	=> $options['other_info_label'],
-						'label'	=> __( 'Set Heading for Other data field or column. (Default: "Other")', 'mstw-loc-domain' )
-						//'label' => 'number_label: ' . $options['number_label'] . '::'
-						);
-						
-		add_settings_field(
-			'tr_other_info_label',
-			'Other Column Label:',
-			'mstw_tr_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
 
-	}
 	
-	function mstw_tr_roster_table_setup( ) {
-		// Roster Table Colors Section
-		$display_on_page = 'mstw_tr_fields_settings';
-		$page_section = 'mstw_tr_roster_color_settings';
-		
-		$options = get_option( 'mstw_tr_options' );
-		
-		add_settings_section(
-			$page_section, 						//'mstw_tr_roster_color_settings'
-			'Roster Table/[shortcode] Settings',		//title of the section
-			'mstw_tr_roster_table_colors_text',	//callback to fill section with desired output - should echo
-			$display_on_page 					//'mstw_tr_fields_settings'
-		);
-		
-		// Show Roster Table title
-		$args = array(	'id' => 'show_title',
-						'name' => 'mstw_tr_options[show_title]',
-						'value' => $options['show_title'],
-						'label' => __( 'Show Roster Table Titles (as "Team Name Roster")', 'mstw-loc-domain')
-						);
-						
-		add_settings_field(
-			'show_title',
-			__( 'Show Roster Table Titles:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',						//Callback to display field
-			$display_on_page,							//Page to display field
-			$page_section,					//Page section to display field
-			$args												//Callback arguments
-			);
-		
-		// Roster Table Format - custom, pro, college, high-school, + baseball-xxx
-		$args = array(	'options' => array(	__( 'Custom', 'mstw-loc-domain' )=> 'custom', 
-											__( 'Pro', 'mstw-loc-domain' ) => 'pro', 
-											__( 'College', 'mstw-loc-domain' ) => 'college',
-											__( 'High School', 'mstw-loc-domain' ) => 'high-school',
-											__( 'Pro Baseball', 'mstw-loc-domain' ) => 'baseball-pro', 
-											__( 'College Baseball', 'mstw-loc-domain' ) => 'baseball-college',
-											__( 'High School Baseball', 'mstw-loc-domain' ) => 'baseball-high-school',
-											),
-						'id' => 'roster_type',
-						'name' => 'mstw_tr_options[roster_type]',
-						'value' => $options['roster_type'],
-						'label' => __( 'Roster Table format. (Default: Custom)', 'mstw-loc-domain')
-						);
-		
-		add_settings_field(
-			'roster_type',										//ID attribute of tags
-			__('Roster Table Format:', 'mstw-loc-domain' ),		//Title of field
-			'mstw_tr_select_option_ctrl',							//Callback to display field
-			$display_on_page,							//Page to display field
-			$page_section,					//Page section to display field
-			$args												//Callback arguments
-		);
-			
-		// Roster Table SORT ORDER
-		$args = array(	'options' => array(	__( 'Sort by Last Name', 'mstw-loc-domain' )=> 'alpha', 
-											__( 'Sort by First Name', 'mstw-loc-domain' ) => 'alpha-first', 
-											__( 'Sort by Number', 'mstw-loc-domain' ) => 'numeric'		
-											),
-						'id' => 'sort_order',
-						'name' => 'mstw_tr_options[sort_order]',
-						'value' => $options['sort_order'],
-						'label' => __( 'Roster table sort order. (Default: Last Name)', 'mstw-loc-domain')
-						);
-		add_settings_field( 
-			'sort_order',									//ID attribute of tags
-			__( 'Sort Roster by:', 'mstw-loc-domain' ), 	//Title of field
-			'mstw_tr_select_option_ctrl',						//Callback to display field
-			$display_on_page,						//Page to display field
-			$page_section,				//Page section to display field
-			$args											//Callback arguments
-		);
-		
-		// DISPLAY FORMAT for Player Names
-		$args = array(	'options' => array(	__( 'Last, First', 'mstw-loc-domain' )=> 'last-first', 
-											__( 'First Last', 'mstw-loc-domain' ) => 'first-last', 
-											__( 'First Name Only', 'mstw-loc-domain' ) => 'first-only',
-											__( 'Last Name Only', 'mstw-loc-domain' ) => 'last-only'		
-											),
-						'id' => 'name_format',
-						'name' => 'mstw_tr_options[name_format]',
-						'value' => $options['name_format'],
-						'label' => __( 'Select display format for Player Name. (Default: Last, First)', 'mstw-loc-domain')
-						//'label' => 'name_format: ' . $options['name_format'] . '::'
-						);
-		add_settings_field( 
-			'name_format',									//ID attribute of tags
-			__( 'Display Players by:', 'mstw-loc-domain' ), 	//Title of field
-			'mstw_tr_select_option_ctrl',						//Callback to display field
-			$display_on_page,						//Page to display field
-			$page_section,				//Page section to display field
-			$args											//Callback arguments
-		);
-		
-		// Show/hide PHOTO
-		$args = array( 	'id' => 'show_photos',
-						'name'	=> 'mstw_tr_options[show_photos]',
-						'value'	=> $options['show_photos'],
-						'label'	=> __( 'Shows photos in roster tables. (Default: Hide)', 'mstw-loc-domain' )
-						);
-						
-		add_settings_field(
-			'show_photos',
-			__( 'Show Player Photos:', 'mstw-loc-domain' ),
-			'mstw_tr_show_hide_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// PHOTO label
-		$args = array( 	'id' => 'photo_label',
-						'name'	=> 'mstw_tr_options[photo_label]',
-						'value'	=> $options['photo_label'],
-						'label'	=> __( '(Default: "Photo")', 'mstw-loc-domain' )
-						);
-						
-		add_settings_field(
-			'photo_label',
-			'Photo Column Label:',
-			'mstw_tr_text_ctrl',
-			$display_on_page,
-			$page_section,
-			$args
-		);
-		
-		// Players' PHOTOS WIDTH
-		$args = array( 	'id' => 'table_photo_width',
-						'name'	=> 'mstw_tr_options[table_photo_width]',
-						'value'	=> $options['table_photo_width'],
-						'label'	=> __( 'Set width in pixels for table photos, if shown. (Default: 64px)', 'mstw-loc-domain' )
-						);
-						
-		add_settings_field(
-			'table_photo_width',
-			__( 'Table Photo Width:', 'mstw-loc-domain' ),
-			'mstw_tr_text_ctrl',
-			$display_on_page,					//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		
-		// Players' PHOTOS WIDTH
-		$args = array( 	'id' => 'table_photo_height',
-						'name'	=> 'mstw_tr_options[table_photo_height]',
-						'value'	=> $options['table_photo_height'],
-						'label'	=> __( 'Set height in pixels for table photos, if shown. (Default: 64px)', 'mstw-loc-domain' )
-						);
-						
-		add_settings_field(
-			'table_photo_height',
-			__( 'Table Photo Height:', 'mstw-loc-domain' ),
-			'mstw_tr_text_ctrl',
-			$display_on_page,					//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
 
-		// Roster Table Title Color
-		$args = array( 	'id' => 'tr_table_title_text_color',
-						'name' => 'mstw_tr_options[tr_table_title_text_color]',
-						'value' => $options['tr_table_title_text_color'],
-						'label' => ''
-					 );
-					 
-		add_settings_field(
-			'tr_table_title_text_color',
-			__( 'Table Title Text Color:', 'mstw-loc-domain' ),
-			'mstw_tr_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		
-		// Link text color. (Hover effect is underline by default. Use stylesheet to customize.)
-		$args = array( 	'id' => 'tr_table_links_color',
-						'name' => 'mstw_tr_options[tr_table_links_color]',
-						'value' => $options['tr_table_links_color'],
-						'label' => '(Hover effect is underline by default. Use stylesheet to customize.)'
-					 );
-					 
-		add_settings_field(
-			'tr_table_links_color',
-			__( 'Table Links Color:', 'mstw-loc-domain' ),
-			'mstw_tr_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		
-		// Roster Table Header Background Color
-		$args = array( 	'id' => 'tr_table_head_bkgd_color',
-						'name' => 'mstw_tr_options[tr_table_head_bkgd_color]',
-						'value' => $options['tr_table_head_bkgd_color'],
-						'label' => ''
-					 );
-					 
-		add_settings_field(
-			'tr_table_head_bkgd_color',
-			__( 'Table Header Background Color:', 'mstw-loc-domain' ),
-			'mstw_tr_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		
-		// Roster Table Header Text Color
-		$args = array( 	'id' => 'tr_table_head_text_color',
-						'name' => 'mstw_tr_options[tr_table_head_text_color]',
-						'value' => $options['tr_table_head_text_color'],
-						'label' => ''
-					 );
-					 
-		add_settings_field(
-			'tr_table_head_text_color',
-			__( 'Table Header Text Color:', 'mstw-loc-domain' ),
-			'mstw_tr_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		
-		// Roster Table Even Row Text Color
-		$args = array( 	'id' => 'tr_table_even_row_color',
-						'name' => 'mstw_tr_options[tr_table_even_row_color]',
-						'value' => $options['tr_table_even_row_color'],
-						'label' => ''
-					 );
-					 
-		add_settings_field(
-			'tr_table_even_row_color',
-			__( 'Table Even Row Text Color:', 'mstw-loc-domain' ),
-			'mstw_tr_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		
-		// Roster Table Even Row Background Color
-		$args = array( 	'id' => 'tr_table_even_row_bkgd',
-						'name' => 'mstw_tr_options[tr_table_even_row_bkgd]',
-						'value' => $options['tr_table_even_row_bkgd'],
-						'label' => ''
-					 );
-					 
-		add_settings_field(
-			'tr_table_even_row_bkgd',
-			__( 'Table Even Row Background Color:', 'mstw-loc-domain' ),
-			'mstw_tr_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-		
-		// Roster Table Odd Row Text Color
-		$args = array( 	'id' => 'tr_table_odd_row_color',
-						'name' => 'mstw_tr_options[tr_table_odd_row_color]',
-						'value' => $options['tr_table_odd_row_color'],
-						'label' => ''
-					 );
-					 
-		add_settings_field(
-			'tr_table_odd_row_color',
-			__( 'Table Odd Row Text Color:', 'mstw-loc-domain' ),
-			'mstw_tr_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-			
-		// Roster Table Odd Row Background Color
-		$args = array( 	'id' => 'tr_table_odd_row_bkgd',
-						'name' => 'mstw_tr_options[tr_table_odd_row_bkgd]',
-						'value' => $options['tr_table_odd_row_bkgd'],
-						'label' => ''
-					 );
-					 
-		add_settings_field(
-			'tr_table_odd_row_bkgd',
-			__( 'Table Odd Row Background Color:', 'mstw-loc-domain' ),
-			'mstw_tr_color_ctrl',
-			$display_on_page,				//Page to display field
-			$page_section, 					//Page section to display field
-			$args
-		);
-	}
 	
 	// Roster Table Colors section instructions
 	function mstw_tr_roster_table_colors_text( ) {
@@ -1433,7 +660,10 @@ function mstw_tr_validate_fields_options( $input ) {
 		$display_on_page = 'mstw_tr_fields_settings';
 		$page_section = 'mstw_tr_single_settings';
 		
-		$options = get_option( 'mstw_tr_options' );
+		$options = wp_parse_args( get_option( 'mstw_tr_options' ), mstw_tr_get_defaults( ) );
+		
+		//mstw_log_msg( 'in mstw_tr_single_player_bio_setup ... ' );
+		//mstw_log_msg( $options );
 		
 		/* Player Bio Page (single player page) settings */
 		add_settings_section(
@@ -1495,7 +725,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		// Background color of main box
 		$args = array( 	'id' => 'sp_main_bkgd_color',
 						'name' => 'mstw_tr_options[sp_main_bkgd_color]',
-						'value' => $options['sp_main_bkgd_color'],
+						'value' => mstw_safe_ref( $options, 'sp_main_bkgd_color'), //$options['sp_main_bkgd_color'],
 						'label' => ''
 					 );
 					 
@@ -1511,7 +741,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		// Text color of main box
 		$args = array( 	'id' => 'sp_main_text_color',
 						'name' => 'mstw_tr_options[sp_main_text_color]',
-						'value' => $options['sp_main_text_color'],
+						'value' => mstw_safe_ref( $options, 'sp_main_text_color'), //$options['sp_main_text_color'],
 						'label' => ''
 					 );
 					 
@@ -1527,7 +757,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		// Border color of player profile box
 		$args = array( 	'id' => 'sp_bio_border_color',
 						'name' => 'mstw_tr_options[sp_bio_border_color]',
-						'value' => $options['sp_bio_border_color'],
+						'value' => mstw_safe_ref( $options, 'sp_bio_border_color'), //$options['sp_bio_border_color'],
 						'label' => ''
 					 );
 					 
@@ -1543,7 +773,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		// Header text color of player bio box
 		$args = array( 	'id' => 'sp_bio_header_color',
 						'name' => 'mstw_tr_options[sp_bio_header_color]',
-						'value' => $options['sp_bio_header_color'],
+						'value' => mstw_safe_ref( $options, 'sp_bio_header_color'), //$options['sp_bio_header_color'],
 						'label' => ''
 					 );
 					 
@@ -1559,7 +789,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		// Text color of player bio box
 		$args = array( 	'id' => 'sp_bio_text_color',
 						'name' => 'mstw_tr_options[sp_bio_text_color]',
-						'value' => $options['sp_bio_text_color'],
+						'value' => mstw_safe_ref( $options, 'sp_bio_text_color'), //$options['sp_bio_text_color'],
 						'label' => ''
 					 );
 					 
@@ -1575,7 +805,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		// Background color of player bio box
 		$args = array( 	'id' => 'sp_bio_bkgd_color',
 						'name' => 'mstw_tr_options[sp_bio_bkgd_color]',
-						'value' => $options['sp_bio_bkgd_color'],
+						'value' => mstw_safe_ref( $options, 'sp_bio_bkgd_color'), //$options['sp_bio_bkgd_color'],
 						'label' => ''
 					 );
 					 
@@ -1591,7 +821,7 @@ function mstw_tr_validate_fields_options( $input ) {
 		// Gallery links color
 		$args = array( 	'id' => 'gallery_links_color',
 						'name' => 'mstw_tr_options[gallery_links_color]',
-						'value' => $options['gallery_links_color'],
+						'value' => mstw_safe_ref( $options, 'gallery_links_color'), //$options['gallery_links_color'],
 						'label' => ''
 					 );
 					 
@@ -1705,7 +935,7 @@ class MSTW_TR_ImporterPlugin {
 								'class'              => 'postform',
 								'depth'              => 0,
 								'tab_index'          => 0,
-								'taxonomy'           => 'teams',
+								'taxonomy'           => 'mstw_tr_team',
 								'hide_if_empty'      => false
 							); ?>
 							
@@ -1775,7 +1005,7 @@ class MSTW_TR_ImporterPlugin {
 		
 		// Check that a team has been selected
 		echo '<p>$opt_cat(ID): ' . $opt_cat;
-		$term = get_term_by( 'id', $opt_cat, 'teams' );
+		$term = get_term_by( 'id', $opt_cat, 'mstw_tr_team' );
 		echo ' Team slug: ' . $term->slug . '</p>';
 		if ( $term ) {
 			echo 'Team slug: ' . $term->slug . '</p>';
@@ -1855,7 +1085,7 @@ class MSTW_TR_ImporterPlugin {
         $data = array_merge( $this->defaults, $data );
 
 		// The post type is hardwired for this plugin's custom post type
-		$type = 'player';
+		$type = 'mstw_tr_player';
 		
         $valid_type = ( function_exists( 'post_type_exists' ) &&
             post_type_exists( $type )) || in_array( $type, array('post', 'page' ));
@@ -1890,7 +1120,7 @@ class MSTW_TR_ImporterPlugin {
 		
 		echo '<p>Title: ' . $temp_title . ' Slug: ' . $temp_slug . '</p>';
 		echo '<p>$opt_cat(ID): ' . $opt_cat . '</p>';
-		$term = get_term_by( 'id', $opt_cat, 'teams' );
+		$term = get_term_by( 'id', $opt_cat, 'mstw_tr_team' );
 
         $new_post = array(
             'post_title'   => convert_chars( $temp_title ),
@@ -1904,8 +1134,8 @@ class MSTW_TR_ImporterPlugin {
         $id = wp_insert_post( $new_post );
 		
 		if ( $id ) {
-			$term = get_term_by( 'id', $opt_cat, 'teams' );
-			wp_set_object_terms( $id, $term->slug, 'teams');
+			$term = get_term_by( 'id', $opt_cat, 'mstw_tr_team' );
+			wp_set_object_terms( $id, $term->slug, 'mstw_tr_team');
 		}
 
         if ('page' !== $type && !$id) {
