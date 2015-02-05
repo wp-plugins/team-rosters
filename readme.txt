@@ -72,6 +72,7 @@ Complete installation instructions are available on [shoalsummitsolutions.com](h
 The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are available on shoalsummitsolutions.com.
 
 == Screenshots ==
+// NEEDS TO BE REDONE
 
 1. Edit All Players admin screen
 2. Edit Single Player admin screen
@@ -85,18 +86,19 @@ The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are ava
 == Changelog ==
 
 = Next Release =
-* Added if ( !function_exists( 'function_name' ) ) wrappers to mstw_tr_utility_functions.php.
-* Integrated mstw_utility_functions (replace tr_utility_functions where possible
-* Completely re-wrote display settings
+* Access controls for MSTW Admin, MSTW Team Rosters Admin, and Team Admins
+* Data fields to team taxonomy to integrate with MSTW Schedules & Scoreboards Teams
+* Added if ( !function_exists( 'function_name' ) ) wrappers to all include files.
+* Integrated mstw_utility_functions - remove old mstw-admin-utils.php replace mstw_tr_utility_functions where possible
+* Completely re-wrote settings screens - organized with tabs and added help screens
 * Re-orgainized Edit Player screen
 * Cleaned up many details in admin UI
 * Cleaned up WP internationalization/translation. Domain was changed from mstw-loc-domain to mstw-team-rosters.
 * Added field to link Team taxonomy to MSTW Schedules & Scoreboards Teams DB.
-* Changed CPT & taxonomy names to prevent collisions with themes and other plugs. THIS HAS A MAJOR IMPACT ON UPGRADES FROM PREVIOUS VERSIONS. READ HOW TO DO IT RIGHT HERE.
-
-
+* Changed Custom Post Type & Taxonomy names to reduce the possiblity of name collisions with themes and other plugs. THIS HAS A MAJOR IMPACT ON UPGRADES FROM PREVIOUS VERSIONS. READ HOW TO DO IT RIGHT HERE.
 * Corrected the display of height/weight in the single-player.php template
-* Uses the single-player.php template from the plugin's /theme-templates directory so the template no longer needs to be copied to the theme's (or child theme's) directory
+* Uses the single-player.php template from the plugin's /theme-templates directory so the template no longer needs to be copied to the theme's (or child theme's) directory.
+* Added a setting to control the addition of links to single player profile pages from the player names in roster tables 
 
 = 3.1.2 =
 * Fixed a bug (a typo) that prevented the team gallery shortcode from behaving correctly.
