@@ -94,8 +94,8 @@
 	function mstw_tr_get_roster_table_defaults( ) {
 		$defaults = array(	
 				'show_title'			=> 0,
-				'roster_format'			=> 'custom',
-				'links_to_profiles'		=> 0,
+				'roster_type'			=> 'custom',
+				'links_to_profiles'		=> '',
 				'sort_order'			=> 'alpha', //sort by last name
 				'name_format'			=> 'last-first',
 				'show_photos'			=> 0,
@@ -139,6 +139,7 @@
 	function mstw_tr_get_bio_gallery_defaults( ) {
 		$defaults = array(
 				'sp_content_title'		=> 'Bio',
+				
 				'sp_image_width'		=> '',
 				'sp_image_height'		=> '',
 		
@@ -476,5 +477,74 @@ if ( !function_exists( 'mstw_tr_build_gallery' ) ) {
 		return $output;
 		
 	} //End: mstw_tr_build_gallery()
+}
+
+//----------------------------------------------------------------
+// 19. mstw_tr_admin_notice - Displays all admin notices; callback for admin_notices action
+//
+//	ARGUMENTS: 	None
+//
+//	RETURNS:	None. Displays all messages in the 'mstw_tr_admin_messages' transient
+//
+if ( !function_exists ( 'mstw_tr_admin_notice' ) ) {
+	function mstw_tr_admin_notice( ) {
+		//mstw_log_msg( 'in mstw_tr_admin_notice ... ' );
+		if ( get_transient( 'mstw_tr_admin_messages' ) !== false ) {
+			// get the types and messages
+			$messages = get_transient( 'mstw_tr_admin_messages' );
+			// display the messages
+			foreach ( $messages as $message ) {
+				$msg_type = $message['type'];
+				$msg_notice = $message['notice'];
+				
+				// Kludge to get warning messages to appear after page title
+				$msg_type = ( $msg_type == 'warning' ) ? $msg_type . ' updated' : $msg_type ;
+			?>
+				<div class="<?php echo $msg_type; ?>">
+					<p><?php echo $msg_notice; ?></p>
+				</div>
+			
+			<?php
+			}
+			//mstw_log_msg( 'deleting transient ... ' );
+			delete_transient( 'mstw_tr_admin_messages' );
+			
+		} //End: if ( get_transient( sss_admin_messages ) )
+	} //End: function sss_admin_notice( )
+}
+
+//----------------------------------------------------------------
+// 20. mstw_tr_add_admin_notice - Adds admin notices to transient for display on admin_notices hook
+//
+//	ARGUMENTS: 	$type - type of notice [updated|error|update-nag|warning]
+//				$notice - notice text
+//
+//	RETURNS:	None. Stores notice and type in transient for later display on admin_notices hook
+//
+if ( !function_exists ( 'mstw_tr_add_admin_notice' ) ) {
+	function mstw_tr_add_admin_notice( $type = 'updated', $notice ) {
+		//default type to 'updated'
+		if ( !( $type == 'updated' or $type == 'error' or $type =='update-nag' or $type == 'warning' ) ) $type = 'updated';
+		
+		//set the admin message
+		$new_msg = array( array(
+							'type'	=> $type,
+							'notice'	=> $notice
+							)
+						);
+
+		//either create or add to the sss_admin transient
+		$existing_msgs = get_transient( 'mstw_tr_admin_messages' );
+		
+		if ( $existing_msgs === false ) {
+			// no transient exists, create it with the current message
+			set_transient( 'mstw_tr_admin_messages', $new_msg, HOUR_IN_SECONDS );
+		} 
+		else {
+			// transient exists, append current message to it
+			$new_msgs = array_merge( $existing_msgs, $new_msg );
+			set_transient ( 'mstw_tr_admin_messages', $new_msgs, HOUR_IN_SECONDS );
+		}
+	} //End: function sss_add_admin_notice( )
 }
 ?>

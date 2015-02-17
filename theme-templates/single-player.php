@@ -6,10 +6,22 @@
  * individual themes. This template has been tested in the WordPress 
  * Twenty Eleven Theme. 
  *
- * @package Twenty_Eleven
- * @subpackage Team_Rosters
- * @since Team Rosters 1.0
- */
+ *	MSTW Wordpress Plugins (http://shoalsummitsolutions.com)
+ *	Copyright 2014-15 Mark O'Donnell (mark@shoalsummitsolutions.com)
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *-------------------------------------------------------------------------*/
  ?>
 
 	<?php get_header(); ?>
@@ -206,7 +218,7 @@
 					
 					// Single Player Page title
 					$html = '<h1 class="player-head-title ';
-					$player_teams = wp_get_object_terms($post->ID, 'teams');
+					$player_teams = wp_get_object_terms($post->ID, 'mstw_tr_team');
 					if( !empty( $player_teams ) ) {
 						if( !is_wp_error( $player_teams ) ) {
 							foreach( $player_teams as $team ) {

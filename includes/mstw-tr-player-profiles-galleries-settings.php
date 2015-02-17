@@ -40,7 +40,7 @@
 			$options = wp_parse_args( get_option( 'mstw_tr_options' ), mstw_tr_get_bio_gallery_defaults( ) );
 			
 			mstw_log_msg( 'in mstw_tr_bio_gallery_section_setup ... ' );
-			mstw_log_msg( $options );
+			//mstw_log_msg( $options );
 			//mstw_log_msg( 'in mstw_tr_data_fields_section_setup ...' );
 			//mstw_log_msg( '$display_on_page= ' . $display_on_page );
 			//mstw_log_msg( '$page_section= ' . $page_section );

@@ -369,6 +369,11 @@ if( !function_exists( 'mstw_build_admin_edit_field' ) ) {
 				//but without it you get an extra option with the 
 				//'option-name' displayed (huh??)
 				$options = $args['options'];
+				
+				//mstw_log_msg( 'in mstw_build_admin_edit_field $options = ' );
+				//mstw_log_msg( $options );
+				//mstw_log_msg( '$current_value= ' . $curr_value );
+				//mstw_log_msg( '$value= ' . $value );
 					
 				echo "<select id='$id' name='$name' $attrib_str >";
 					foreach( $options as $key=>$value ) {

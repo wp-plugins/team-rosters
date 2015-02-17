@@ -3,27 +3,22 @@
  * The template for displaying Team Archive pages using the Team Rosters plugin.
  * This will create a 'gallery view' of the team.
  *
- * CHANGE LOG
- * 20130203-MAO:
- *	(1) Added photo/image sizes from admin settings
- *	(2) Added hide-weight from admin settings. Also hide if weight field is empty
- *	(3) Added formats for baseball ?format=format-string now works in URL.
+  *	MSTW Wordpress Plugins (http://shoalsummitsolutions.com)
+ *	Copyright 2014-15 Mark O'Donnell (mark@shoalsummitsolutions.com)
  *
- * 20130621-MAO:
- *	(1) Added changes to support specific team formatting.
- *	(2) Added extensive changes to support custom display of data fields.
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *	GNU General Public License for more details.
  *
- * 20130910-MAO:
- *	(1) Called new mstw_tr_build_gallery() utility. Gallery shortcode and page
- *		use the same code.
- *
- */
- 
-	if ( !function_exists( 'mstw_tr_set_fields_by_format' ) ) {
-		//echo '<p> mstw_text_ctrl does not exist. </p>';
-		//echo '<p> path:' . WP_CONTENT_DIR . '/plugins/team-rosters/includes/mstw-tr-utility-functions.php</p>';
-		require_once  WP_CONTENT_DIR . '/plugins/team-rosters/includes/mstw-tr-utility-functions.php';
-	};
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *-------------------------------------------------------------------------*/
  
 	get_header(); 
 	
@@ -55,7 +50,7 @@
 	// figure out the team name - for the title (if shown) and for team-based styles
 	$uri_array = explode( '/', $_SERVER['REQUEST_URI'] );	
 	$team_slug = $uri_array[sizeof( $uri_array )-2];
-	$term = get_term_by( 'slug', $team_slug, 'teams' );
+	$term = get_term_by( 'slug', $team_slug, 'mstw_tr_team' );
 	$team_name .= $term->name;
 	?>
 	
@@ -92,8 +87,8 @@
 	
 	// Get the team roster		
 	$posts = get_posts(array( 'numberposts' => -1,
-							  'post_type' => 'player',
-							  'teams' => $team_slug, 
+							  'post_type' => 'mstw_tr_player',
+							  'mstw_tr_team' => $team_slug, 
 							  'orderby' => $order_by, 
 							  'meta_key' => $sort_key,
 							  'order' => 'ASC' 

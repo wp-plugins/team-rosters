@@ -86,7 +86,7 @@ function mstw_tr_register_cpts( ) {
 			'with_front' 	=> false,
 		),
 		
-		'supports' 			=> array( 'title' ),
+		'supports' 			=> array( 'title', 'editor', 'thumbnail' ),
 		
 		//post is the default capability type
 		//'capability_type'	=> array( 'player', 'players' ), 
@@ -148,7 +148,8 @@ function mstw_tr_register_cpts( ) {
 			'labels'				=> $labels,
 			'public'				=> true,
 			'show_ui'				=> true,
-			'show_in_nav_menus'		=> false,
+			'show_in_nav_menus'		=> true,
+			'show_in_menu'			=> true,
 			'show_tagcloud'			=> false,
 			//'meta_box_cb'			=> null, provide callback fcn for meta box display
 			'show_admin_column'		=> true, //allow automatic creation of taxonomy column in associated post-types table.

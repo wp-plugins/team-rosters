@@ -1,0 +1,23 @@
+/*
+ * CSS File for Team Rosters Players Admin Screen
+ *
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
+ */
+
+/*-------------------------------------------------------	
+ *	Style the header for the player bio (post content) field
+ *------------------------------------------------------*/
+ 
+p.player-bio-admin-head {
+	font-weight: 600;
+	font-size: 14px;
+	font-family: 'Open Sans', sans-serif;
+	margin-bottom: 0;
+	margin-left: 10px;
+}
+
+p.plugin-not-installed {
+	margin-bottom: 30px;
+	font-weight: bold;
+	color: #000;
+}

@@ -3,26 +3,22 @@
  * The MSTW Team Rosters template for displaying content in the 
  * single-player.php template
  *
- * @package WordPress
- * @subpackage Twenty_Eleven
- * @since Twenty Eleven 1.0
- */
-/*----------------------------------------------------------------------
- * CHANGE LOG
- *----------------------------------------------------------------------
- * 20121211-MAO:
- *	(1) Added option to change content title (e.g., "Player Bio") based on
- *		the admin setting.
- *	(2) Updated pro and college player info display.
- * 20130130-MAO:
- *	(1) Added support for image size settings 
- * 20130202-MAO:
- *	(1) Added support for baseball formats 
+ *	MSTW Wordpress Plugins (http://shoalsummitsolutions.com)
+ *	Copyright 2014-15 Mark O'Donnell (mark@shoalsummitsolutions.com)
  *
- * 20130422-MAO:
- *	(1) Changed the thumbnail support to 'full'. Actual size needs to be set
- *		in WordPress->General Settings->Media
- -----------------------------------------------------------------------*/
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *-------------------------------------------------------------------------*/
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
@@ -198,7 +194,7 @@
 	
 	// Single Player Page title
 	$html = '<h1 class="player-head-title ';
-	$player_teams = wp_get_object_terms($post->ID, 'teams');
+	$player_teams = wp_get_object_terms($post->ID, 'mstw_tr_team');
 	if( !empty( $player_teams ) ) {
 		if( !is_wp_error( $player_teams ) ) {
 			foreach( $player_teams as $team ) {
