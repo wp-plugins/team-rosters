@@ -30,9 +30,13 @@
  if( !function_exists( 'mstw_tr_build_player_screen' ) ) {
 	function mstw_tr_build_player_screen( ) {
 		global $post, $wp_meta_boxes;
-		do_meta_boxes(get_current_screen( ), 'advanced', $post);
-		unset( $wp_meta_boxes[get_post_type($post)]['advanced'] );
-		echo "<p class='player-bio-admin-head'>" . __( 'Player Bio:', 'mstw-team-rosters' ) . "</p>";
+		
+		// first make sure we're on the right screen ...
+		if( get_post_type( $post ) == 'mstw_tr_player' ) {
+			do_meta_boxes(get_current_screen( ), 'advanced', $post);
+			unset( $wp_meta_boxes[get_post_type($post)]['advanced'] );
+			echo "<p class='player-bio-admin-head'>" . __( 'Player Bio:', 'mstw-team-rosters' ) . "</p>";
+		}
 	}  //End: mstw_tr_build_player_screen
  }
  
@@ -63,11 +67,11 @@
  
   if( !function_exists( 'mstw_tr_change_featured_image_link' ) ) {
 	 function mstw_tr_change_featured_image_link( $content ) {
-		 
-		$content = str_replace( __( 'Set featured image' ), __( 'Set Player Photo', 'mstw-team-rosters' ), $content );
-		
-		$content = str_replace( __( 'Remove featured image' ), __( 'Remove Player Photo', 'mstw-team-rosters' ), $content );
-		
+		if ( get_post_type( ) == 'mstw_tr_player' ) {
+			$content = str_replace( __( 'Set featured image' ), __( 'Set Player Photo', 'mstw-team-rosters' ), $content );
+			
+			$content = str_replace( __( 'Remove featured image' ), __( 'Remove Player Photo', 'mstw-team-rosters' ), $content );
+		}
 		return $content;
 		
 	 } //End: mstw_tr_change_featured_image_link( ) 
@@ -158,16 +162,16 @@
 		<?php
 		$admin_fields = array ( 
 						'player_first_name' => array (
-							'type' => 'text',
-							'curr_value' => get_post_meta( $post->ID, 'player_first_name', true ), //$first_name,
-							'label' => __( 'First Name:', 'mstw-team-rosters' ),
-							'maxlength' => $std_length,
-							'size' => $std_size,
-							'desc' => __( '', 'mstw-team-rosters' ),
+							'type' 			=> 'text',
+							'curr_value' 	=> get_post_meta( $post->ID, 'player_first_name', true ), //$first_name,
+							'label' 		=> __( 'First Name:', 'mstw-team-rosters' ),
+							'maxlength' 	=> $std_length,
+							'size' 			=> $std_size,
+							'desc' 			=> __( '', 'mstw-team-rosters' ),
 							),
 						'player_last_name' => array (
 							'type' => 'text',
-							'curr_value' => get_post_meta( $post->ID, 'player_first_name', true ), //$last_name,
+							'curr_value' => get_post_meta( $post->ID, 'player_last_name', true ),
 							'label' =>  __( 'Last Name:', 'mstw-team-rosters' ),
 							'maxlength' => $std_length,
 							'size' => $std_size,
@@ -215,7 +219,7 @@
 							),
 						'player_experience' => array (
 							'type' => 'text',
-							'curr_value' => $year,
+							'curr_value' => $experience,
 							'label' =>  __( 'Experience:', 'mstw-team-rosters' ),
 							'maxlength' => $std_length,
 							'size' => $std_size,
@@ -279,6 +283,7 @@
 							'size' => $std_size,
 							'desc' => __( 'This field is a spare. It is intended to be re-purposed by site admins.', 'mstw-team-rosters' ),
 							),
+						/*
 						'player_photo' => array (
 								'type'	=> 'media-uploader',
 								//'type' => 'text',
@@ -290,6 +295,7 @@
 								'btn_label' => __( 'Upload from Media Library', 'mstw-schedules-scoreboards' ),
 								'img_width' => 41,
 								),
+							*/
 
 						);
 			mstw_build_admin_edit_screen( $admin_fields );
@@ -366,9 +372,6 @@
 				update_post_meta( $post_id, 'player_other',
 						strip_tags( $_POST['player_other'] ) );
 						
-				update_post_meta( $post_id, 'player_photo',
-						strip_tags( $_POST['player_photo'] ) );
-						
 			} //End: if ( $_POST['post_type'] == 'mstw_tr_player' )
 		} //End: if( isset( $_POST['post_type'] ) )
 	} //End: function mstw_tr_save_player_meta
@@ -377,7 +380,8 @@
  // ----------------------------------------------------------------
  // Set up the Team Roster 'view all' columns
  //
- add_filter( 'manage_mstw_tr_player_posts_columns', 'mstw_tr_edit_player_columns' ) ;
+ add_filter( 'manage_edit-mstw_tr_player_columns',
+			 'mstw_tr_edit_player_columns' ) ;
  
  if( !function_exists( 'mstw_tr_edit_player_columns' ) ) {
 	function mstw_tr_edit_player_columns( $columns ) {
@@ -404,15 +408,16 @@
  }
 
  // ----------------------------------------------------------------
- // Display the Team Roster 'view all' players columns
+ // Display the View All Players table columns
  //
- add_action( 'manage_mstw_tr_player_posts_custom_column', 'mstw_tr_manage_player_columns', 10, 2 );
+ add_action( 'manage_mstw_tr_player_posts_custom_column', 
+			 'mstw_tr_manage_player_columns', 10, 2 );
  
  if( !function_exists( 'mstw_tr_manage_player_columns' ) ) {
 	function mstw_tr_manage_player_columns( $column, $post_id ) {
 		global $post;
 		
-		/* echo 'column: ' . $column . " Post ID: " . $post_id; */
+		//mstw_log_msg( 'column: ' . $column . " Post ID: " . $post_id );
 
 		switch( $column ) {
 			case 'team' :
@@ -430,7 +435,8 @@
 				break;
 				
 			case 'first-name' :
-				printf( '%s', get_post_meta( $post_id, 'player_first_name', true ) );
+				//printf( '%s', get_post_meta( $post_id, 'player_first_name', true ) );
+				echo( get_post_meta( $post_id, 'player_first_name', true ) );
 				break;
 				
 			case 'last-name' :
@@ -472,14 +478,15 @@
  // ----------------------------------------------------------------
  // Sort the all players table on first name, last name, number, team(s)
  //
- add_filter("manage_edit-mstw_tr_player_sortable_columns", 'mstw_tr_players_columns_sort');
+ add_filter( 'manage_edit-mstw_tr_player_sortable_columns', 
+			 'mstw_tr_players_columns_sort');
 
  if( !function_exists( 'mstw_tr_players_columns_sort' ) ) {
 	function mstw_tr_players_columns_sort( $columns ) {
 		
 		$custom = array(
 			'first-name' => 'player_first_name',
-			'last-name' 	=> 'player_first_name',
+			'last-name' 	=> 'player_last_name',
 			'number' 	=> 'player_number',
 		);
 		
@@ -489,17 +496,14 @@
  } 
  
  // ----------------------------------------------------------------
- // Add a filter the All Players screen based on Team (the mstw_tr_team taxonomy)
+ // Filter the All Players screen based on Team (mstw_tr_team) taxonomy
  //
- add_action('restrict_manage_posts','mstw_tr_restrict_players_by_team');
+ add_action( 'restrict_manage_posts','mstw_tr_restrict_players_by_team' );
 
  if( !function_exists( 'mstw_tr_restrict_players_by_team' ) ) {
 	function mstw_tr_restrict_players_by_team( ) {
 		global $typenow;
-		global $wp_query;
-		
-		mstw_log_msg( 'in mstw_tr_restrict_players_by_team ... ' );
-		mstw_log_msg( '$typenow= ' . $typenow );
+		//global $wp_query;
 		
 		if( $typenow == 'mstw_tr_player' ) {
 			
@@ -513,11 +517,9 @@
 				$terms = get_terms( $tax_slug );
 					
 				//output the html for the drop down menu
-				?>
-				<select name='<?php echo $tax_slug ?>' id='<?php echo $tax_slug?>' class='postform'>
-					<option value=''><?php _e( 'Show All Teams', 'mstw-team-rosters') ?></option>
+				echo "<select name='$tax_slug' id='$tax_slug' class='postform'>";
+				echo "<option value=''>" . __( 'Show All Teams', 'mstw-team-rosters') . "</option>";
 				
-				<?php
 				//output each select option line
 				foreach ($terms as $term) {
 					//check against the last $_GET to show the current selection
@@ -529,12 +531,53 @@
 					}
 					echo '<option value=' . $term->slug . $selected . '>' . $term->name . ' (' . $term->count . ')</option>';
 				}
-				?>
-				</select> 
-				<?php
+				echo '</select>';
 			}	
 		}
 	} //End: mstw_tr_restrict_players_by_team( )
  }
  
+ //-----------------------------------------------------------------
+ // Sort show all players by columns. See:
+ // http://scribu.net/wordpress/custom-sortable-columns.html#comment-4732
+ //
+ add_filter( 'request', 'mstw_ss_players_column_order' );
+
+ if( !function_exists( 'mstw_ss_players_column_order' ) ) {
+	function mstw_ss_players_column_order( $vars ) {
+		if ( isset( $vars['orderby'] ) ) {
+			mstw_log_msg( 'in ... mstw_ss_players_column_order' . $vars['orderby'] );
+			$custom = array();
+			switch( $vars['orderby'] ) {
+				case'player_number':
+					$custom = array( 'meta_key' => 'player_number',
+									 'orderby' => 'meta_value_num',
+									 );
+					//$vars = array_merge( $vars, $custom );
+					break;
+				case 'player_first_name':
+					$custom = array( 'meta_key' => 'player_first_name',
+										 //'orderby' => 'meta_value_num', // does not work
+										 'orderby' => 'meta_value'
+										 //'order' => 'asc' // don't use this; blocks toggle UI
+										);
+					//$vars = array_merge( $vars, $custom );
+					break;
+				case 'player_last_name':
+					$custom = array( 'meta_key' => 'player_last_name',
+										 //'orderby' => 'meta_value_num', // does not work
+										 'orderby' => 'meta_value'
+										 //'order' => 'asc' // don't use this; blocks toggle UI
+										);
+					//$vars = array_merge( $vars, $custom );
+					break;
+			}
+			if( $custom ) 
+				$vars = array_merge( $vars, $custom );
+		}
+		
+		return $vars;
+		
+	} //End mstw_ss_players_column_order( )
+ }
  ?>

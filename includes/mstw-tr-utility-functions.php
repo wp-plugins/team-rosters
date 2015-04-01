@@ -3,13 +3,8 @@
  *	MSTW-TR-UTILITY-FUNCTIONS.PHP
  *		Utility or convenience functions used in both the front and back ends
  *
- *	1. mstw_tr_get_defaults() - returns the default option settings
- *	2. mstw_tr_set_fields_by_format() - sets options based on specified roster format
- *	3. mstw_tr_build_gallery: Builds the player gallery on the front end.
- *
- *
  *	MSTW Wordpress Plugins (http://shoalsummitsolutions.com)
- *	Copyright 2014 Mark O'Donnell (mark@shoalsummitsolutions.com)
+ *	Copyright 2014-15 Mark O'Donnell (mark@shoalsummitsolutions.com)
  *
  *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -25,8 +20,28 @@
  *	along with this program. If not, see <http://www.gnu.org/licenses/>.
  *-------------------------------------------------------------------------*/
  
+ /*------------------------------------------------------------------------
+ *	MSTW-SS-UTILITY-FUNCTIONS
+ *	These functions are included in both the front and back end.
+ *
+ * 1. mstw_tr_get_defaults() - returns the default mstw_tr_options[]
+ * 2. mstw_tr_get_data_fields_columns_defaults() - returns the defaults 
+ *		for the data fields & columns options (ONLY)
+ * 3. mstw_tr_get_roster_table_defaults() - returns the defaults 
+ *		the roster table options (ONLY)
+ * 4. mstw_tr_get_roster_table_colors_defaults() -  returns the defaults 
+ *		for the table colors options (ONLY)
+ * 5. mstw_tr_get_bio_gallery_defaults() - returns the defaults 
+ *		for the player profile & team gallery (ONLY)
+ * 6. mstw_tr_set_options_by_format() - Sets the options based on one 
+ *		of the six built-in roster type
+ * 7. mstw_tr_build_gallery() - Builds the player gallery on the front end.
+ * 8. mstw_tr_build_player_photo: constructs the html for the player photo.
+ *
+ *--------------------------------------------------------------------------*/
+ 
  //-----------------------------------------------------------
- //	mstw_tr_get_defaults: returns the array of ALL option defaults
+ //	1. mstw_tr_get_defaults: returns the array of ALL option defaults
  //	
  if ( !function_exists( 'mstw_tr_get_defaults' ) ) {
 	function mstw_tr_get_defaults( ) {
@@ -42,22 +57,23 @@
 }
 
  //-----------------------------------------------------------
- //	mstw_tr_get_data_fields_columns_defaults: returns the array 
+ //	2. mstw_tr_get_data_fields_columns_defaults: returns the array 
  //		defaults for the data fields & columns options (ONLY)
  //
  if ( !function_exists( 'mstw_tr_get_data_fields_columns_defaults' ) ) {
 	function mstw_tr_get_data_fields_columns_defaults( ) {
 		$defaults = array(	
 				'team'					=> 'no-team-specified',
-				'show_title'			=> 1,
-				'roster_type'			=> 'custom',
-				'sort_order'			=> 'alpha',
-				'name_format'			=> 'last-first',
-				'name_label'			=> __( 'Name', 'mstw-team-rosters' ),
-				'show_photos'			=> 0,
-				'photo_label'			=> __( 'Photo', 'mstw-team-rosters' ),
+				//'show_title'			=> 1,
+				//'roster_type'			=> 'custom',
+				//'sort_order'			=> 'alpha',
+				//'name_format'			=> 'last-first',
 				'show_number'			=> 1,
 				'number_label'			=> __( 'Nbr', 'mstw-team-rosters' ),
+				//always show the name
+				'name_label'			=> __( 'Name', 'mstw-team-rosters' ),
+				//'show_photos'			=> 0,
+				//'photo_label'			=> __( 'Photo', 'mstw-team-rosters' ),
 				'show_position'			=> 1,
 				'position_label'		=> __( 'Pos', 'mstw-team-rosters' ),
 				'show_height'			=> 1,
@@ -87,15 +103,15 @@
  }
  
  //-----------------------------------------------------------
- //	mstw_tr_get_data_fields_columns_defaults: returns the array 
- //		defaults for the data fields & columns options (ONLY)
+ //	3. mstw_tr_get_roster_table_defaults: returns the defaults for 
+ //		the roster table options (ONLY)
  //
  if ( !function_exists( 'mstw_tr_get_roster_table_defaults' ) ) {
 	function mstw_tr_get_roster_table_defaults( ) {
 		$defaults = array(	
 				'show_title'			=> 0,
 				'roster_type'			=> 'custom',
-				'links_to_profiles'		=> '',
+				'links_to_profiles'		=> 1,
 				'sort_order'			=> 'alpha', //sort by last name
 				'name_format'			=> 'last-first',
 				'show_photos'			=> 0,
@@ -109,12 +125,13 @@
  }
 
  //-----------------------------------------------------------
- //	mstw_tr_get_roster_table_colors_defaults: returns the array 
- //		defaults for the data fields & columns options (ONLY)
+ //	4. mstw_tr_get_roster_table_colors_defaults: returns the array 
+ //		defaults for the table colors options (ONLY)
  //
  if ( !function_exists( 'mstw_tr_get_roster_table_colors_defaults' ) ) {
 	function mstw_tr_get_roster_table_colors_defaults( ) {
 		$defaults = array(	
+				'use_team_colors'		=> 0,
 				'table_title_color'		=> '',
 				'table_links_color'		=> '',
 				'table_head_bkgd'		=> '',
@@ -132,16 +149,17 @@
  
  
  //-----------------------------------------------------------
- //	mstw_tr_get_bio_gallery_defaults: returns the array 
+ //	5. mstw_tr_get_bio_gallery_defaults: returns the array 
  //		defaults for the player profile & team gallery (ONLY)
  //
  if ( !function_exists( 'mstw_tr_get_bio_gallery_defaults' ) ) {
 	function mstw_tr_get_bio_gallery_defaults( ) {
 		$defaults = array(
-				'sp_content_title'		=> 'Bio',
+				'sp_show_title'			=> 1,
+				'sp_content_title'		=> __( 'Player Bio', 'mstw-team-rosters' ),
 				
-				'sp_image_width'		=> '',
-				'sp_image_height'		=> '',
+				'sp_image_width'		=> 150,
+				'sp_image_height'		=> 150,
 		
 				'sp_main_bkgd_color'	=> '',
 				'sp_main_text_color'	=> '',
@@ -156,13 +174,13 @@
 	} //End: mstw_tr_get_bio_gallery_defaults( )
  }
 
-//-----------------------------------------------------------
-//	mstw_tr_set_options_by_format: Sets the options based on the 
-//		format argument: custom, high-school, college, pro, 
-//		baseball-high-school, baseball-college, or baseball-pro. 
-//		"custom" causes the Settings admin page defaults to be used
-//
-if ( !function_exists( 'mstw_tr_set_fields_by_format' ) ) {
+ //-----------------------------------------------------------
+ // 6. mstw_tr_set_fields_by_format: Sets the options based on the 
+ //		format argument: custom, high-school, college, pro, 
+ //		baseball-high-school, baseball-college, or baseball-pro. 
+ //		"custom" causes the Settings admin page defaults to be used
+ //
+ if ( !function_exists( 'mstw_tr_set_fields_by_format' ) ) {
 	function mstw_tr_set_fields_by_format( $format ) {
 		switch ( $format) {
 			case 'baseball-high-school':
@@ -289,178 +307,118 @@ if ( !function_exists( 'mstw_tr_set_fields_by_format' ) ) {
 	} //End: mstw_tr_set_fields_by_format()
 }
 
-//---------------------------------------------------------------------------------
-//	mstw_tr_build_gallery: Builds the player gallery on the front end. Called by both
-//		the gallery shortcode and the player taxonomy page template.
-//
+ //-----------------------------------------------------------
+ //	7. mstw_tr_build_gallery: Builds the player gallery on the front end.
+ //		Called by both the gallery shortcode and the team taxonomy 
+ //		page template.
+ //
 if ( !function_exists( 'mstw_tr_build_gallery' ) ) {
 	function mstw_tr_build_gallery( $team_slug, $posts, $options, $format ) {	
-		
-		//$output = "<div class='mstw_tr_gallery'>\n";
-	
 		if( !empty( $posts ) ) {
 		
 			// 	Do we really want to set the default here?
 			//	Or let the stylesheet handle it? 
-			$img_width = ( $options['sp_image_width'] == '' ) ? 150 : $options['sp_image_width'];
-			$img_height = ( $options['sp_image_height'] == '' ) ? 150 : $options['sp_image_height'];
+			//$img_width = ( $options['sp_image_width'] == '' ) ? 150 : $options['sp_image_width'];
+			//$img_height = ( $options['sp_image_height'] == '' ) ? 150 : $options['sp_image_height'];
+			
+			$output = '';
 			
 			foreach( $posts as $post ) { // ( have_posts( ) ) : the_post();
 				// Get the post data
-				$first_name = get_post_meta($post->ID, '_mstw_tr_first_name', true );
-				$last_name = get_post_meta($post->ID, '_mstw_tr_last_name', true );
-				$number = get_post_meta($post->ID, '_mstw_tr_number', true );
-				$position = get_post_meta($post->ID, '_mstw_tr_position', true );
-				$height = get_post_meta($post->ID, '_mstw_tr_height', true );
-				$weight = get_post_meta($post->ID, '_mstw_tr_weight', true );
-				$year = get_post_meta($post->ID, '_mstw_tr_year', true );
-				$experience = get_post_meta($post->ID, '_mstw_tr_experience', true );
-				$age = get_post_meta($post->ID, '_mstw_tr_age', true );
-				$last_school = get_post_meta($post->ID, '_mstw_tr_last_school', true );
-				$home_town = get_post_meta($post->ID, '_mstw_tr_home_town', true );
-				$country = get_post_meta($post->ID, '_mstw_tr_country', true );
-				$bats = get_post_meta($post->ID, '_mstw_tr_bats', true );
-				$throws = get_post_meta($post->ID, '_mstw_tr_throws', true );
-				$other = get_post_meta($post->ID, '_mstw_tr_other', true );
+				$first_name = get_post_meta($post->ID, 'player_first_name', true );
+				$last_name = get_post_meta($post->ID, 'player_last_name', true );
+				
+				$position = get_post_meta($post->ID, 'player_position', true );
+				$height = get_post_meta($post->ID, 'player_height', true );
+				$weight = get_post_meta($post->ID, 'player_weight', true );
+				$year = get_post_meta($post->ID, 'player_year', true );
+				$experience = get_post_meta($post->ID, 'player_experience', true );
+				$age = get_post_meta($post->ID, 'player_age', true );
+				$last_school = get_post_meta($post->ID, 'player_last_school', true );
+				$home_town = get_post_meta($post->ID, 'player_home_town', true );
+				$country = get_post_meta($post->ID, 'player_country', true );
+				$bats = get_post_meta($post->ID, 'player_bats', true );
+				$throws = get_post_meta($post->ID, 'player_throws', true );
+				$other = get_post_meta($post->ID, 'player_other', true );
 	
 				$output .= "<div class='player-tile player-tile-" . $team_slug . "'>\n";
 		
 				$output .= "<div class = 'player-photo' >\n";
-				
-				// check if the post has a Post Thumbnail assigned to it.
-				 if ( has_post_thumbnail( $post->ID ) ) { 
-					//echo get_the_post_thumbnail( get_the_ID(), 'full' );
-					$photo_file_url = wp_get_attachment_thumb_url( get_post_thumbnail_id( $post->ID ) );
-					$alt = 'Photo of ' . $first_name . ' ' . $last_name;
-					//echo '<p>Photo File: ' . $photo_file_url . '</p>';
-				} else {
-					// Default image is tied to the team taxonomy. 
-					// Try to load default-photo-team-slug.jpg, If it does not exst,
-					// Then load default-photo.jpg from the plugin -->
-					$photo_file = WP_PLUGIN_DIR . '/team-rosters/images/default-photo' . '-' . $team_slug . '.jpg';
-					if ( file_exists( $photo_file ) ) {
-						$photo_file_url = plugins_url() . '/team-rosters/images/default-photo' . '-' . $team_slug . '.jpg';
-					}
-					else {
-						$photo_file_url = plugins_url() . '/team-rosters/images/default-photo' . '.jpg';
-					}
-				}
-				//$single_player_template = get_stylesheet_directory( ) . '/single-player.php';
-				$single_player_template = plugin_dir_path( __DIR__ ) . 'theme-templates/single-player.php';
-				if ( !file_exists( $single_player_template ) ) {
-					$single_player_template = get_stylesheet_directory( ) . '/single-player.php';
-				}
-				
-				if ( file_exists( $single_player_template ) ) {
-					$output .= '<a href="' . get_permalink( $post->ID ) . '?format=' . $format . '">' . '<img src="' . $photo_file_url . '" alt="' . $alt . '" width="' . $img_width . '" height="' . $img_height . '" /></a>';
-				}
-				else {
-					$output .= '<img src="' . $photo_file_url . '" alt="' . $alt . '" width="' . $img_width . '" height="' . $img_height . '" />';
-				}
-				
+					$output .= mstw_tr_build_player_photo( $post, $team_slug, $options, 'gallery' );
 				$output .= "</div> <!-- .player-photo -->\n";
-				//End of .player-photo
 				
 				$output .= "<div class = 'player-info-container'>\n";
-					switch( $options['name_format'] ) {
-						case 'last-first':
-							$player_name = $last_name . ', ' . $first_name;
-							break;
-						case 'first-only':
-							$player_name = $first_name;
-							break;
-						case 'last-only':
-							$player_name = $last_name;
-						break;
-						default:  //first-last is default
-							$player_name = $first_name . " " . 	$last_name;
-							break;
-					}
-					
-					$single_player_template = get_template_directory( ) . '/single-player.php';
-					
-					if ( file_exists( $single_player_template ) ) {
-						// add links from player name to player bio page 	
-						$player_html = '<a href="' .  
-										get_permalink($post->ID) . 
-										'?format=' . $format . '" ';
-			
-						$player_html .= '>' . $player_name . '</a>';
-					}
-					else {
-						$player_html = $player_name;
-					}
-				
 					$output .= "<div class='player-name-number'>\n"; 
-					$output .= $number . '  ' . $player_html;
+						if ( $options['show_number'] ) {
+							$player_number = get_post_meta($post->ID, 'player_number', true );
+							$output .= "<div class='player-number'>$player_number</div>";
+						}
+						$player_name = mstw_tr_build_player_name( $post, $options, 'gallery' );
+						$output .= "<div class='player-name'>$player_name</div>";
 					$output .= "</div> <!-- .player-name-number -->\n";
 					
 					$output .= "<table class='player-info'>\n";
-					$output .= "<tbody>\n";
-					 
-					$row_start = '<tr><td class="lf-col">';
-					$new_cell = ':</td><td class="rt-col">'; //colon is for the end of the title
-					$row_end = '</td></tr>';
-					
-					// POSITION
-					if( $options['show_position'] ) {
-						$output .= $row_start . $options['position_label'] . $new_cell .  $position . $row_end;
-					}
-					
-					
-					// BATS/THROWS
-					if( $options['show_bats_throws'] ) {
-						$output .= $row_start . $options['bats_throws_label'] . $new_cell .  $bats . '/' . $throws . $row_end;
-					}
-					
-					// HEIGHT/WEIGHT
-					if ( $options['show_weight'] and $options['show_height'] ) {
-						$output .= $row_start . $options['height_label'] . '/' .  $options['weight_label'] . $new_cell .  $height . '/' . $weight . $row_end;
-					}
-					else if ( $options['show_height'] ) {
-						$output .= $row_start . $options['height_label'] . $new_cell .  $height . $row_end;
-					}
-					else if( $options['show_weight'] ) {
-						$output .= $row_start . $options['weight_label'] . $new_cell .  $weight . $row_end;
-					}
+					  $output .= "<tbody>\n";
+						$row_start = '<tr><td class="lf-col">';
+						$new_cell = ':</td><td class="rt-col">'; //colon is for the end of the title
+						$row_end = '</td></tr>';
+						
+						// POSITION
+						if( $options['show_position'] ) {
+							$output .= $row_start . $options['position_label'] . $new_cell .  $position . $row_end;
+						}
 
-					//YEAR
-					if( $options['show_year'] ) {
-						$output .= $row_start . $options['year_label'] . $new_cell .  $year . $row_end;
-					}
-					
-					//AGE
-					if( $options['show_age'] ) {
-						$output .= $row_start . $options['age_label'] . $new_cell .  $age . $row_end;
-					}
-					
-					//EXPERIENCE
-					if( $options['show_experience'] ) {
-						$output .= $row_start . $options['experience_label'] . $new_cell .  $experience . $row_end;
-					}
-					
-					//HOME TOWN
-					if( $options['show_home_town'] ) {
-						$output .= $row_start . $options['home_town_label'] . $new_cell .  $home_town . $row_end;
-					}
-					
-					//LAST SCHOOL
-					if( $options['show_last_school'] ) {
-						$output .= $row_start . $options['last_school_label'] . $new_cell .  $last_school . $row_end;
-					}
-					
-					//COUNTRY
-					if( $options['show_country'] ) {
-						$output .= $row_start . $options['country_label'] . $new_cell .  $country . $row_end;
-					}
-					
-					//OTHER
-					if( $options['show_other_info'] ) {
-						$output .= $row_start . $options['other_info_label'] . $new_cell .  $other . $row_end;
-					}
-					
-					
-				$output .= "</tbody>\n";
+						// BATS/THROWS
+						if( $options['show_bats_throws'] ) {
+							$output .= $row_start . $options['bats_throws_label'] . $new_cell .  $bats . '/' . $throws . $row_end;
+						}
+						
+						// HEIGHT/WEIGHT
+						if ( $options['show_weight'] and $options['show_height'] ) {
+							$output .= $row_start . $options['height_label'] . '/' .  $options['weight_label'] . $new_cell .  $height . '/' . $weight . $row_end;
+						}
+						else if ( $options['show_height'] ) {
+							$output .= $row_start . $options['height_label'] . $new_cell .  $height . $row_end;
+						}
+						else if( $options['show_weight'] ) {
+							$output .= $row_start . $options['weight_label'] . $new_cell .  $weight . $row_end;
+						}
+
+						//YEAR
+						if( $options['show_year'] ) {
+							$output .= $row_start . $options['year_label'] . $new_cell .  $year . $row_end;
+						}
+						
+						//AGE
+						if( $options['show_age'] ) {
+							$output .= $row_start . $options['age_label'] . $new_cell .  $age . $row_end;
+						}
+						
+						//EXPERIENCE
+						if( $options['show_experience'] ) {
+							$output .= $row_start . $options['experience_label'] . $new_cell .  $experience . $row_end;
+						}
+						
+						//HOME TOWN
+						if( $options['show_home_town'] ) {
+							$output .= $row_start . $options['home_town_label'] . $new_cell .  $home_town . $row_end;
+						}
+						
+						//LAST SCHOOL
+						if( $options['show_last_school'] ) {
+							$output .= $row_start . $options['last_school_label'] . $new_cell .  $last_school . $row_end;
+						}
+						
+						//COUNTRY
+						if( $options['show_country'] ) {
+							$output .= $row_start . $options['country_label'] . $new_cell .  $country . $row_end;
+						}
+						
+						//OTHER
+						if( $options['show_other_info'] ) {
+							$output .= $row_start . $options['other_info_label'] . $new_cell .  $other . $row_end;
+						}		
+				 $output .= "</tbody>\n";
 				$output .= "</table>\n";
 				
 				$output .= "</div> <!-- .player-info-container -->\n";
@@ -472,13 +430,125 @@ if ( !function_exists( 'mstw_tr_build_gallery' ) ) {
 			$so_sorry = sprintf( __( 'Sorry, no players were found for %s', 'mstw-team-rosters' ), $team_slug );
 			$output .= "<h1>$so_sorry</h1>";
 		}
-		
-		//$output .= "</div> <!--end .mstw_tr_gallery -->";
+
 		return $output;
 		
 	} //End: mstw_tr_build_gallery()
 }
 
+ //-----------------------------------------------------------
+ //	8. mstw_tr_build_player_photo: constructs the html for the 
+ //		player photo all front-end displays ...  
+ //		the single player profiles, roster galleries, and tables
+ //
+ if ( !function_exists( 'mstw_tr_build_player_photo' ) ) {
+	function mstw_tr_build_player_photo( $player, $team_slug, $options, $display = 'profile' ) {
+           
+		//1. Use the player photo (thumbnail) if available
+		//2. Else use the default-photo-team-slug.png from the plugin images dir
+		//3. Else use the team logo from the teams DB, if available,
+		//4. Else load the default-photo.png (mystery player) from the plugin images dir
+		
+		// $display - profile, gallery, table
+		
+		$default_img_dir = WP_PLUGIN_DIR . '/team-rosters/images/default-images/';
+		$default_img_url = plugins_url( ) . '/team-rosters/images/default-images/';
+		
+		/*
+		mstw_log_msg( 'in mstw_tr_build_player_photo ... ' );
+		mstw_log_msg( '$player->ID: ' . $player->ID );
+		mstw_log_msg( '$team_slug: ' . $team_slug );
+		
+		if( $player->ID == 293 ) {
+			mstw_log_msg( 'PLAYER 293 ... ' );
+			if( has_post_thumbnail( $player->ID ) )
+				mstw_log_msg( 'has post thumbnail' );
+			else
+				mstw_log_msg( 'does not have post thumbnail' );
+			mstw_log_msg( '$options: ' );
+			mstw_log_msg( $options );
+		}
+		*/
+		
+		//if( $thumbnail = get_the_post_thumbnail( $player->ID, 'full' ) ) {
+		if ( has_post_thumbnail( $player->ID ) ) { 
+			$photo_file_url = wp_get_attachment_thumb_url( get_post_thumbnail_id( $player->ID ) );
+			$first_name = get_post_meta($player->ID, 'player_first_name', true );
+			$last_name = get_post_meta($player->ID, 'player_last_name', true );
+			$alt = "$first_name $last_name";
+		} 
+		else {
+			// Default image can be tied to the team taxonomy 
+			// Try to load default-photo-team-slug.png, if it does not exist,
+			// load default-photo.png
+			$photo_file = $default_img_dir . 'default-photo-' . $team_slug . '.png';
+			if ( file_exists( $photo_file ) ) {
+				$photo_file_url = $default_img_url . 'default-photo-' . $team_slug . '.png';
+			}
+			else {
+				$photo_file_url = $default_img_url . 'default-photo.png';
+			}
+			$alt = 'No photo available';
+		}
+		
+		$photo_html = "<img src='$photo_file_url' alt='$alt' />";
+		
+		//
+		// add the link to the player profile, if appropriate
+		//
+		if ( $display != 'profile' ) {
+			if ( isset( $options['links_to_profiles'] ) and $options['links_to_profiles'] ) {
+				$photo_html = '<a href="' .  get_permalink( $player->ID ) . '">' . $photo_html . '</a>';
+			}
+		}
+			
+		return $photo_html;
+			
+	} //End: mstw_tr_build_player_photo()
+ }
+ 
+ //-----------------------------------------------------------
+ //	9. mstw_tr_build_player_name: constructs a player name based
+ //		on first, last, and $options['name_format']
+ //		Link to player profile is based on $display, profiles don't have links to themselves,
+ //		and $options['links_to_profiles']
+ //
+ if ( !function_exists( 'mstw_tr_build_player_name' ) ) {
+	function mstw_tr_build_player_name( $player, $options, $display = 'profile' ) {
+		
+		$first_name = get_post_meta($player->ID, 'player_first_name', true );
+		$last_name = get_post_meta($player->ID, 'player_last_name', true );
+		
+		switch ( $options['name_format'] ) { 
+			case 'first-last':
+				$player_name = ( $display == 'profile' ) ? $first_name . '<br/>' . $last_name : "$first_name $last_name";
+				break; 
+			case 'first-only':
+				$player_name = $first_name;
+				break;
+			case 'last-only':
+				$player_name = $first_name;
+				break;
+			case 'last-first':
+			default:
+				$player_name = ( $display == 'profile' ) ? $last_name . ',<br/>' . $first_name : "$last_name, $first_name";
+				break; 
+		} 
+		
+		$player_html = $player_name;
+		
+		if( $display != 'profile' ) {
+			if ( $options['links_to_profiles'] ) {
+				$player_html = '<a href="' .  get_permalink( $player->ID ) . '?roster_type=' . $options['roster_type'] . '" ';
+				$player_html .= '>' . $player_name . '</a>';
+			}
+		}
+		
+		return $player_html;
+		
+	} //End: mstw_tr_build_player_name()
+ }
+ 
 //----------------------------------------------------------------
 // 19. mstw_tr_admin_notice - Displays all admin notices; callback for admin_notices action
 //

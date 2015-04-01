@@ -39,14 +39,13 @@
 			
 			$options = wp_parse_args( get_option( 'mstw_tr_options' ), mstw_tr_get_bio_gallery_defaults( ) );
 			
-			mstw_log_msg( 'in mstw_tr_bio_gallery_section_setup ... ' );
+			//mstw_log_msg( 'in mstw_tr_bio_gallery_section_setup ... ' );
 			//mstw_log_msg( $options );
 			//mstw_log_msg( 'in mstw_tr_data_fields_section_setup ...' );
 			//mstw_log_msg( '$display_on_page= ' . $display_on_page );
 			//mstw_log_msg( '$page_section= ' . $page_section );
 			//mstw_log_msg( '$options= ' );
 			//mstw_log_msg( $options );
-			
 			
 			add_settings_section(
 				$page_section,
@@ -58,6 +57,16 @@
 			//return;
 
 			$arguments = array(
+				array( 	// Show or hide title (the team name)
+					'type' => 'checkbox', 
+					'id' => 'sp_show_title',
+					'name'	=> 'mstw_tr_options[sp_show_title]',
+					'value' => mstw_safe_ref( $options, 'sp_show_title' ),
+					'title'	=> __( 'Show Player Profile Title:', 'mstw-team-rosters' ),
+					'desc'	=> __( 'If checked, this will be the team name.', 'mstw-team-rosters' ),
+					'page' => $display_on_page,
+					'section' => $page_section,
+				),
 				array( 	// Title for BIO CONTENT
 					'type' => 'text', 
 					'id' => 'sp_content_title',

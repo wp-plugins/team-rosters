@@ -53,10 +53,28 @@
 				'mstw_tr_data_fields_inst',
 				$display_on_page
 				);
-			
-			//return;
 
 			$arguments = array(
+				array( 	// Show/hide player PHOTOS
+					'type' => 'show-hide', 
+					'id' => 'show_photos',
+					'name'	=> 'mstw_tr_options[show_photos]',
+					'value' => mstw_safe_ref( $options, 'show_photos' ), 
+					'title' => __( 'Show Player Photos:', 'mstw-team-rosters' ),
+					'desc'	=> __( 'Show Photos in roster tables" (Default: Hide)', 'mstw-team-rosters' ),
+					'page' => $display_on_page,
+					'section' => $page_section,
+				),
+				array( 	// Player PHOTO LABEL
+					'type' => 'text', 
+					'id' => 'photo_label',
+					'name'	=> 'mstw_tr_options[photo_label]',
+					'value' => mstw_safe_ref( $options, 'photo_label' ), 
+					'title' => __( 'Photo Column Label:', 'mstw-team-rosters' ),
+					'desc'	=> __( '(Default: Photo)', 'mstw-team-rosters' ),
+					'page' => $display_on_page,
+					'section' => $page_section,
+				),
 				array( 	// Show/hide NUMBER column
 					'type' => 'show-hide', 
 					'id' => 'show_number',

@@ -85,6 +85,7 @@ function mstw_tr_register_cpts( ) {
 			'slug' 			=> 'player',
 			'with_front' 	=> false,
 		),
+
 		
 		'supports' 			=> array( 'title', 'editor', 'thumbnail' ),
 		
@@ -136,9 +137,9 @@ function mstw_tr_register_cpts( ) {
 				'update_item' => __( 'Update Team', 'mstw-team-rosters' ),
 				'add_new_item' => __( 'Add New Team', 'mstw-team-rosters' ),
 				'new_item_name' => __( 'New Team Name', 'mstw-team-rosters' ),
-				'separate_items_with_commas' => __( 'Add game to one or more scoreboards (separate scoreboards with commas).', 'mstw-team-rosters' ),
+				'separate_items_with_commas' => __( 'Add Player to one or more Teams (separate Teams with commas).', 'mstw-team-rosters' ),
 				'add_or_remove_items' => __( 'Add or Remove Teams', 'mstw-team-rosters' ),
-				'choose_from_most_used' => __( 'Choose from the most used scoreboards', 'mstw-team-rosters' ),
+				'choose_from_most_used' => __( 'Choose from the most used teams', 'mstw-team-rosters' ),
 				'not_found' => __( 'No Teams Found', 'mstw-team-rosters' ),
 				'menu_name'  => __( 'Teams', 'mstw-team-rosters' ),
 			  );
@@ -163,6 +164,49 @@ function mstw_tr_register_cpts( ) {
 		
 	register_taxonomy( 'mstw_tr_team', 'mstw_tr_player', $args );
 	register_taxonomy_for_object_type( 'mstw_tr_team', 'mstw_tr_player' );
+	
+	
+	//----------------------------------------------------------------------------
+	// register mstw_ss_team post type
+	//
+	$args = array(
+		'public' 			=> true,
+		'show_ui'			=> true,
+		'show_in_menu'		=> false, //default is value of show_ui
+		'show_in_admin_bar' => false, //default is value of show_in_menu
+		
+		'menu_icon'     	=> $menu_icon_url,
+		//'show_in_menu' 		=> 'edit.php?post_type=scheduled_games',
+		'query_var' 		=> true, //default is mstw_ss_team
+		'rewrite' 			=> array(
+			'slug' 			=> 'mstw-ss-team',
+			'with_front' 	=> false,
+		),
+		
+		'supports' 			=> array( 'title' ),
+		
+		//post is the default capability type
+		'capability_type'	=> array( 'team', 'teams' ), 
+		
+		'map_meta_cap' 		=> true,
+		
+		'labels' 			=> array(
+									'name' => __( 'Teams', 'mstw-schedules-scoreboards' ),
+									'singular_name' => __( 'Team', 'mstw-schedules-scoreboards' ),
+									'all_items' => __( 'Teams', 'mstw-schedules-scoreboards' ),
+									'add_new' => __( 'Add New Team', 'mstw-schedules-scoreboards' ),
+									'add_new_item' => __( 'Add Team', 'mstw-schedules-scoreboards' ),
+									'edit_item' => __( 'Edit Team', 'mstw-schedules-scoreboards' ),
+									'new_item' => __( 'New Team', 'mstw-schedules-scoreboards' ),
+									//'View Game Schedule' needs a custom page template that is of no value.
+									'view_item' => null, 
+									'search_items' => __( 'Search Teams', 'mstw-schedules-scoreboards' ),
+									'not_found' => __( 'No Teams Found', 'mstw-schedules-scoreboards' ),
+									'not_found_in_trash' => __( 'No Teams Found In Trash', 'mstw-schedules-scoreboards' ),
+									)
+		);
+		
+	register_post_type( 'mstw_ss_team', $args);
 	
 
 } //End: mstw_tr_register_cpts( )

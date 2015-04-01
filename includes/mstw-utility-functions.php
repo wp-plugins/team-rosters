@@ -43,6 +43,8 @@
  * 15. mstw_has_admin_rights - checks is the CURRENT USER has mstw admin rights
  * 16. mstw_user_has_plugin_rights - check if the CURRENT USER has admin rights for
  *									 specified plugin
+ * 16.1 mstw_user_has_ss_rights - FOR COMPATIBILITY ONLY - use mstw_user_has_plugin_rights('ss')
+ *			check if the CURRENT USER has admin rights for MSTW Schedules & Scoreboards plugin
  * 17. mstw_admin_notice - Displays all admin notices; callback for admin_notices action
  * 18. mstw_add_admin_notice - Adds admin notices to transient for display on admin_notices hook
  *----------------------------------------------------------------------------*/
@@ -115,17 +117,18 @@ if( !function_exists( 'mstw_safe_ref' ) ) {
 //------------------------------------------------------------------------------
 //	4. mstw_build_css_rule - builds css rules
 //		Arguments:
-//			$options - array of options
+//			$options: array of options (settings DB)
 //			$option_key: key for options in array 
 //			$css_base: base for css rule (e.g. 'background-color' )
+//			$suffix: string to add on end of rule (E.G. 'px' at the end of width)
 //		Returns:
 //			css rule "css_base:options[option_key]; \n"
 //				or "" on an error	
 //
 if ( !function_exists( 'mstw_build_css_rule' ) ) {		
-	function mstw_build_css_rule( $options, $option_key, $css_base ) {
+	function mstw_build_css_rule( $options, $option_key, $css_base, $suffix='' ) {
 		if ( isset( $options[$option_key] ) and !empty( $options[$option_key] ) ) {
-			return $css_base . ":" . $options[$option_key] . "; \n";	
+			return $css_base . ":" . $options[$option_key] . $suffix . "; \n";	
 		} 
 		else {
 			return "";
@@ -790,6 +793,7 @@ if ( !function_exists( 'mstw_has_admin_rights' ) ) {
 	} //End: mstw_has_admin_rights( )
 }
 
+
 //-------------------------------------------------------------------------------
 // 16. mstw_has_plugin_rights - check if the CURRENT USER has 
 //							Schedules & Scoreboards admin rights
@@ -811,6 +815,23 @@ if ( !function_exists( 'mstw_user_has_plugin_rights' ) ) {
 	} //End: mstw_user_has_plugin_rights( )
 }
 
+//-------------------------------------------------------------------------------
+// 16.1 mstw_has_ss_rights - check if the CURRENT USER has 
+//							Schedules & Scoreboards admin rights
+//		ARGUMENTS: 	none
+//		RETURNS: 	true if the current user has rights
+//				 	false otherwise	
+//
+// THIS IS HERE FOR COMPATIBILITY PURPOSES ONLY. 
+// IT CALLS mstw_user_has_plugin_rights()
+//
+if ( !function_exists( 'mstw_user_has_ss_rights' ) ) { 	
+	function mstw_user_has_ss_rights( ) {
+		return mstw_user_has_plugin_rights( 'ss' );
+	} //End: mstw_user_has_ss_rights( )
+}
+
+
 //----------------------------------------------------------------
 // 17. mstw_admin_notice - Displays all admin notices; callback for admin_notices action
 //		ARGUMENTS: 	$transient - transient where messages are stored
@@ -819,7 +840,7 @@ if ( !function_exists( 'mstw_user_has_plugin_rights' ) ) {
 //
 if ( !function_exists ( 'mstw_admin_notice' ) ) {
 	function mstw_admin_notice( $transient = 'mstw_admin_messages' ) {
-		//mstw_log_msg( 'in mstw_ss_admin_notice ... ' );
+		
 		if ( get_transient( $transient ) !== false ) {
 			// get the types and messages
 			$messages = get_transient( $transient );

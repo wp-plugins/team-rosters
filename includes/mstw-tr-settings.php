@@ -233,10 +233,10 @@ if( !function_exists( 'mstw_tr_player_profiles_galleries_help' ) ) {
 //
 if( !function_exists( 'mstw_tr_validate_settings' ) ) { 
 	function mstw_tr_validate_settings( $input ) {
-		mstw_log_msg( 'in mstw_tr_validate_settings ...' );
-		mstw_log_msg( $_POST );
-		mstw_log_msg( '$input = ' );
-		mstw_log_msg( $input );
+		//mstw_log_msg( 'in mstw_tr_validate_settings ...' );
+		//mstw_log_msg( $_POST );
+		//mstw_log_msg( '$input = ' );
+		//mstw_log_msg( $input );
 		
 		// only replace existing settings with valid $input values
 		$output = get_option( 'mstw_tr_options' );
@@ -245,9 +245,6 @@ if( !function_exists( 'mstw_tr_validate_settings' ) ) {
 		// Default to first/main settings tab
 		$current_tab = ( isset( $_POST['current_tab'] ) ) ? $_POST['current_tab'] : 'data-fields-columns-tab';
 
-		//
-		// THIS IS NOT RIGHT ... HAVE TO GO BY TAB
-		//
 		//check if the reset button was pressed and confirmed
 		//array_key_exists() returns true for null, isset does not
 		if ( array_key_exists( 'reset', $input ) ) {
@@ -256,15 +253,15 @@ if( !function_exists( 'mstw_tr_validate_settings' ) ) {
 				// reset to defaults
 				switch( $current_tab ) {
 					case 'data-fields-columns-tab':
-						mstw_log_msg( '$output(orig) = ' );
-						mstw_log_msg( $output );
-						mstw_log_msg( 'data_fields_columns_defaults = ' );
-						mstw_log_msg( mstw_tr_get_data_fields_columns_defaults( ) );
+						//mstw_log_msg( '$output(orig) = ' );
+						//mstw_log_msg( $output );
+						//mstw_log_msg( 'data_fields_columns_defaults = ' );
+						//mstw_log_msg( mstw_tr_get_data_fields_columns_defaults( ) );
 						
 						$output = array_merge( $output,mstw_tr_get_data_fields_columns_defaults( ) );
 						
-						mstw_log_msg( '$output(merged) = ' );
-						mstw_log_msg( $output );
+						//mstw_log_msg( '$output(merged) = ' );
+						//mstw_log_msg( $output );
 						
 						$msg = __( 'Data fields & columns settings reset to defaults.', 'mstw-team-rosters');
 						break;
@@ -309,14 +306,17 @@ if( !function_exists( 'mstw_tr_validate_settings' ) ) {
 						switch( $key ) {
 							case 'table_photo_width':
 							case 'table_photo_height':
-								// check numbers
-						if( $input[$key] != '' and 
-							( intval( $input[$key]) <= 0 or
-							  (string)$input[$key] != (string)intval( $input[$key] ) or
-							  $input[$key] != abs( $input[$key] ) 
-							) ) {	
+								// check numbers ... blanks or positive integers
+								if( $input[$key] == '' ) {
+									$output[$key] = '';
+								}
+								else if ( $input[$key] != '' and 
+										( intval( $input[$key] ) <= 0 or
+										  (string)$input[$key] != (string)intval( $input[$key] ) or
+										  $input[$key] != abs( $input[$key] ) ) 
+										) {	
 									// set error message and don't change settings
-									$msg = sprintf( __( 'Error with %s. Reset to previous value.', 'mstw-team-roster' ), $key );
+									$msg = sprintf( __( 'Error with %s = \'%s\'. Reset to previous value.', 'mstw-team-roster' ), $key, $input[$key] );
 									mstw_add_admin_notice( 'mstw_tr_admin_messages', 'error', $msg );
 								} else {
 									$output[$key] = abs( intval( $input[$key] ) );
@@ -332,7 +332,11 @@ if( !function_exists( 'mstw_tr_validate_settings' ) ) {
 					break;
 					
 				case 'roster-colors-tab':
-					mstw_log_msg( 'validating ... $current_tab= roster-colors-tab' );
+					//mstw_log_msg( 'validating ... $current_tab= roster-colors-tab' );
+					
+					// checkboxes are unique
+					$output['use_team_colors'] = isset( $input['use_team_colors'] ) and $input['use_team_colors'] == 1 ? 1 : 0;
+					
 					foreach( $input as $key => $value ) {
 						$sanitized_color = mstw_sanitize_hex_color( $input[$key] );
 						// decide what to do - save new setting 
@@ -355,27 +359,35 @@ if( !function_exists( 'mstw_tr_validate_settings' ) ) {
 					
 				case 'bio-gallery-tab':
 					mstw_log_msg( 'validating ... $current_tab= bio-gallery-tab' );
+					// checkboxes are unique
+					$output['sp_show_title'] = isset( $input['sp_show_title'] ) and $input['sp_show_title'] == 1 ? 1 : 0;
+					
 					foreach( $input as $key => $value ) {
 						switch( $key ) {
 							case 'sp_content_title':  // text settings
+							case 'sp_show_title':
 								$output[$key] = ( sanitize_text_field( $input[$key] ) == $input[$key] ) ? $input[$key] : $output[$key];
 								break;
 							
-							case 'sp_image_width': // number settings
+							case 'sp_image_width':
 							case 'sp_image_height':
-								if( $input[$key] != '' and 
-									( intval( $input[$key]) <= 0 or
-									(string)$input[$key] != (string)intval( $input[$key] ) or
-									$input[$key] != abs( $input[$key] ) 
-									) ) {	
+								// check numbers ... blanks or positive integers
+								if( $input[$key] == '' ) {
+									$output[$key] = '';
+								}
+								else if ( $input[$key] != '' and 
+										( intval( $input[$key] ) <= 0 or
+										  (string)$input[$key] != (string)intval( $input[$key] ) or
+										  $input[$key] != abs( $input[$key] ) ) 
+										) {	
 									// set error message and don't change settings
-									$msg = sprintf( __( 'Error with %s. Reset to previous value.', 'mstw-team-roster' ), $key );
+									$msg = sprintf( __( 'Error with %s = \'%s\'. Reset to previous value.', 'mstw-team-roster' ), $key, $input[$key] );
 									mstw_add_admin_notice( 'mstw_tr_admin_messages', 'error', $msg );
 								} else {
 									$output[$key] = abs( intval( $input[$key] ) );
 								}
-								break;
-								
+								break;	
+
 							default: //color settings
 								$sanitized_color = mstw_sanitize_hex_color( $input[$key] );
 								// decide what to do - save new setting 

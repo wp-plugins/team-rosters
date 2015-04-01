@@ -1,0 +1,312 @@
+/*
+CSS File for Team Rosters Plugin
+Theme URI: http://shoalsummitsolutions.com
+Author: Mark O'Donnell
+Author URI: http://shoalsummitsolutions.com
+Description: Styles required for the Team Rosters Plugin.
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+*/
+/*---------------------------------------------------------------------------
+ *	MSTW Wordpress Plugins (http://shoalsummitsolutions.com)
+ *	Copyright 2014-15 Mark O'Donnell (mark@shoalsummitsolutions.com)
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU General Public License as published by
+ *	the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *	GNU General Public License for more details.
+ *
+ *	You should have received a copy of the GNU General Public License
+ *	along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*-------------------------------------------------------	
+ *	Custom post type "player" single page styles 
+ *------------------------------------------------------*/
+ 
+/* player-header contains player photo and information */
+div.player-header {
+	background-color: #dce6f1; 				/*MS default - very light blue*/
+	color: #000;							/*MS default - black*/
+	width: 100%;
+	/*height: 162px;*/
+	float: left;
+	font-size: 12px;
+	padding: 10px 0;
+}
+
+h1.player-head-title {
+	color: #000;						/*MS default */
+	font-size: 24px;
+	font-weight: bold;
+}
+
+/* player-photo is coming from the featured image */
+#player-photo {
+	float: left;
+	padding-left: 20px;
+	/* display: inline; */
+	line-height: 0;
+}
+
+#player-photo img {
+	border: 1px solid #bbb;
+	padding: 5px;
+	background-color: #eee;
+	width: 150px;
+	height: 150px;
+}
+
+#player-name-nbr {
+	float: left;
+	/*position: absolute;*/
+	padding: 18px 0 20px 20px;
+	display: inline;
+}
+
+.player-header #player-name-nbr #number {
+	float: left;
+	font-size: 72px;
+	line-height: 1em;
+	display: inline;
+}
+
+.player-header #player-name-nbr #player-name {
+	float: left;
+	font-size: 24px;
+	line-height: 36px;
+	padding-left: 10px;
+	display: inline;
+	margin-right: 20px;
+}
+			
+#player-info {
+	float: left;
+	font-size: 14px;
+	line-height: 16px;
+	border-left: 1px solid #fff;
+}
+
+#player-info p {
+	margin-bottom: 0px;
+}
+
+table#player-info {
+	width: auto;
+	font-size: 16px;
+	/*padding-left: 10px;*/
+	/*margin-left: 20px;*/
+}
+
+table#player-info td {
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+table#player-info td.lf-col {
+	text-align: right;
+	font-weight: bold; 
+	padding-left: 10px;
+}
+	
+table#player-info td.rt-col {
+	text-align: left;
+	padding-left: 6px;
+}
+
+/* 	
+ *	player-bio contains whatever is in the post content 
+ *	bio, stats, etc.
+ */			
+.player-bio {
+	clear: both;
+	border-style: solid;
+	border-width: 2px;
+	/*border-color: #ffc831; 			/*MC Football - yellow */
+	/*border-color: #5899E6; 			/*MCS Athletics - carolina blue */
+	border-color: #1982d1; 				/*Twentyeleven Default - lt blue */
+}
+
+.player-bio h1 {
+	padding: 0 15px;
+	font-size: 18px;
+	font-weight: bold;
+	/*color: #b8202e; 					/*MC Football - red */
+	/*color: #5899E6; 					/*MCS Athletics - carolina blue */
+	/*color: #000;						/*MS Default - black */
+	color: #1982d1;						/*Twentyeleven Default - lt blue */
+}
+
+.player-bio h2 {
+	padding: 0 15px;
+	font-size: 15px;
+	/*color: #b8202e; 					/*MC Football - red */
+	/*color: #5899E6; 					/*MCS Athletics - carolina blue */
+	color: #000;						/*MS Default - black */
+}
+
+.player-bio h3 {
+	padding: 0 15px;
+	font-size: 13px;
+	text-transform: uppercase;
+	/*color: #b8202e; 					/*MC Football - red */
+	/*color: #5899E6; 					/*MCS Athletics - carolina blue */
+	color: #000;						/*MS Default - black */
+}
+
+.player-bio p {
+	padding: 0 15px;
+	font-size: 12px;
+	margin-bottom: 1.0em;
+}
+
+/*-------------------------------------------------------	
+ *	Roster table settings
+ *------------------------------------------------------*/
+
+h1.mstw_tr_roster_title {
+	color: inherit;
+	font-size: 24px;
+	margin-top: 24px;
+	margin-bottom: 12px;
+	}
+ 
+table.mstw-tr-table thead tr  th {
+	background-color: #4e81db;		/*MS default */
+	color: #fff; 					/*MS default */
+	vertical-align: middle;
+	padding-left: 5px;
+	text-align: left;
+	}
+
+table.mstw-tr-table tr:nth-child(odd) {
+	background-color: #dce6f1;		/*MS default */
+	color: #000;					/*MS default */
+	vertical-align: middle;
+	}
+
+table.mstw-tr-table tr:nth-child(even) {
+	vertical-align: middle;
+	background-color: fff; 			/*MS default */
+	color: 000; 					/*MS default */
+	}
+	
+table.mstw-tr-table tbody tr td  {
+	padding-left: 5px;
+	/* this is needed down this low in the stack to override twentyeleven defaults */
+	border-top: #95b3d7 solid 1px;  		/* MS default */
+	border-bottom: #95b3d7 solid 1px;  		/* MS default */
+	vertical-align: middle;
+	text-align: left;
+	}
+
+table.mstw-tr-table tbody tr td a:link, table.mstw-tr-table tbody tr td a:visited {	
+	/* you have finer control here than you do with the admin settings */
+	color: #1982d1; 		
+	vertical-align: middle;
+	text-decoration: none;
+	}
+	
+table.mstw-tr-table tbody tr td a:hover {	
+	text-decoration: underline;
+	}
+
+table.mstw-tr-table tbody tr td a:active {	
+	color: #1982d1;
+	}
+
+table.mstw-tr-table tbody tr td img {
+	border: 1px solid #BBB;
+	padding: 5px;
+	background-color: #EEE;
+	margin-left: 0; /*10px;*/
+	height: 64px;
+	width: 64px;
+	}
+ 
+/*-------------------------------------------------------	
+ *	"Teams/team-slug" taxonomy page - creates 'gallery page' 
+ *------------------------------------------------------*/
+ 
+ #content-player-gallery {
+	margin: 0 7.6% 0 7.6%;
+	width: 84.8%;
+	}
+
+h1.team-head-title {
+	font-size: 28px;
+	color: #5899E6;
+	}
+
+.player-tile {
+	float: left;
+	margin: 15px;
+	width: 230px;
+	/*color: #00004F; 					/*MCS Athletics - sample */
+	color: #000;						/*MS default - black*/
+	/* background-color: #5899E6;		/*MCS Athletics - sample */
+	background-color: #dce6f1; 			/*MS default - very light blue*/
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	}
+ 
+.player-tile img {
+	border:           1px solid #bbb;
+	padding:          5px;
+	background-color: #eee;
+	margin-top:       10px;
+	margin-left:      10px;
+	width:            125px;
+	height:           125px;
+	}
+ 
+.player-info-container .player-name-number {
+	font-size:   16px;
+	font-weight: bold;
+	color:       #00004f;
+	}
+
+div.player-name, div.player-number {
+	display: inline;
+	}
+	
+div.player-number {
+	margin-right: 10px;
+	}
+
+div.player-name a:link, div.player-name a:visited {
+	color:           #1982d1;
+	text-decoration: none;
+	}
+	
+div.player-name a:hover {
+	text-decoration: underline;
+	}
+ 
+div.player-name a:active {
+	text-decoration: none;
+	}
+	
+.player-info-container table.player-info {
+	padding: 0 5px 5px 5px;
+	margin: 0;
+	/*layout: fixed;*/
+	width: 100%;
+	font-size: 12px;
+	border: 0 solid #fff;
+	color: #333;
+	}
+ 
+.player-info-container .player-name-number {
+	padding: 0 5px 5px 5px;
+	}
+
+table.player-info tr td {
+	border: 0 solid blue;
+	padding: 0px 5px 5px 5px;
+	}	

@@ -20,6 +20,23 @@
  *	along with this program. If not, see <http://www.gnu.org/licenses/>.
  *-------------------------------------------------------------------------*/
 
+ 
+ // ----------------------------------------------------------------
+// Remove the row actions
+//	
+add_filter( 'mstw_tr_team_row_actions', 'mstw_tr_team_row_actions' ); //, 10, 2 );
+
+function mstw_tr_team_row_actions( $actions ) { //, $post ) {
+		 
+	unset( $actions['inline hide-if-no-js'] );
+	unset( $actions['view'] );
+	unset( $actions['delete'] );
+	unset( $actions['edit'] );
+		
+	return $actions;
+	
+} //End: mstw_tr_team_row_actions( )
+
  //----------------------------------------------------------------------
  // Add MSTW SS team link to team taxonomy add & edit screens
  // 
@@ -88,7 +105,7 @@
 			
 			$team_links = get_option( 'mstw_tr_ss_team_links' );
 				
-			$curr_link = array_key_exists( $team_slug, $team_links ) ? $team_links[$team_slug] : -1;
+			$curr_link = ( $team_links && array_key_exists( $team_slug, $team_links ) ) ? $team_links[$team_slug] : -1;
 			
 			?>
 			<tr class="form-field">
@@ -164,10 +181,10 @@ if ( !function_exists( 'mstw_tr_manage_team_columns' ) ) {
 		// check for a link to an SS team
 		$tr_ss_links = get_option( 'mstw_tr_ss_team_links' );
 		
-		if ( array_key_exists( $team_slug, $tr_ss_links ) ) {
+		if ( $tr_ss_links && array_key_exists( $team_slug, $tr_ss_links ) ) {
 			$ss_slug = $tr_ss_links[$team_slug];
 			$ss_team_obj = get_page_by_path( $ss_slug, OBJECT, 'mstw_ss_team' );
-			$out = get_the_title( $ss_team_obj->ID ); 
+			$out = ( $ss_team_obj ) ? get_the_title( $ss_team_obj->ID ) : ''; 
 		}
 		
 		return $out;    
@@ -187,33 +204,35 @@ if ( !function_exists( 'mstw_tr_manage_team_columns' ) ) {
 		//mstw_log_msg( '$term_id= ' . $term_id );
 		//mstw_log_msg( $_POST );
 		
-		$team = $_POST['slug'];
-		
-		//mstw_log_msg( '$sport= ' . $sport );
-		
-		// load existing sports metadata
-		$team_links = get_option( 'mstw_tr_ss_team_links' );
-		
-		// sanitize the inputs
-		if ( isset( $_POST['tr-ss-team-link'] ) ) {
-			//build the team slug from either the Name or Slug entry
-			$team_slug = ( isset( $_POST['slug'] ) && !empty( $_POST['slug'] ) ) ? sanitize_title( $_POST['slug'] ) : sanitize_title( $_POST['tag-name'] );
+		//this is here in case function gets called from CSV import
+		if ( array_key_exists( 'slug', $_POST ) ) {
+			$team = $_POST['slug'];
 			
-			// $team_slug is the team taxomony $_POST is the SS team ID
-			$link_pair = array( $team_slug => $_POST['tr-ss-team-link'] ); 
-	
-			//mstw_log_msg ( '$link_pair = ' );
-			//mstw_log_msg ( $link_pair );
+			//mstw_log_msg( '$sport= ' . $sport );
 			
-			$new_links = ($team_links) ? array_merge( $team_links, $link_pair ) : $link_pair;
+			// load existing sports metadata
+			$team_links = get_option( 'mstw_tr_ss_team_links' );
 			
-			//mstw_log_msg ( '$new_links = ' );
-			//mstw_log_msg ( $new_links );
-			
-			update_option( 'mstw_tr_ss_team_links', $new_links );
+			// sanitize the inputs
+			if ( isset( $_POST['tr-ss-team-link'] ) ) {
+				//build the team slug from either the Name or Slug entry
+				$team_slug = ( isset( $_POST['slug'] ) && !empty( $_POST['slug'] ) ) ? sanitize_title( $_POST['slug'] ) : sanitize_title( $_POST['tag-name'] );
 				
-		}
+				// $team_slug is the team taxomony $_POST is the SS team ID
+				$link_pair = array( $team_slug => $_POST['tr-ss-team-link'] ); 
 		
+				//mstw_log_msg ( '$link_pair = ' );
+				//mstw_log_msg ( $link_pair );
+				
+				$new_links = ($team_links) ? array_merge( $team_links, $link_pair ) : $link_pair;
+				
+				//mstw_log_msg ( '$new_links = ' );
+				//mstw_log_msg ( $new_links );
+				
+				update_option( 'mstw_tr_ss_team_links', $new_links );
+					
+			}
+		}
 	} //End: mstw_tr_save_team_meta()
  }
 

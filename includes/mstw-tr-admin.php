@@ -102,6 +102,10 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 			
 			include_once 'mstw-tr-settings.php';
 			
+			
+		
+			include_once 'mstw-tr-data-migration-page.php';
+
 			// Settings for the fields and columns display and label controls.
 			if ( false == get_option( 'mstw_tr_options' ) ) {
 				add_option( 'mstw_tr_options' );
@@ -121,6 +125,8 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 			wp_register_style( 'players-screen-styles', plugins_url( 'mstw-tr-admin-styles.css', __FILE__ ) );
 			//mstw_log_msg( plugins_url( 'mstw-tr-admin-styles.css', __FILE__ ) );
 			mstw_tr_load_admin_styles( );
+			
+			ob_start();
 		
 			
 		} //End: mstw_tr_admin_init()
@@ -281,7 +287,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 	function mstw_tr_register_menu_pages( ) {
 		//mstw_log_msg( 'including mstw-tr-import-class' );
 		include_once 'mstw-tr-import-class.php';
-
+		
 		//Top Level Menu
 		
 		$rosters_page = add_menu_page( __( 'Team Rosters', 'mstw-team-rosters' ), //$page_title, 
@@ -292,7 +298,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 					   plugins_url( 'images/mstw-admin-menu-icon.png', dirname( __FILE__ ) ), //$menu_icon
 					   "58.75" //menu order
 					 );
-		//mstw_log_msg( 'admin_print_styles-' . $rosters_page );			 
+		//mstw_log_msg( 'admin_print_styles-' . $rosters_page );
 		
 		//Players			 
 		$players_page = add_submenu_page( 
@@ -306,7 +312,21 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 						
 		add_action( 'admin_print_styles-' . $players_page, 'mstw_tr_load_admin_styles');
 		
-		mstw_log_msg( 'admin_print_styles-' . $players_page );
+		//
+		//TESTING SS TEAMS
+		//
+		$test_page = add_submenu_page( 
+							'edit.php?post_type=mstw_tr_player', 
+							__( 'SS Teams', 'mstw-team-rosters' ), //page title
+							__( 'SS Teams', 'mstw-team-rosters' ), //menu title
+							'read', // Capability required to see this option.
+							'my-test-slug', //'edit.php?post_type=mstw_ss_team', // Slug name to refer to this menu
+							'test_callback' //'edit.php?post_type=mstw_ss_team' //					
+							); // Callback to output content
+							
+		add_action( "load-$test_page", 'test_redirect' );
+		
+		//mstw_log_msg( 'admin_print_styles-' . $players_page );
 		
 		//Teams (taxonomy)			 
 		$teams_page = add_submenu_page( 
@@ -335,21 +355,47 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		//
 		add_action( "load-$settings_page", 'mstw_tr_settings_help' );
 		
-							
+		//
+		// Data Migration (from 3.1.2)
+		//
+		if ( true ) {
+		//if( post_type_exists( 'player' ) and get_option( 'mstw_team_rosters_activated' ) ) {
+		$migration_page = add_submenu_page (
+							'edit.php?post_type=mstw_tr_player',  //parent slug
+							__( 'Migrate Data from Version 3.1.2', 'mstw-team-rosters' ),   //page title
+							__( '3.1.2 Data Migration', 'mstw-team-rosters' ),  //menu title
+							'read',  //user capability required to access
+							'mstw-tr-data-migration',  //unique menu slug
+							'mstw_tr_data_migration_page'  //callback to display page
+							);
+		}
 
-		//require_once ABSPATH . '/wp-admin/admin.php'; - not needed?
-		//mstw_log_msg( 'creating new MSTW_TR_ImporterPlugin' );
+		//
+		// CSV Import
 		$plugin = new MSTW_TR_ImporterPlugin;
 		
 		add_submenu_page(	'edit.php?post_type=mstw_tr_player',
 							'Import Roster from CSV File',			//page title
 							'CSV Roster Import',					//menu title
 							'manage_options',
-							'mstw_tr_csv_import',
+							'mstw-tr-csv-import',
 							array( $plugin, 'form' )
 						);
 							
 		// Now also add action to load java scripts ONLY when you're on this page
+	}
+	
+	function test_callback( ) {
+		return;
+		echo '<h1>Test Callback</h1>';
+		//ob_start();
+		//wp_redirect( 'http://mstw.dev/wp-admin/edit.php?post_type=mstw_tr_player', 302 );
+		//exit;
+	}
+	
+	function test_redirect( ) {
+		wp_redirect( 'http://mstw.dev/wp-admin/edit.php?post_type=mstw_ss_team', 302 );
+		exit;
 	}
 
 	
@@ -417,14 +463,14 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		//mstw_log_msg( $messages );
 		
 		 $messages['mstw_tr_team'] = array(
-										0 => '',
-										1 => __( 'Team added.', 'mstw-team-rosters' ),
-										2 => __( 'Team deleted.', 'mstw-team-rosters' ),
-										3 => __( 'Team updated.', 'mstw-team-rosters' ),
-										4 => __( 'Team not added.', 'mstw-team-rosters' ),
-										5 => __( 'Team not updated.', 'mstw-team-rosters' ),
-										6 => __( 'Teams deleted.', 'mstw-team-rosters' ),
-									);
+					0 => '',
+					1 => __( 'Team added.', 'mstw-team-rosters' ),
+					2 => __( 'Team deleted.', 'mstw-team-rosters' ),
+					3 => __( 'Team updated.', 'mstw-team-rosters' ),
+					4 => __( 'Team not added.', 'mstw-team-rosters' ),
+					5 => __( 'Team not updated.', 'mstw-team-rosters' ),
+					6 => __( 'Teams deleted.', 'mstw-team-rosters' ),
+				);
 									
 		//mstw_log_msg( $messages );
 		

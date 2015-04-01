@@ -21,7 +21,7 @@
  *	along with this program. If not, see <http://www.gnu.org/licenses/>.
  *--------------------------------------------------------------------------*/
  
-if( !class_exists( 'MSTW_TR_ImporterPlugin' ) ) {
+ if( !class_exists( 'MSTW_TR_ImporterPlugin' ) ) {
 	class MSTW_TR_ImporterPlugin {
 		var $defaults = array(
 			'csv_post_title'      => null,
@@ -91,7 +91,7 @@ if( !class_exists( 'MSTW_TR_ImporterPlugin' ) ) {
 
 	<div class="wrap">
 		<?php echo get_screen_icon(); ?>
-		<h2>Import CSV</h2>
+		<h2><?php _e( 'Import CSV', 'mstw-team-rosters' ) ?></h2>
 		<form class="add:the-list: validate" method="post" enctype="multipart/form-data">
 		
 			<!-- Team taxonomy -->
@@ -115,11 +115,11 @@ if( !class_exists( 'MSTW_TR_ImporterPlugin' ) ) {
 									'hide_if_empty'      => false
 								); ?>
 								
-			<p>Select Team to Import:  <?php wp_dropdown_categories( $args );?><br/>
+			<p><?php _e( 'Select Team to Import:', 'mstw-team-rosters' );    wp_dropdown_categories( $args );?><br/>
 			</p>
 
 			<!-- File input -->
-			<p><label for="csv_import">Upload file:</label><br/>
+			<p><label for="csv_import"><?php _e( 'Upload file:', 'mstw-team-rosters') ?></label><br/>
 				<input name="csv_import" id="csv_import" type="file" value="" aria-required="true" /></p>
 			<p class="submit"><input type="submit" class="button" name="submit" value="Import" /></p>
 		</form>
@@ -181,19 +181,21 @@ if( !class_exists( 'MSTW_TR_ImporterPlugin' ) ) {
 			
 			// Check that a team has been selected
 			echo '<p>$opt_cat(ID): ' . $opt_cat;
-			$term = get_term_by( 'id', $opt_cat, 'mstw_tr_team' );
-			echo ' Team slug: ' . $term->slug . '</p>';
-			if ( $term ) {
-				echo 'Team slug: ' . $term->slug . '</p>';
+			if ( $opt_cat >0 ) {
+				$term = get_term_by( 'id', $opt_cat, 'mstw_tr_team' );
+				echo ' Team slug: ' . $term->slug . '</p>';
+				if ( $term ) {
+					echo 'Team slug: ' . $term->slug . '</p>';
+				}
 			}
 			else {
-				$this->log['error'][] = 'Please select a team. Exiting.';
-				$this->print_messages();
-				return;
+				$this->log['error'][] = __( 'No Team Selected. Using player_team column from CSV file.', 'mstw-team-rosters' );
+				//$this->print_messages();
+				//return;
 			}
 			// Check that a file has been uploaded
 			if ( empty($_FILES['csv_import']['tmp_name']) ) {
-				$this->log['error'][] = 'Please select a file. Exiting.';
+				$this->log['error'][] = __( 'Please select a CSV file. Exiting.', 'mstw-team-rosters' );
 				$this->print_messages();
 				return;
 			}
@@ -201,9 +203,9 @@ if( !class_exists( 'MSTW_TR_ImporterPlugin' ) ) {
 			echo '<p> Loading DataSource ... </p>';
 			if ( !class_exists( 'File_CSV_DataSource' ) ) {
 				require_once 'DataSource.php';
-				echo '<p> Done. </p>';
+				echo '<p>' . __( 'Done.', 'mstw-team-rosters' ) . '</p>';
 			} else {
-				echo '<p> Alrady loaded. </p>';
+				echo '<p>' . __( 'Already loaded.', 'mstw-team-rosters' ) . '</p>';
 			}
 
 			$time_start = microtime(true);
@@ -251,13 +253,20 @@ if( !class_exists( 'MSTW_TR_ImporterPlugin' ) ) {
 			if ($skipped) {
 				$this->log['notice'][] = "<b>Skipped {$skipped} posts (most likely due to empty title, body and excerpt).</b>";
 			}
-			$this->log['notice'][] = sprintf("<b>Imported {$imported} posts to {$term->slug} in %.2f seconds.</b>", $exec_time);
+			
+			$term_msg = ( isset( $term ) ) ? $term->slug : __( 'teams from CSV file', 'mstw-team-rosters' );
+			
+			$this->log['notice'][] = '<b>' . sprintf( __( 'Imported %s posts to %s in %.2f seconds.', 'mstw-team-rosters' ), $imported, $term_msg, $exec_time ) . '</b>';
+			//sprintf( __('You have %d tacos', 'plugin-domain'), $number );
 			$this->print_messages();
 		}
 
 		function create_post( $data, $options ) {
+			//mstw_log_msg( 'in create_post ...' );
+			//mstw_log_msg( $options );
+			
 			extract( $options );
-
+			
 			$data = array_merge( $this->defaults, $data );
 
 			// The post type is hardwired for this plugin's custom post type
@@ -271,53 +280,80 @@ if( !class_exists( 'MSTW_TR_ImporterPlugin' ) ) {
 					'Unknown post type "%s".', $type);
 			}
 			
-			$temp_title = '';
-			echo '<p>First Name: ' . $data['First Name'] . '</p>';
-			if ( $data['First Name'] != '' ) {
-				$temp_title .= $data['First Name'];
-			} else if ( $data['First'] != '' ) {
-				$temp_title .= $data['First'];
-			}
-			echo '<p>Last Name: ' . $data['Last Name'] . '</p>';
-			if ( $data['Last Name'] != '' ) {
-				if ( $temp_title != '' ) //add a space between the names
-					$temp_title .= ' ';
-				$temp_title .= $data['Last Name'];
-			} else if ( $data['Last'] != '' ) {
-				if ( $temp_title != '' ) 
-					$temp_title .= ' ';  //add a space between the names
-				$temp_title .= $data['Last'];
+			$temp_title = ( $data['player_title'] != '' ) ? $data['player_title'] : '';
+			
+			//$temp_title = '';
+			//echo '<p>First Name: ' . $data['player_first'] . '</p>';
+			//if ( $data['player_first'] != '' ) {
+				///$temp_title .= $data['First Name'];
+			//} 
+			if ( $temp_title == '' ) {
+				if( $data['player_first_name'] != '' && $data['player_last_name'] != '' ) {
+					$temp_title = "{$data['player_first_name']} {$data['player_last_name']}";
+				}
+				else if( $data['player_first_name'] != '' ) {
+					$temp_title = $data['player_first_name'];
+				}
+				else if( $data['player_last_name'] != '' ) {
+					$temp_title = $data['player_last_name'];
+				}
+				else {
+					$temp_title = __( 'No first or last name.', 'mstw-team-rosters' );
+				}
 			}
 			
-			if ( $temp_title == '' )
-				$temp_title = __( 'No first or last name', 'mstw-loc-domain' );
-			else
-				$temp_slug = sanitize_title( $temp_title );  
-			
-			echo '<p>Title: ' . $temp_title . ' Slug: ' . $temp_slug . '</p>';
-			echo '<p>$opt_cat(ID): ' . $opt_cat . '</p>';
-			$term = get_term_by( 'id', $opt_cat, 'mstw_tr_team' );
+			$temp_slug = sanitize_title( $temp_title );  
+	
 
+			//mstw_log_msg( 'player bio: ' . $data['player_bio'] );
+			//mstw_log_msg( 'converted player bio: ' . convert_chars( $data['player_bio'] ) );
+			
 			$new_post = array(
 				'post_title'   => convert_chars( $temp_title ),
-				'post_content' => wpautop(convert_chars($data['Bio'])),
+				'post_content' => wpautop(convert_chars($data['player_bio'])),
 				'post_status'  => 'publish',
 				'post_type'    => $type,
 				'post_name'    => $temp_slug,
 			);
 			
-			// create!
+			// create the player (post)
 			$id = wp_insert_post( $new_post );
 			
-			if ( $id ) {
-				$term = get_term_by( 'id', $opt_cat, 'mstw_tr_team' );
-				wp_set_object_terms( $id, $term->slug, 'mstw_tr_team');
+			//if the post was successfully created, set the team (taxonomy/term)
+			if ( $id ) { 
+				//echo '<p>Title: ' . $temp_title . ' Slug: ' . $temp_slug . '</p>';
+				//echo '<p>$opt_cat(ID): ' . $opt_cat . '</p>';
+				if ( isset( $opt_cat ) && $opt_cat > 0 ) { 
+					//use the team selected in UI
+					$term = get_term_by( 'id', $opt_cat, 'mstw_tr_team' );
+					wp_set_object_terms( $id, $term->slug, 'mstw_tr_team');
+				}
+				else if ( array_key_exists( 'player_teams', $data ) && !empty( $data['player_teams'] ) ) { 
+					//use the teams from the CSV
+					//remove_action( 'create_mstw_tr_team', 'mstw_tr_save_team_meta' );
+					
+					//array_filter() should remove empty strings
+					$teams_array = array_filter( explode( ';', $data['player_teams'] ) );
+					mstw_log_msg( '$teams_array: ' );
+					mstw_log_msg( $teams_array );
+					
+					wp_set_object_terms( $id, $teams_array, 'mstw_tr_team');
+					
+					
+					//add_action( 'create_mstw_tr_team', 'mstw_tr_save_team_meta' );
+				}
+				else {
+					//no team provided
+					echo '<p>' . sprintf( __( 'No team provided for player: %s', 'mstw-team-rosters' ), $temp_title ) . '</p>';
+				}
+				
+				
 			}
 
-			if ('page' !== $type && !$id) {
+			if ( 'page' !== $type && !$id ) {
 				// cleanup new categories on failure
 				foreach ($cats['cleanup'] as $c) {
-					wp_delete_term($c, 'category');
+					wp_delete_term( $c, 'category' );
 				}
 			}
 			return $id;
@@ -326,73 +362,31 @@ if( !class_exists( 'MSTW_TR_ImporterPlugin' ) ) {
 		function create_custom_fields( $post_id, $data ) {
 			foreach ( $data as $k => $v ) {
 				// anything that doesn't start with csv_ is a custom field
-				if (!preg_match('/^csv_/', $k) && $v != '') {
-					switch ( strtolower( $k ) ) {
-						case __( 'first name', 'mstw-loc-domain' ):
-						case __( 'first', 'mstw-loc-domain' ):
-							$k = '_mstw_tr_first_name';
-							break;
-						case __( 'last name', 'mstw-loc-domain' ):
-						case __( 'last', 'mstw-loc-domain' ):
-							$k = '_mstw_tr_last_name';
-							break;
-						case __( 'position', 'mstw-loc-domain' ):
-						case __( 'pos', 'mstw-loc-domain' ):
-							$k = '_mstw_tr_position';
-							break;
-						case __( 'number', 'mstw-loc-domain' ):
-						case __( 'nbr', 'mstw-loc-domain' ):
-						case __( '#', 'mstw-loc-domain' ):
-							$k = '_mstw_tr_number';
-							break;
-						case __( 'weight', 'mstw-loc-domain' ):
-						case __( 'wt', 'mstw-loc-domain' ):
-							$k = '_mstw_tr_weight';
-							break;
-						case __( 'height', 'mstw-loc-domain' ):
-						case __( 'ht', 'mstw-loc-domain' ):
-							$k = '_mstw_tr_height';
-							break;
-						case __( 'age', 'mstw-loc-domain' ):
-							$k = '_mstw_tr_age';
-							break;
-						case __( 'year', 'mstw-loc-domain' ):
-						case __( 'yr', 'mstw-loc-domain' ):
-							$k = '_mstw_tr_year';
-							break;
-						case __( 'experience', 'mstw-loc-domain' ):
-						case __( 'exp', 'mstw-loc-domain' ):
-							$k = '_mstw_tr_experience';
-							break;
-						case __( 'home town', 'mstw-loc-domain' ):
-							$k = '_mstw_tr_home_town';
-							break;
-						case __( 'country', 'mstw-loc-domain' ):
-							$k = '_mstw_tr_country';
-							break;
-						case __( 'last school', 'mstw-loc-domain' ):
-							$k = '_mstw_tr_last_school';
-							break;
-						case __( 'bats', 'mstw-loc-domain' ):
-						case __( 'bat', 'mstw-loc-domain' ):
-							$k = '_mstw_tr_bats';
-							break;
-						case __( 'throws', 'mstw-loc-domain' ):
-						case __( 'throw', 'mstw-loc-domain' ):
-						case __( 'thw', 'mstw-loc-domain' ):
-							$k = '_mstw_tr_throws';
-							break;
-						case __( 'other', 'mstw-loc-domain' ):
-							$k = '_mstw_tr_other';
-							break;
-					}
-						
-					$ret = update_post_meta( $post_id, $k, $v );	
-					
-					echo '<p>retval = '. $ret . ' ID: ' . $post_id . ' K: ' . $k . ' V: ' . $v . '</p>';
-				}
-			}
-		}
+				switch ( $k ) {
+					case 'player_first_name':	
+					case 'player_last_name':
+					case 'player_position':
+					case 'player_number':
+					case 'player_weight':
+					case 'player_height':
+					case 'player_age':
+					case 'player_year':
+					case 'player_experience':
+					case 'player_home_town':	
+					case 'player_country':
+					case 'player_last_school':
+					case 'player_bats':
+					case 'player_throws':
+					case 'player_other':
+						$ret = update_post_meta( $post_id, $k, sanitize_text_field( $v ) );	
+						//echo '<p>retval = '. $ret . ' ID: ' . $post_id . ' Key: ' . $k . ' Value: ' . $v . '</p>';
+						break;
+					default:
+						mstw_log_msg( 'Bad data column: ' . $k );
+						break;
+				} //End: switch				
+			} //End: foreach
+		} //End: create_custom_fields( )
 
 		/**
 		 * Delete BOM from UTF-8 file.
@@ -425,6 +419,5 @@ if( !class_exists( 'MSTW_TR_ImporterPlugin' ) ) {
 			}
 		}
 	} //End: class MSTW_TR_ImporterPlugin
-}
- 
+ }
  ?>

@@ -29,11 +29,6 @@
  */
 
 //-----------------------------------------------------------------
-// Set up global variables
-//	
-// NONE ??
-
-//-----------------------------------------------------------------
 // Initialize the plugin
 //
 	add_action( 'init', 'mstw_tr_init' );
@@ -51,25 +46,26 @@
 		require_once ( plugin_dir_path( __FILE__ ) . 'includes/mstw-tr-utility-functions.php' );
 		//mstw_log_msg( 'in mstw_tr_init  ... mstw-tr-utility-functions loaded ' );
 		
-		//--------------------------------------------------------------------------------
-		// REGISTER THE MSTW TEAM ROSTERS CUSTOM POST TYPES & TAXONOMIES
-		//	mstw_tr_player, mstw_tr_team
+		//------------------------------------------------------------------------
+		// Functions for MSTW roster table shortcode
 		//
-		include_once( plugin_dir_path( __FILE__ ) . 'includes/mstw-tr-cpts.php' );
-		mstw_tr_register_cpts( );
-		//mstw_log_msg( 'in mstw_tr_init  ... mstw-tr-cpts loaded ' );
+		include_once( plugin_dir_path( __FILE__ ) . 'includes/mstw-tr-roster-table.php' );
+		//mstw_log_msg( 'in mstw_tr_init  ... mstw-tr-roster-table loaded ' );
+		
+		//------------------------------------------------------------------------
+		// Functions for MSTW roster gallery shortcode
+		//
+		require_once( plugin_dir_path( __FILE__ ) . 'includes/mstw-tr-roster-gallery.php' );
+		
+		mstw_log_msg( 'in mstw_tr_init ...' );
+		if (function_exists( 'mstw_tr_roster_gallery_handler' ) ) 
+			mstw_log_msg( 'mstw_tr_roster_gallery_handler exists' );
+		else
+			mstw_log_msg( 'mstw_tr_roster_gallery_handler does not exist' );
+		
+		//add_shortcode( 'mstw_roster_gallery', 'mstw_tr_roster_gallery_handler' );
 		
 		/*
-		//------------------------------------------------------------------------
-		// Functions for MSTW schedule table shortcode and widget
-		//
-		include_once( MSTW_SS_INCLUDES_DIR . '/mstw-tr-schedule-table.php' );
-		
-		//------------------------------------------------------------------------
-		// Functions for MSTW venue table shortcode
-		//
-		include_once( MSTW_SS_INCLUDES_DIR . '/mstw-tr-venue-table.php' );
-		
 		//------------------------------------------------------------------------
 		// Functions for MSTW countdown timer shortcode
 		//
@@ -86,8 +82,19 @@
 		include_once( MSTW_SS_INCLUDES_DIR . '/mstw-tr-scoreboard.php' );
 		*/
 		
+		//------------------------------------------------------------------------
+		// REGISTER THE MSTW TEAM ROSTERS CUSTOM POST TYPES & TAXONOMIES
+		//	mstw_tr_player, mstw_tr_team
+		//
+		include_once( plugin_dir_path( __FILE__ ) . 'includes/mstw-tr-cpts.php' );
+		mstw_tr_register_cpts( );
+		//mstw_log_msg( 'in mstw_tr_init  ... mstw-tr-cpts loaded ' );
 		
-
+		//-----------------------------------------------------------------
+		// find the single-mstw_tr_player template in the plugin's directory
+		//
+		add_filter( "single_template", "mstw_tr_single_player_template" );
+ 
 		//------------------------------------------------------------------------
 		// If an admin screen, load the admin functions (gotta have 'em)
 		
@@ -102,39 +109,84 @@
 
 }
 
-
-// ----------------------------------------------------------------
-// On activation, check the version of WP and set up the 'mstw_tr'
-//		roles and capabilites
-//
-	register_activation_hook( __FILE__, 'mstw_tr_activate' );	
-
-	function mstw_tr_activate( ) {
+ //-----------------------------------------------------------------
+ // add the shortcodes (priority 99 == last)
+ //
+ add_action( 'init', 'mstw_tr_add_shortcodes', 99 );	
 	
-		mstw_tr_check_wp_version( '4.0' ); //tested - OK
+ function mstw_tr_add_shortcodes( ) {
+	 mstw_log_msg( 'in mstw_tr_add_shortcodes ...' );
+	 
+	
+	remove_shortcode( 'mstw_roster_gallery' );
+	add_shortcode( 'mstw_roster_gallery', 'mstw_tr_roster_gallery_handler' );
+	
+		  
+	if (shortcode_exists( 'mstw_roster_gallery' ) ) 
+		mstw_log_msg( 'mstw_roster_gallery shortcode exists' );
+	else
+		mstw_log_msg( 'mstw_roster_gallery shortcode does not exist' );
+	
 		
-		//THIS IS A MESS. NEED TO FIX
-		//mstw_tr_add_user_roles( );
-		
-		/*$result = add_role( 'mstw_tr_admin', 'MSTW Team Rosters Admin', 
-							array(	'read'						=> true,
-									'edit_mstw_tr_player' 				=> true,
-									'read_mstw_tr_player' 				=> true,
-									'delete_mstw_tr_player' 			=> true,
-									'edit_mstw_tr_players'				=> true,
-									'edit_others_mstw_tr_players'		=> true,
-									'edit_others_mstw_tr_players'		=> true,
-									'publish_mstw_tr_players'			=> true,
-									'read_private_mstw_tr_players'		=> true,
-									'delete_mstw_tr_players'			=> true,
-									'delete_private_mstw_tr_players'	=> true,
-									'delete_published_mstw_tr_players'	=> true,
-									'delete_others_mstw_tr_players'		=> true,
-									'edit_private_mstw_tr_players'		=> true,
-									'edit_published_mstw_tr_players'	=> true
-									)
-									
-								);*/
+	if (function_exists( 'mstw_tr_roster_gallery_handler' ) ) 
+		mstw_log_msg( 'mstw_tr_roster_gallery_handler exists' );
+	else
+		mstw_log_msg( 'mstw_tr_roster_gallery_handler does not exist' );
+	
+	remove_shortcode( 'mstw_roster_table' );
+	add_shortcode( 'mstw_roster_table', 'mstw_tr_roster_table_handler' );
+	
+	if (shortcode_exists( 'mstw_roster_table' ) ) 
+		mstw_log_msg( 'mstw_roster_table shortcode exists' );
+	else
+		mstw_log_msg( 'mstw_roster_table shortcode does not exist' );
+	 
+	/*remove_shortcode( 'mstw_roster_gallery' );
+	add_shortcode( 'mstw_roster_gallery', 'mstw_tr_roster_table_handler' );
+	
+	if (shortcode_exists( 'mstw_roster_gallery' ) ) 
+		mstw_log_msg( 'mstw_roster_gallery shortcode exists' );
+	else
+		mstw_log_msg( 'mstw_roster_gallery shortcode does not exist' );*/
+
+
+ }
+
+
+ // ----------------------------------------------------------------
+ // On activation, check the version of WP and set up the 'mstw_tr'
+ //		roles and capabilites
+ //
+ register_activation_hook( __FILE__, 'mstw_tr_activate' );	
+
+ function mstw_tr_activate( ) {
+	
+	mstw_tr_check_wp_version( '4.0' ); //tested - OK
+	
+	update_option( 'mstw_team_rosters_activated', 1 );
+	
+	//THIS IS A MESS. NEED TO FIX
+	//mstw_tr_add_user_roles( );
+	
+	/*$result = add_role( 'mstw_tr_admin', 'MSTW Team Rosters Admin', 
+						array(	'read'						=> true,
+								'edit_mstw_tr_player' 				=> true,
+								'read_mstw_tr_player' 				=> true,
+								'delete_mstw_tr_player' 			=> true,
+								'edit_mstw_tr_players'				=> true,
+								'edit_others_mstw_tr_players'		=> true,
+								'edit_others_mstw_tr_players'		=> true,
+								'publish_mstw_tr_players'			=> true,
+								'read_private_mstw_tr_players'		=> true,
+								'delete_mstw_tr_players'			=> true,
+								'delete_private_mstw_tr_players'	=> true,
+								'delete_published_mstw_tr_players'	=> true,
+								'delete_others_mstw_tr_players'		=> true,
+								'edit_private_mstw_tr_players'		=> true,
+								'edit_published_mstw_tr_players'	=> true
+								)
+								
+							);*/
 	}
 	
 // ----------------------------------------------------------------
@@ -285,23 +337,35 @@
 		
 	} //End: mstw_tr_add_caps( )
 	
-//-----------------------------------------------------------------
-// filter so single-mstw_tr_player template does  not need to be in the theme directory
-//
-	add_filter( "single_template", "mstw_tr_single_player_template" );
-	
-	function mstw_tr_single_player_template( $single_template ) {
-		 global $post;
-
-		 if ($post->post_type == 'mstw_tr_player') {
-			  $single_template = dirname( __FILE__ ) . '/theme-templates/single-mstw_tr_player.php';
-			  //echo '$single_template= ' . $single_template;
-			  //die;
-		 }
+ //-----------------------------------------------------------------
+ // filter the single_player template. first look for single-player.php 
+ //	in the current theme directory, just in case a user wants to get fancy,
+ // then look in the plugin's /theme-templates directory
+ //
+ // filter is now part of the init action - mstw_tr_init()
+ // add_filter( "single_template", "mstw_tr_single_player_template", 11 );
+ //
+ 
+ function mstw_tr_single_player_template( $single_template ) {
+	global $post;
+		
+	if ( $post->post_type == 'mstw_tr_player' ) {
+		
+		$custom_single_template = get_stylesheet_directory( ) . '/single-player.php';
+		$plugin_single_template = dirname( __FILE__ ) . '/theme-templates/single-player.php';
+		
+		if ( file_exists( $custom_single_template ) ) {
+			$single_template = $custom_single_template;
+		}
+		else if ( file_exists( $plugin_single_template ) ) {
+			$single_template = $plugin_single_template;
+		}
+		
+	}
 		 
-		 return $single_template;
+	return $single_template;
 		 
-	} //End: mstw_tr_single_player_template()	
+ } //End: mstw_tr_single_player_template()	
 
 
 	
@@ -318,79 +382,107 @@
 		$options = get_option( 'mstw_tr_options' );
 		
 		echo '<style type="text/css">';
-		
-		echo "tr.mstw-tr-table-head { \n";
-			echo mstw_tr_build_css_rule( $options, 'tr_table_head_text_color', 'color' );
-			echo mstw_tr_build_css_rule( $options, 'tr_table_head_bkgd_color', 'background-color' );
+		//
+		// Roster Table settings
+		//
+		echo "table.mstw-tr-table thead tr th { \n";
+			echo mstw_build_css_rule( $options, 'table_head_text', 'color' );
+			echo mstw_build_css_rule( $options, 'table_head_bkgd', 'background-color' );
 		echo "} \n";
 		
 		echo "h1.team-head-title { \n";
-			echo mstw_tr_build_css_rule( $options, 'tr_table_title_text_color', 'color' );		
+			echo mstw_build_css_rule( $options, 'table_title_color', 'color' );		
 		echo "} \n";
 		
-		echo 'tr.mstw-tr-odd {';
-			echo mstw_tr_build_css_rule( $options, 'tr_table_odd_row_color', 'color' );
-			echo mstw_tr_build_css_rule( $options, 'tr_table_odd_row_bkgd', 'background-color' );
+		echo '.mstw-tr-table tr:nth-child(odd) {';//'tr.mstw-tr-odd {';
+			echo mstw_build_css_rule( $options, 'table_odd_row_text', 'color' );
+			echo mstw_build_css_rule( $options, 'table_odd_row_bkgd', 'background-color' );
 		echo '}';
 		
-		echo 'tr.mstw-tr-even {';
-			echo mstw_tr_build_css_rule( $options, 'tr_table_even_row_color', 'color' );
-			echo mstw_tr_build_css_rule( $options, 'tr_table_even_row_bkgd', 'background-color' );
+		echo '.mstw-tr-table tr:nth-child(even) {' ; //'tr.mstw-tr-even {';
+			echo mstw_build_css_rule( $options, 'table_even_row_text', 'color' );
+			echo mstw_build_css_rule( $options, 'table_even_row_bkgd', 'background-color' );
 		echo '}';
 		
-		echo "tr.mstw-tr-odd a, tr.mstw-tr-even a { \n";
-			echo mstw_tr_build_css_rule( $options, 'tr_table_links_color', 'color' );
+		echo ".mstw-tr-table tr:nth-child(even) td a, 
+			  .mstw-tr-table tr:nth-child(odd) td a	{ \n";
+			echo mstw_build_css_rule( $options, 'table_links_color', 'color' );
 		echo "} \n";
 		
-		//Rules for single player
+		echo '.mstw-tr-table tr:nth-child(even) td,
+			 .mstw-tr-table tr:nth-child(odd) td {';
+			echo mstw_build_css_rule( $options, 'table_border_color', 'border-top-color' );
+			echo mstw_build_css_rule( $options, 'table_border_color', 'border-bottom-color' );
+		echo '}';
+		
+		echo "table.mstw-tr-table tbody tr td img { \n";
+			echo mstw_build_css_rule( $options, 'table_photo_width', 'width', 'px' );
+			echo mstw_build_css_rule( $options, 'table_photo_height', 'height', 'px' );
+		echo "}\n";
+		
+		//
+		// Player Profile Settings
+		//
 		echo "div.player-header { \n";
-			echo mstw_tr_build_css_rule( $options, 'sp_main_bkgd_color', 'background-color' );
+			echo mstw_build_css_rule( $options, 'sp_main_bkgd_color', 'background-color' );
 		echo "} \n";
 		
 		echo "#player-name-nbr { \n";
-			echo mstw_tr_build_css_rule( $options, 'sp_main_text_color', 'color' );
+			echo mstw_build_css_rule( $options, 'sp_main_text_color', 'color' );
 		echo "} \n";
 		
 		echo ".player-bio { \n";
-			echo mstw_tr_build_css_rule( $options, 'sp_bio_border_color', 'border-color' );
+			echo mstw_build_css_rule( $options, 'sp_bio_border_color', 'border-color' );
 		echo '}';
 		
 		echo ".player-bio h1 { \n";
-			echo mstw_tr_build_css_rule( $options, 'sp_bio_header_color', 'color' );
+			echo mstw_build_css_rule( $options, 'sp_bio_header_color', 'color' );
 		echo "}\n";
 		
 		echo ".player-bio { \n";
-			echo mstw_tr_build_css_rule( $options, 'sp_bio_text_color', 'color' );
+			echo mstw_build_css_rule( $options, 'sp_bio_text_color', 'color' );
 		echo "}\n";
 		
 		echo ".player-bio { \n";
-			echo mstw_tr_build_css_rule( $options, 'sp_bio_bkgd_color', 'background-color' );
+			echo mstw_build_css_rule( $options, 'sp_bio_bkgd_color', 'background-color' );
 		echo "}\n";
 		
 		echo "h1.player-head-title { \n";
-			echo mstw_tr_build_css_rule( $options, 'tr_table_title_text_color', 'color' );
+			echo mstw_build_css_rule( $options, 'tr_table_title_text_color', 'color' );
 		echo "}\n";
 		
 		echo "h1.mstw_tr_roster_title { \n";
-			echo mstw_tr_build_css_rule( $options, 'tr_table_title_text_color', 'color' );
+			echo mstw_build_css_rule( $options, 'tr_table_title_text_color', 'color' );
 		echo "}\n";
 		
-		// Rules for player galleries
+		echo "div#player-photo img { \n";
+			echo mstw_build_css_rule( $options, 'sp_image_width', 'width', 'px' );
+			echo mstw_build_css_rule( $options, 'sp_image_height', 'height', 'px' );
+		echo "}\n";
+		
+		//
+		// Player Gallery Settings
+		//
 		echo ".player-tile { \n";
-			echo mstw_tr_build_css_rule( $options, 'sp_main_bkgd_color', 'background-color' );
+			echo mstw_build_css_rule( $options, 'sp_main_bkgd_color', 'background-color' );
 		echo "} \n";
 		
 		echo ".player-tile { \n";
-			echo mstw_tr_build_css_rule( $options, 'sp_main_text_color', 'color' );
+			echo mstw_build_css_rule( $options, 'sp_main_text_color', 'color' );
+		echo "} \n";
+		
+		echo ".player-tile img { \n";
+			echo mstw_build_css_rule( $options, 'sp_image_width', 'width', 'px' );
+			echo mstw_build_css_rule( $options, 'sp_image_height', 'height', 'px' );
 		echo "} \n";
 		
 		echo ".player-name-number { \n";
-			echo mstw_tr_build_css_rule( $options, 'sp_main_text_color', 'color' );
+			echo mstw_build_css_rule( $options, 'sp_main_text_color', 'color' );
 			
 		echo "} \n";
 		
 		echo ".player-name-number a { \n";
-			echo mstw_tr_build_css_rule( $options, 'gallery_links_color', 'color' );
+			echo mstw_build_css_rule( $options, 'gallery_links_color', 'color' );
 		echo "}\n";
 		
 		echo '</style>';
@@ -419,18 +511,27 @@
 
 // ----------------------------------------------------------------
 // Want to show player post type on category pages
-
+//
+// THIS THING IS NOT RIGHT!!
+//
 	add_filter( 'pre_get_posts', 'mstw_tr_get_posts' );
 
 	function mstw_tr_get_posts( $query ) {
+		//mstw_log_msg( 'in mstw_tr_get_posts' );
+		//mstw_log_msg( 'input query: ' );
+		//mstw_log_msg( $query );
+		
+		if( !is_admin( ) ) {
 		// Need to check the need for this first conditional ... someday
-		if ( is_category() && $query->is_main_query() )
+		if ( is_category( ) && $query->is_main_query( ) )
 			$query->set( 'post_type', array( 'post', 'mstw_tr_player' ) ); 
   
-		if ( is_tax( 'mstw_tr_team' ) && $query->is_main_query() ) {
+		if ( is_tax( 'mstw_tr_team' ) && $query->is_main_query( ) ) {
 			// We are on the player gallery page ...
 			// So set the sort order based on the admin settings
 			$options = get_option( 'mstw_tr_options' );
+			//mstw_log_msg( 'in mstw_tr_get_posts ... $options:' );
+			//mstw_log_msg( $options );
 			
 			// Need the team slug to set query
 			$uri_array = explode( '/', $_SERVER['REQUEST_URI'] );	
@@ -440,20 +541,23 @@
 			$query->set( 'post_type', 'mstw_tr_player' );
 			$query->set( 'mstw_tr_team' , $team_slug );
 			$query->set( 'orderby', 'meta_value' );  
-			$query->set( 'meta_key', '_mstw_tr_last_name' );   
+			$query->set( 'meta_key', 'player_last_name' );   
 			$query->set( 'order', 'ASC' );
 			
-			if ( array_key_exists( 'tr_pg_sort_order', $options ) ) {
+			if ( array_key_exists( 'tr_pg_sort_order', (array)$options ) ) {
 				if ( $options['tr_pg_sort_order'] == 'numeric' ) {
 					// sort by number ascending
 					$query->set( 'post_type', 'mstw_tr_player' );
 					$query->set( 'mstw_tr_team' , $team_slug );
 					$query->set( 'orderby', 'meta_value_num' );    
-					$query->set( 'meta_key', '_mstw_tr_number' );     
+					$query->set( 'meta_key', 'player_number' );     
 					$query->set( 'order', 'ASC' );
 				}	 
 			}
 		}
+		}
+		//mstw_log_msg( 'output query: ' );
+		//mstw_log_msg( $query );
 	}  
 
 // ----------------------------------------------------------------
@@ -466,7 +570,7 @@
 		$plugin = plugin_basename( __FILE__ );
 		$plugin_data = get_plugin_data( __FILE__, false );
 
-		if ( version_compare($wp_version, "3.4.2", "<" ) ) {
+		if ( version_compare($wp_version, "4.0", "<" ) ) {
 			if( is_plugin_active($plugin) ) {
 				deactivate_plugins( $plugin );
 				wp_die( "'".$plugin_data['Name']."' requires WordPress 3.4.2 or higher, and has been deactivated! 
@@ -480,499 +584,52 @@
 
 	add_action( 'wp_enqueue_scripts', 'mstw_tr_enqueue_styles' );
 
-	function mstw_tr_enqueue_styles () {
-		
-		/* Find the full path to the css file */
-		$mstw_tr_style_url = plugins_url( '/css/mstw-tr-style.css', __FILE__ );
-		//$mstw_tr_style_file = WP_PLUGIN_DIR . '/mstw-team-rosters/css/mstw-tr-style.css';
-		$mstw_tr_style_file = dirname( __FILE__ ) . '/css/mstw-tr-style.css';
-		
-		wp_register_style( 'mstw_tr_style', plugins_url( '/css/mstw-tr-style.css', __FILE__ ) );
-		
-		/* If stylesheet exists, enqueue the style */
-		if ( file_exists( $mstw_tr_style_file ) ) {	
+	function mstw_tr_enqueue_styles () {		
+		// Find the full path to the plugin's CSS file
+		$plugin_stylesheet = dirname( __FILE__ ) . '/css/mstw-tr-styles.css';
+
+		// If stylesheet exists, which it should, enqueue the style
+		if ( file_exists( $plugin_stylesheet ) ) {	
+			$plugin_style_url = plugins_url( '/css/mstw-tr-styles.css', __FILE__ );
+			wp_register_style( 'mstw_tr_style', $plugin_style_url );
 			wp_enqueue_style( 'mstw_tr_style' );				
-		} 
-
-	}
-
-// --------------------------------------------------------------------------------------
-// CUSTOM POST TYPE STUFF
-// --------------------------------------------------------------------------------------
-// Set-up Action Hooks & Filters for the Player custom post type
-// ACTIONS
-// 		'init'											mstw_tr_register_post_type
-//		'add_metaboxes'									mstw_tr_add_meta
-//		'save_posts'									mstw_tr_save_meta
-//		'manage_game_schedule_posts_custom_column'		mstw_tr_manage_columns
-
-// FILTERS
-// 		'manage_edit-game_schedule_columns'				mstw_tr_edit_columns
-//		'post_row_actions'								mstw_tr_remove_the_view
-//		
-// --------------------------------------------------------------------------------------
-
-// First want to make sure thumbnails are active in the theme before adding them via the 
-//	register_post_type call in the 'init' action
-
-	add_action( 'after_setup_theme', 'mstw_tr_add_feat_img' );
-	
-	function mstw_tr_add_feat_img( ) {
-		if ( function_exists( 'add_theme_support' ) and function_exists( 'get_theme_support' ) ) {
-			if ( get_theme_support( 'post-thumbnails' ) === false ) {
-				add_theme_support( 'post-thumbnails' );
-			}
 		}
-	}
-
-// --------------------------------------------------------------------------------------
-// Add the table shortcode handler, which will create the a Team Roster table on the user side.
-// Handles the shortcode parameters, if there were any, 
-// then calls mstw_tr_build_roster() to create the output
-// --------------------------------------------------------------------------------------
-
-add_shortcode( 'mstw-tr-roster', 'mstw_tr_table_handler' );
-
-function mstw_tr_table_handler( $atts ){
-
-	// get the options set in the admin screen
-	$options = get_option( 'mstw_tr_options' );
-	//$output = '<pre>OPTIONS:' . print_r( $options, true ) . '</pre>';
-	
-	// Remove all keys with empty values
-	//foreach ( $options as $k=>$v ) {
-		//if( $v == '' ) {
-			//unset( $options[$k] );
+		//else {
+		//	mstw_log_msg( "enqueuing styles ... plugin stylesheet missing ... $plugin_stylesheet" );
 		//}
-	//}
-	//$output .= '<pre>FILTERED OPTIONS:' . print_r( $options, true ) . '</pre>';
-	
-	// and merge them with the defaults
-	$args = wp_parse_args( $options, mstw_tr_get_defaults( ) );
-	//$output .= '<pre>ARGS:' . print_r( $args, true ) . '</pre>';
-	
-	// then merge the parameters passed to the shortcode with the result									
-	$attribs = shortcode_atts( $args, $atts );
-	//$output .= '<pre>ATTS:' . print_r( $atts, true ) . '</pre>';
-	//$output .= '<pre>ATTRIBS:' . print_r( $attribs, true ) . '</pre>';
-	
-	$mstw_tr_roster = mstw_tr_build_roster( $attribs );
-	
-	return $mstw_tr_roster;
-}
 
-// --------------------------------------------------------------------------------------
-// Add the gallery shortcode handler, which will create the a Team Gallery on the user side.
-// Handles the shortcode parameters, if there were any, 
-// then calls mstw_tr_build_gallery( ) to create the output
-// --------------------------------------------------------------------------------------
-add_shortcode( 'mstw-tr-gallery', 'mstw_tr_gallery_handler' );
+		// Check if a custom stylesheet exists in the current theme's directory;
+		// if so, enqueue it too. it MUST be named mstw-tr-custom-styles.css
+		$custom_stylesheet = get_stylesheet_directory( ) . '/mstw-tr-custom-styles.css';
+		
+		if ( file_exists( $custom_stylesheet ) ) {
+			$custom_stylesheet_url = get_stylesheet_directory_uri( ) . '/mstw-tr-custom-styles.css';
+			//mstw_log_msg( 'custom stylesheet uri: ' . $custom_stylesheet_url );
+			wp_register_style( 'mstw_tr_custom_style', $custom_stylesheet_url );
+			wp_enqueue_style( 'mstw_tr_custom_style' );
+		}
+		//else {
+		//	mstw_log_msg( 'custom stylesheet: ' . $mstw_tr_custom_stylesheet . ' does not exist.' );
+		//}
 
-function mstw_tr_gallery_handler( $atts ){
+	}
 
-	// get the options set in the admin screen
-	$options = get_option( 'mstw_tr_options' );
-	//$output = '<pre>OPTIONS:' . print_r( $options, true ) . '</pre>';
-	
-	// Remove all keys with empty values
-	foreach ( $options as $k=>$v ) {
-		if( $v == '' ) {
-			unset( $options[$k] );
-		}
-	}
-	
-	// and merge them with the defaults
-	$args = wp_parse_args( $options, mstw_tr_get_defaults( ) );
-	//$output .= '<pre>ARGS:' . print_r( $args, true ) . '</pre>';
-	
-	// then merge the parameters passed to the shortcode with the result									
-	$attribs = shortcode_atts( $args, $atts );
-	//$output .= '<pre>ATTS:' . print_r( $atts, true ) . '</pre>';
-	//$output .= '<pre>ATTRIBS:' . print_r( $attribs, true ) . '</pre>';
-	
-	$attribs = mstw_tr_set_fields( $attribs['roster_type'], $attribs );
-	
-	//get the team slug
-	if ( $attribs['team'] == 'no-team-specified' )
-		return '<h3>No Team Specified </h3>';
-	else
-		$team_slug = $attribs['team'];
-		
-	// Set the sort order	
-	switch ( $attribs['sort_order'] ) {
-		case'numeric':
-			$sort_key = '_mstw_tr_number';
-			$order_by = 'meta_value_num';
-			break;
-		case 'alpha-first':
-			$sort_key = '_mstw_tr_first_name';
-			$order_by = 'meta_value';
-			break;
-		default: // alpha by last
-			$sort_key = '_mstw_tr_last_name';
-			$order_by = 'meta_value';
-			break;
-	}
-	
-	// Get the posts		
-	$posts = get_posts(array( 'numberposts' => -1,
-							  'post_type' => 'mstw_tr_player',
-							  'mstw_tr_team' => $team_slug, 
-							  'orderby' => $order_by, 
-							  'meta_key' => $sort_key,
-							  'order' => 'ASC' 
-							));		
-	
-	//Now gotta grab the posts
-	
-	$mstw_tr_gallery = mstw_tr_build_gallery( $team_slug, $posts, $attribs, $attribs['roster-type'] );
-	
-	return $mstw_tr_gallery;
-}
 
-// --------------------------------------------------------------------------------------
-// Called by:	mstw_tr_table_handler
-// Builds the Team Roster table as a string (to replace the [shortcode] in a page or post).
-// Loops through the Player Custom posts in the "team" category and formats them 
-// into a pretty table.
-// --------------------------------------------------------------------------------------
-function mstw_tr_build_roster( $attribs ) {
+ // First want to make sure thumbnails are active in the theme before adding them via the 
+ //	register_post_type call in the 'init' action
+ //
+ add_action( 'after_setup_theme', 'mstw_tr_add_feat_img' );
 	
-	// These will come from plugin options someday 
-	// Add the colors and stuff
-	
-	//$output = '<pre>BEFORE:' . print_r( $attribs, true ) . '</pre>';
-	//return $output;
-	
-	$attribs = mstw_tr_set_fields( $attribs['roster_type'], $attribs );
-	
-	//FOR INITIAL DEBUGGING 
-	//$output . = '<p>Roster_type: ' . $attribs['roster_type'] . '</p>';
-	//$output .= '<p>strpos( $roster_type, "baseball"): ' . strpos( $attribs['roster_type'], "baseball" ) . '</p>';
-	//$output .= '<pre>ATTRIBS AFTER:' . print_r( $attribs, true ) . '</pre>';
-	//return $output;
-	
-	extract( $attribs );
-	
-	//new attribute because single template isn't moved anymore - link_to_player_pages
-	$link_to_player_pages = 1;
-	
-	if ( $team == 'no-team-specified' ) {
-		$output = '<h3>No Team Specified </h3>';
-		return $output;
-	}
-	
-	$output = "";
-		
-	// Settings from the admin page
-	// THIS IS OKAY ... ATTRIBS HAVE ALREADY BEEN EXTRACTED
-	
-	$options = get_option( 'mstw_tr_options' );
-	
-	// Set the roster table format. If default in [shortcode] atts, 
-	// then use the default setting from admin page.
-	if ( $roster_type == 'default' or $roster_type == '' ) 
-		$roster_type = $options['roster_type'];
-	
-	if ( $show_title == 1 ) {
-		//Set the title color
-		
-		$term_obj = get_term_by( 'slug', $team, 'mstw_tr_team', OBJECT );
-		//mstw_log_msg( ' in mstw_tr_build_roster ... $team:' . $team );
-		//mstw_log_msg( '$term_ogj:' );
-		//mstw_log_msg( $term_obj );
-		$team_name = ( $term_obj ) ? $term_obj->name : $team;
-		
-		$team_class = 'mstw_tr_roster_title mstw_tr_roster_title_' . $team;
-        
-		$title_h1 = '<h1 class="' . $team_class . '">'; 
-		
-		$output .= $title_h1 . $team_name . ' Roster' . '</h1>';
-	}
-	
-	// Set the sort order	
-	switch ( $sort_order ) {
-		case'numeric':
-			$sort_key = '_mstw_tr_number';
-			$order_by = 'meta_value_num';
-			break;
-		case 'alpha-first':
-			$sort_key = '_mstw_tr_first_name';
-			$order_by = 'meta_value';
-			break;
-		default: // alpha by last
-			$sort_key = '_mstw_tr_last_name';
-			$order_by = 'meta_value';
-			break;
-	}
-	
-	// Get the team roster		
-	$posts = get_posts(array( 'numberposts' => -1,
-							  'post_type' => 'mstw_tr_player',
-							  'mstw_tr_team' => $team, 
-							  'orderby' => $order_by, 
-							  'meta_key' => $sort_key,
-							  'order' => 'ASC' 
-							));						
-	
-    if( $posts ) {
-		// Make table of posts
-		// Start with the table header
+ function mstw_tr_add_feat_img( ) {
+	add_theme_support( 'post-thumbnails', array( 'mstw_tr_player' ) );
+ }
 
-		$team_class = 'mstw-tr-table-' . $team;
-        $output .= '<table class="mstw-tr-table ' . $team_class . '">';
-		
-		// leave this open and check on styles from the admin settings
-		$output .= '<thead><tr class="mstw-tr-table-head">';
-	
-		$th_temp = '<th class="mstw-tr-table-head" > ';
-		
-		// Check the PHOTO Column
-		if ( $show_photos ) {
-			$output .= $th_temp . $photo_label . '</th>';
-		}
-		
-		if ( $show_number ) {	
-			$output .= $th_temp . $number_label . '</th>';
-		}
-		
-		// Always show the NAME column
-		$output .= $th_temp . $name_label . '</th>';
-		
-		// POSITION column
-		if ( $show_position ) {
-			$output .= $th_temp . $position_label . '</th>';
-		}
-		
-		// BATS/THROWS column
-		if ( $show_bats_throws ) {
-			$output .= $th_temp . $bats_throws_label . '</th>';
-		}
-		
-		// HEIGHT column
-		if ( $show_height ) {
-			$output .= $th_temp . $height_label . '</th>';
-		}
-		
-		// WEIGHT column
-		if ( $show_weight ) {
-			$output .= $th_temp . $weight_label . '</th>';
-		}
-		
-		// YEAR column
-		if ( $show_year ) {
-			$output .= $th_temp . $year_label . '</th>';
-		}
-		
-		// AGE column
-		if ( $show_age ) {
-			$output .= $th_temp . $age_label . '</th>';
-		}
-		
-		// EXPERIENCE column
-		if ( $show_experience ) {
-			$output .= $th_temp . $experience_label . '</th>';
-		}
-		
-		// HOMETOWN column
-		if ( $show_home_town ) {
-			if ( $roster_type == 'college' or $roster_type == 'baseball-college' ) {
-				$output .= $th_temp . $home_town_label . ' ('. $last_school_label . ')' . '</th>';
-			}
-			else if ( $roster_type == 'custom' ) {
-				$output .= $th_temp . $home_town_label . '</th>';
-			}
-		}
-		
-		// LAST SCHOOL column
-		if ( $show_last_school ) {
-			if ( $roster_type == 'pro' or $roster_type == 'baseball-pro' ) {
-				$output .= $th_temp . $last_school_label . ' ('. $country_label . ')' . '</th>';
-			}
-			else if ( $roster_type == 'custom' ) {
-				$output .= $th_temp . $last_school_label . '</th>';
-			}
-		}
-		
-		// COUNTRY column
-		if ( $show_country and $roster_type == 'custom' ) {
-			$output .= $th_temp . $country_label . '</th>';
-		}
-		
-		// OTHER column
-		if ( $show_other_info and $roster_type == 'custom' ) {
-			$output .= $th_temp . $other_info_label . '</th>';
-		}
-		
-        $output = $output . '</tr></thead>';
-        
-		// Keeps track of even and odd rows. Start with row 1 = odd.
-		$even_and_odd = array('even', 'odd');
-		$row_cnt = 1; 
-		
-		// Loop through the posts and make the rows
-		foreach($posts as $post){
-			// set up some housekeeping to make styling in the loop easier
-			// NEEDS TO BE UPDATED
-			$even_or_odd_row = $even_and_odd[$row_cnt]; 
-			$row_class = 'mstw-tr-' . $even_or_odd_row;
-			
-			$row_tr = '<tr class="' . $row_class . '">'; 
-			$row_td = '<td class="' . $row_class . '">'; 
-			
-			// create the row
-			$row_string = $row_tr;	
 
-			// Add the player's photo	
-			if ( $show_photos ) {
-				$row_string .= $row_td;
-				if ( has_post_thumbnail( $post->ID ) ) {
-					if ( $link_to_player_pages ) {
-						$row_string .= '<a href="' .  get_permalink( $post->ID ) . '">';
-						$row_string .= get_the_post_thumbnail( $post->ID, array($table_photo_width, $table_photo_height) ) .  '</a></td>'; 
-					}
-					else {  //No profile to link to
-						$row_string .= get_the_post_thumbnail( $post->ID, array($table_photo_width, $table_photo_height) ) .  '</td>';
-					}	
-				}
-				else {
-					$photo_file = plugin_dir_path( __FILE__ ) . 'images/default-photo-'. $team . '.jpg';
-					if (file_exists( $photo_file ) ) {
-						$photo_file_url = plugins_url() . '/team-rosters/images/default-photo-' . $team . '.jpg';
-					}
-					else {
-						$photo_file_url = plugins_url() . '/team-rosters/images/default-photo.jpg';	
-					}
-					$row_string .=  '<img width="' . $table_photo_width . '" height="' . $table_photo_height . '" src="' . $photo_file_url . '" class="attachment-64x64 wp-post-image" alt="No photo available"/></td>';
-				}
-			}
-			
-			// column 1: Add the player's number
-			if ( $show_number ) {
-				$row_string .= $row_td . get_post_meta( $post->ID, '_mstw_tr_number', true ) . '</td>';
-			}
-			
-			// column 2: Add the player's name
-			switch( $name_format ) {
-			case 'first-last':
-				$player_name = get_post_meta( $post->ID, '_mstw_tr_first_name', true ) . " " . 
-				get_post_meta( $post->ID, '_mstw_tr_last_name', true );
-				break;
-			case 'first-only':
-				$player_name = get_post_meta( $post->ID, '_mstw_tr_first_name', true );
-				break;
-				
-			case 'last-only':
-				$player_name = get_post_meta( $post->ID, '_mstw_tr_last_name', true );
-				break;
-			
-			default: //It's going to be last-first
-				$player_name = get_post_meta( $post->ID, '_mstw_tr_last_name', true ) . ', ' . 
-				get_post_meta( $post->ID, '_mstw_tr_first_name', true );
-				break;
-			}
-			
-			
-			if ( file_exists( $link_to_player_pages ) ) {
-				$player_html = '<a href="' .  get_permalink($post->ID) . '?format=' . $roster_type . '" ';
-				/*if ( $options['tr_table_links_color'] != '' ) {
-					$player_html .= 'style="color:' . $options['tr_table_links_color'] . ';"';
-				}
-				*/
-				$player_html .= '>' . $player_name . '</a>';
-			}
-			else {
-				$player_html = $player_name;
-			}
-			
-			$row_string =  $row_string . $row_td . $player_html . '</td>';
-			
-			// column 3: Add the player's postition
-			if ( $show_position ) {
-				$row_string .= $row_td . get_post_meta( $post->ID, '_mstw_tr_position', true ) . '</td>';
-			}
-			
-			// column 3a bats/throws (baseball)
-			if ( $show_bats_throws ) {
-				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_bats', true ) . '/' . get_post_meta( $post->ID, '_mstw_tr_throws', true ) . '</td>';	
-			}	
-			
-			// column 4: Add the player's height
-			if ( $show_height ) {
-				$row_string .= $row_td . get_post_meta( $post->ID, '_mstw_tr_height', true ) . '</td>';
-			}
-			
-			// column 5: Add the player's weight
-			if ( $show_weight ) {
-				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_weight', true ) . '</td>';
-			}
-			
-			// column 6: Add the player's year (in school)
-			if ( $show_year ) {
-				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_year', true ) . '</td>';
-			}
-			
-			// AGE column
-			if ( $show_age ) {
-				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_age', true ) . '</td>';
-			}
-			
-			// EXPERIENCE column
-			if ( $show_experience ) {
-				$row_string =  $row_string . $row_td . get_post_meta( $post->ID, '_mstw_tr_experience', true ) . '</td>';
-			}
-			
-			// HOMETOWN column
-			if ( $show_home_town ) {
-				if ( $roster_type == 'college' or $roster_type == 'baseball-college' ) {
-					$row_string .=  $row_td . get_post_meta( $post->ID, '_mstw_tr_home_town', true ) . 
-					' (' . get_post_meta( $post->ID, '_mstw_tr_last_school', true ) . ') </td>';
-				}
-				else if ( $roster_type == 'custom' ) {
-					$row_string .= $row_td . get_post_meta( $post->ID, '_mstw_tr_home_town', true )  . '</td>';
-				}
-			}
-			
-			// LAST SCHOOL column
-			if ( $show_last_school ) {
-				if ( $roster_type == 'pro' or $roster_type == 'baseball-pro' ) {
-					$row_string .= $row_td . get_post_meta( $post->ID, '_mstw_tr_last_school', true ) . 
-					' (' . get_post_meta( $post->ID, '_mstw_tr_country', true ) . ') </td>';
-				}
-				else if ( $roster_type == 'custom' ) {
-					$row_string .= $row_td . get_post_meta( $post->ID, '_mstw_tr_last_school', true )  . '</td>';
-				}
-			}
-			
-			// COUNTRY column
-			if ( $show_country and $roster_type == 'custom' ) {
-				$row_string .= $row_td . get_post_meta( $post->ID, '_mstw_tr_country', true )  . '</td>';
-			}
-			
-			// OTHER column
-			if ( $show_other_info and $roster_type == 'custom' ) {
-				$row_string .= $row_td . get_post_meta( $post->ID, '_mstw_tr_other', true ) .'</td>';
-			}
-			
-			$output = $output . $row_string;
-			
-			$row_cnt = 1- $row_cnt;  // Get the styles right
-			
-		} // end of foreach post or end of table content
-		
-		$output = $output . '</table>';
-	}
-	else { // No posts were found
-	
-		$output =  $output . '<h3>' . __( 'Sorry, No players found for team: ' . $team, 'mstw-loc-domain' ) . '</h3>';
-		
-	}
-	
-	return $output;
-	
-}
 
 // Convenience function to determine whether or not to show a field
+//
+// USE _ste_fields_by_format in tr_utility_functions?
+//
 	function mstw_tr_set_fields( $roster_format, $defaults ) {
 		//$show_bats_throws = ( strpos( $roster_type, 'baseball' ) === false ) ? 0 : 1;
 		switch ( $roster_format ) {

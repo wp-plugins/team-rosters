@@ -49,6 +49,16 @@
 				);
 				
 			$arguments = array( 
+				array( 	// USE TEAM COLORS
+					'type' => 'checkbox', 
+					'id' => 'use_team_colors',
+					'name'	=> 'mstw_tr_options[use_team_colors]',
+					'value' => mstw_safe_ref( $options, 'use_team_colors' ), 
+					'title' => __( 'Use Team Colors:', 'mstw-team-rosters' ),
+					'page' => $display_on_page,
+					'section' => $page_section,
+					'desc' => __( 'Use the colors from the Teams table in MSTW Schedules & Scoreboards. IGNORED if the MSTW Schedules & Scoreboards plugin is not active.', '' ),
+				),
 				array( 	// ROSTER TITLE COLOR
 					'type' => 'text', 
 					'id' => 'table_title_color',
