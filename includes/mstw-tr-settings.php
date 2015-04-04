@@ -248,7 +248,7 @@ if( !function_exists( 'mstw_tr_validate_settings' ) ) {
 		//check if the reset button was pressed and confirmed
 		//array_key_exists() returns true for null, isset does not
 		if ( array_key_exists( 'reset', $input ) ) {
-			mstw_log_msg( 'OK, we are looking to reset defaults $current_tab = ' . $current_tab );
+			//mstw_log_msg( 'OK, we are looking to reset defaults $current_tab = ' . $current_tab );
 			if( $input['reset'] == 'Resetting Defaults' ) {
 				// reset to defaults
 				switch( $current_tab ) {
@@ -358,14 +358,16 @@ if( !function_exists( 'mstw_tr_validate_settings' ) ) {
 					break;
 					
 				case 'bio-gallery-tab':
-					mstw_log_msg( 'validating ... $current_tab= bio-gallery-tab' );
+					//mstw_log_msg( 'validating ... $current_tab= bio-gallery-tab' );
 					// checkboxes are unique
 					$output['sp_show_title'] = isset( $input['sp_show_title'] ) and $input['sp_show_title'] == 1 ? 1 : 0;
+					$output['sp_show_logo'] = isset( $input['sp_show_logo'] ) and $input['sp_show_logo'] == 1 ? 1 : 0;
 					
 					foreach( $input as $key => $value ) {
 						switch( $key ) {
 							case 'sp_content_title':  // text settings
 							case 'sp_show_title':
+							case 'sp_show_logo':
 								$output[$key] = ( sanitize_text_field( $input[$key] ) == $input[$key] ) ? $input[$key] : $output[$key];
 								break;
 							

@@ -312,7 +312,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 						
 		add_action( 'admin_print_styles-' . $players_page, 'mstw_tr_load_admin_styles');
 		
-		//
+		/*
 		//TESTING SS TEAMS
 		//
 		$test_page = add_submenu_page( 
@@ -325,6 +325,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 							); // Callback to output content
 							
 		add_action( "load-$test_page", 'test_redirect' );
+		*/
 		
 		//mstw_log_msg( 'admin_print_styles-' . $players_page );
 		
@@ -355,7 +356,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		//
 		add_action( "load-$settings_page", 'mstw_tr_settings_help' );
 		
-		//
+		/*
 		// Data Migration (from 3.1.2)
 		//
 		if ( true ) {
@@ -369,6 +370,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 							'mstw_tr_data_migration_page'  //callback to display page
 							);
 		}
+		*/
 
 		//
 		// CSV Import
@@ -385,6 +387,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		// Now also add action to load java scripts ONLY when you're on this page
 	}
 	
+	/*
 	function test_callback( ) {
 		return;
 		echo '<h1>Test Callback</h1>';
@@ -397,7 +400,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		wp_redirect( 'http://mstw.dev/wp-admin/edit.php?post_type=mstw_ss_team', 302 );
 		exit;
 	}
-
+	*/
 	
  //-----------------------------------------------------------------------
  // Enqueue admin styles - only if on players admin page

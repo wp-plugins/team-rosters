@@ -196,7 +196,11 @@
 				
 				// BATS/THROWS COLUMN (baseball)
 				if ( $show_bats_throws ) {
-					$row_string =  $row_string . $row_td . get_post_meta( $post->ID, 'player_bats', true ) . '/' . get_post_meta( $post->ID, 'player_throws', true ) . '</td>';	
+					
+					//$bats = get_post_meta( $post->ID, 'player_bats', true );
+					//$throws = get_post_meta( $post->ID, 'player_throws', true );
+					$row_string =  $row_string . $row_td . 
+							mstw_tr_build_bats_throws( $post ) . '</td>';	
 				}	
 				
 				// HEIGHT COLUMN

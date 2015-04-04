@@ -51,32 +51,22 @@
 		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 		<?php
-		$position = get_post_meta($post->ID, 'player_position', true );
-		$height = get_post_meta($post->ID, 'player_height', true );
-		$weight = get_post_meta($post->ID, 'player_weight', true );
-		$year = get_post_meta($post->ID, 'player_year', true );
-		$experience = get_post_meta($post->ID, 'player_experience', true );
-		$last_school = get_post_meta($post->ID, 'player_last_school', true );
-		$home_town = get_post_meta($post->ID, 'player_home_town', true );
-		$country = get_post_meta($post->ID, 'player_country', true );
-		$age = get_post_meta($post->ID, 'player_age', true );
+		mstw_log_msg( 'in single-player.php ... ' );
 		
-		$other = get_post_meta( $post->ID, 'player_other', true );
-
 		//Handle the display settings (options) & roster_type (format)
 		$options = get_option( 'mstw_tr_options' );
 		
-		mstw_log_msg( '$options (before) = ' );
+		mstw_log_msg( '$options = ' );
 		mstw_log_msg( $options );
 		
 		
-		//$options = wp_parse_args( $options, mstw_tr_get_data_fields_columns_defaults( ) );
+		$options = wp_parse_args( $options, mstw_tr_get_defaults( ) );
 		
 		//mstw_log_msg( '$defaults= ' );
 		//mstw_log_msg( mstw_tr_get_data_fields_columns_defaults( ) );
 		
-		//mstw_log_msg( '$options (after) = ' );
-		//mstw_log_msg( $options );
+		mstw_log_msg( '$options merged with defaults = ' );
+		mstw_log_msg( $options );
 		
 		//			
 		// Set the roster format based on the page args & plugin settings
@@ -87,13 +77,13 @@
 		
 		$settings = mstw_tr_set_fields_by_format( $roster_type ); 
 		
-		//mstw_log_msg( '$settings[' . $roster_type . '] = ' );
-		//mstw_log_msg( $settings );
+		mstw_log_msg( '$fields by format for ' . $roster_type . '] = ' );
+		mstw_log_msg( $settings );
 		
 		$options = wp_parse_args( $settings, $options );
 		
-		//mstw_log_msg( '$options (merged) = ' );
-		//mstw_log_msg( $options );
+		mstw_log_msg( '$options merged with fields by format = ' );
+		mstw_log_msg( $options );
 		
 		//$options = wp_parse_args( $options, mstw_tr_get_defaults( ) );
 		
@@ -145,6 +135,7 @@
 				<?php //Always show the player name ?>
 				<div id="player-name">
 					<?php 
+					//Convert 'last, first' to 'first last'
 					$options['name_format'] = ( $options['name_format'] == 'last-first' ) ? 'first-last' : $options['name_format'] ;
 					echo mstw_tr_build_player_name( $post, $options, 'profile' );
 					?>
@@ -160,62 +151,71 @@
 				
 				// the first two rows are (now almost) the same in all formats
 				if ( $options['show_position'] ) {
-					//echo $row_start . __('Position', 'mstw-loc-domain') . $new_cell .  $position . $row_end;
-					echo $row_start . $options['position_label'] . $new_cell .  $position . $row_end;
+					echo $row_start . $options['position_label'] . $new_cell .  get_post_meta($post->ID, 'player_position', true ) . $row_end;
 				}
 				
 				if ( $options['show_bats_throws'] ) {
 					$bats = get_post_meta($post->ID, 'player_bats', true );
+					$bats = ( $bats == 0 ) ? '' : $bats ;
 					$throws = get_post_meta($post->ID, 'player_throws', true );
-					echo $row_start . $options['bats_throws_label'] . $new_cell .  $bats . '/' . $throws . $row_end;
+					$throws = ( $throws == 0 ) ? '' : $throws ;
+					echo $row_start . $options['bats_throws_label'] . $new_cell 
+									.  mstw_tr_build_bats_throws( $post ) . $row_end;
 				}
 				
 				// If showing both height and weight show them as height/weight
 				// Otherwise show just one or the other
 				if ( $options['show_height'] and $options['show_weight'] ) {
-					echo $row_start . $options['height_label'] . '/' . $options['weight_label'] . $new_cell .  $height . '/' . $weight . $row_end;
+					echo $row_start . $options['height_label'] . '/' . $options['weight_label'] . $new_cell .  get_post_meta($post->ID, 'player_height', true ) . '/' . get_post_meta($post->ID, 'player_weight', true ) . $row_end;
 				} 
 				else  if ( $options['show_weight'] ) {
-						echo $row_start . $options['weight_label'] . $new_cell .  $weight . $row_end;
+						echo $row_start . $options['weight_label'] . $new_cell .  get_post_meta($post->ID, 'player_weight', true ) . $row_end;
 				} 
 				else if ( $options['show_height'] ) {
-						echo $row_start . $options['height_label'] . $new_cell .  $height . $row_end;
+						echo $row_start . $options['height_label'] . $new_cell .  get_post_meta($post->ID, 'player_height', true ) . $row_end;
 				}		
 				
 				//Year
 				if ( $options['show_year'] ) {
-					echo $row_start . $options['year_label'] . $new_cell . $year . $row_end;
+					echo $row_start . $options['year_label'] . $new_cell . get_post_meta( $post->ID, 'player_year', true ) . $row_end;
 				}
 				//Age
 				if ( $options['show_age'] ) {
-					echo $row_start . $options['age_label'] . $new_cell . $age . $row_end;
+					echo $row_start . $options['age_label'] . $new_cell . get_post_meta( $post->ID, 'player_age', true ) . $row_end;
 				}
 				//Experience
 				if ( $options['show_experience'] ) {
-					echo $row_start . $options['experience_label'] . $new_cell . $experience . $row_end;
+					echo $row_start . $options['experience_label'] . $new_cell . get_post_meta( $post->ID, 'player_experience', true ) . $row_end;
 				}
 				//Hometown
 				if ( $options['show_home_town'] ) {
-					echo $row_start . $options['home_town_label'] . $new_cell . $home_town . $row_end;
+					echo $row_start . $options['home_town_label'] . $new_cell . get_post_meta( $post->ID, 'player_home_town', true ) . $row_end;
 				}
 				//Last School
 				if ( $options['show_last_school'] ) {
-					echo $row_start . $options['last_school_label'] . $new_cell . $last_school . $row_end;
+					echo $row_start . $options['last_school_label'] . $new_cell . get_post_meta( $post->ID, 'player_last_school', true ) . $row_end;
 				}
 				//Country
 				if ( $options['show_country'] ) {
-					echo $row_start . $options['country_label'] . $new_cell . $country . $row_end;
+					echo $row_start . $options['country_label'] . $new_cell . get_post_meta( $post->ID, 'player_country', true ) . $row_end;
 				}
 				
 				//Other
 				if ( $options['show_other_info'] ) {
-					echo $row_start . $options['other_info_label'] . $new_cell . $other . $row_end;
+					echo $row_start . $options['other_info_label'] . $new_cell . get_post_meta( $post->ID, 'player_other', true ) . $row_end;
 				}
 				?>
 			</tbody>
 			</table> <!-- #player-info-->
-			
 			</div> <!-- #player-name-nbr -->
+			
+			<div id='team-logo'>
+				<?php
+				if ( $options['sp_show_logo'] ) {
+					echo mstw_tr_build_profile_logo( $post, $team_slug, $options, 'profile' );
+				} 
+				?>
+			</div> <!-- #team-logo -->
 		</div> <!-- .player-header -->
 		
 		<?php //Player Bio ?>

@@ -67,6 +67,16 @@
 					'page' => $display_on_page,
 					'section' => $page_section,
 				),
+				array( 	// Show or hide team logo on right of player profile
+					'type' => 'checkbox', 
+					'id' => 'sp_show_logo',
+					'name'	=> 'mstw_tr_options[sp_show_logo]',
+					'value' => mstw_safe_ref( $options, 'sp_show_logo' ),
+					'title'	=> __( 'Show Team Logo:', 'mstw-team-rosters' ),
+					'desc'	=> __( 'Show team logo at the top right. Only works if team is linked to MSTW Schedules & Scoreboards database.', 'mstw-team-rosters' ),
+					'page' => $display_on_page,
+					'section' => $page_section,
+				),
 				array( 	// Title for BIO CONTENT
 					'type' => 'text', 
 					'id' => 'sp_content_title',

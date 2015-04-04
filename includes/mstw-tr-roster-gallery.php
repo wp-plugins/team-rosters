@@ -34,15 +34,6 @@
 		// get the options set in the admin screen
 		$options = get_option( 'mstw_tr_options' );
 		
-		// Remove all keys with empty values
-		/*
-		foreach ( $options as $k=>$v ) {
-			if( $v == '' ) {
-				unset( $options[$k] );
-			}
-		}
-		*/
-		
 		// and merge them with the defaults
 		$args = wp_parse_args( $options, mstw_tr_get_defaults( ) );
 		
@@ -55,8 +46,8 @@
 		//mstw_log_msg( $test_attribs );
 		
 		$attribs = mstw_tr_set_fields( $attribs['roster_type'], $attribs );
-		mstw_log_msg( '$test_attribs vs. $attribs:' );
-		mstw_log_msg( array_diff( $attribs, $test_attribs ) );
+		//mstw_log_msg( '$test_attribs vs. $attribs:' );
+		//mstw_log_msg( array_diff( $attribs, $test_attribs ) );
 		
 		//get the team slug
 		if ( $attribs['team'] == 'no-team-specified' )

@@ -61,6 +61,19 @@ h1.player-head-title {
 	width: 150px;
 	height: 150px;
 }
+div #team-logo {
+	padding-left: 20px;
+	padding-right: 20px;
+	float: right;
+}
+
+div#team-logo img {
+	border: 1px solid #bbb;
+	padding: 5px;
+	background-color: #eee;
+	width: 150px;
+	height: 150px;
+}
 
 #player-name-nbr {
 	float: left;
@@ -118,6 +131,7 @@ table#player-info td.rt-col {
 	text-align: left;
 	padding-left: 6px;
 }
+
 
 /* 	
  *	player-bio contains whatever is in the post content 

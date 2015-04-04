@@ -455,7 +455,7 @@
 			echo mstw_build_css_rule( $options, 'tr_table_title_text_color', 'color' );
 		echo "}\n";
 		
-		echo "div#player-photo img { \n";
+		echo "div#player-photo img, div#team-logo img { \n";
 			echo mstw_build_css_rule( $options, 'sp_image_width', 'width', 'px' );
 			echo mstw_build_css_rule( $options, 'sp_image_height', 'height', 'px' );
 		echo "}\n";
