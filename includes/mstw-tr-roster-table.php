@@ -31,33 +31,60 @@
  //add_shortcode( 'mstw_roster_table', 'mstw_tr_roster_table_handler' );
  
  if ( !function_exists( 'mstw_tr_roster_table_handler' ) ) {
-	function mstw_tr_roster_table_handler( $atts ){
+	function mstw_tr_roster_table_handler( $atts = null ){
 		
-		mstw_log_msg( 'in mstw_tr_roster_table_handler ... ' );
+		//mstw_log_msg( 'in mstw_tr_roster_table_handler ... ' );
+		//mstw_log_msg( 'table shortcode arguments=' );
+		//mstw_log_msg( $atts );
+		
+		//
+		// the roster type comes from the shortcode args; defaults to 'custom'
+		//
+		if ( is_array( $atts ) && array_key_exists( 'roster_type', $atts ) ) {
+			$roster_type = ( mstw_tr_is_valid_roster_type( $atts['roster_type'] ) ) 
+						 ? $atts['roster_type'] : 'custom';
+		} else {
+			$roster_type = 'custom';
+		}
+		
+		//mstw_log_msg( '$roster_type= ' . $roster_type );
+		
+		//
+		// the team comes from the shortcode args; must be provided
+		//
+		if ( is_array( $atts ) && array_key_exists( 'team', $atts ) ) {
+			$team = $atts['team'];
+		} else {
+			return '<h3>No team specified in shortcode.</h3>';
+		}
+		
+		//mstw_log_msg( '$team= ' . $team );
+			
 
 		// get the options set in the admin screen
 		$options = get_option( 'mstw_tr_options' );
-		
-		// Remove all keys with empty values
-		//foreach ( $options as $k=>$v ) {
-			//if( $v == '' ) {
-				//unset( $options[$k] );
-			//}
-		//}
 
 		// and merge them with the defaults
 		$args = wp_parse_args( $options, mstw_tr_get_defaults( ) );
 		
-		// then merge the parameters passed to the shortcode with the result									
+		// then merge the arguments passed to the shortcode 
 		$attribs = shortcode_atts( $args, $atts );
+
+		// if a specific roster_type is specified, it takes priority over all
+		// including the other shortcode args
+		if( 'custom' != $roster_type ) {
+			$fields = mstw_tr_get_fields_by_roster_type( $roster_type );
+			//mstw_log_msg( ' $fields' );
+			//mstw_log_msg( $fields );
+			$attribs = wp_parse_args( $fields, $attribs );
+		}
 		
 		//mstw_log_msg( 'calling mstw_tr_build_roster_table() with $attribs:' );
 		//mstw_log_msg( $atts );
 		//mstw_log_msg( $attribs );
 		
-		$mstw_tr_roster = mstw_tr_build_roster_table( $attribs );
+		return mstw_tr_build_roster_table( $team, $roster_type, $attribs );
 		
-		return $mstw_tr_roster;
 	}
  }
  
@@ -68,59 +95,40 @@
  // into a pretty table.
  // --------------------------------------------------------------------------------------
  if( !function_exists( 'mstw_tr_build_roster_table' ) ) {
-	function mstw_tr_build_roster_table( $attribs ) {
-		mstw_log_msg( 'in mstw_tr_build_roster_table ...' );
+	function mstw_tr_build_roster_table( $team, $roster_type, $attribs ) {
 		
-		// These will come from plugin options someday 
-		// Add the colors and stuff
-		
-		//$output = '<pre>BEFORE:' . print_r( $attribs, true ) . '</pre>';
-		//return $output;
-		
-		$attribs = mstw_tr_set_fields( $attribs['roster_type'], $attribs );
-		
-		//mstw_log_msg( '$attribs: ' );
-		//mstw_log_msg( $attribs );
-		
-		extract( $attribs );
-		
-		//new attribute because single template isn't moved anymore - link_to_player_pages
-		$link_to_player_pages = 1;
-		
-		if ( $team == 'no-team-specified' ) {
-			$output = '<h3>No Team Specified </h3>';
-			return $output;
-		}
+		//mstw_log_msg( 'in mstw_tr_build_roster_table ...' );
+		//mstw_log_msg( 'roster table shortcode arguments=' );
+		//mstw_log_msg( $atts );
 		
 		$output = "";
 			
 		// Settings from the admin page
 		// THIS IS OKAY ... ATTRIBS HAVE ALREADY BEEN EXTRACTED
 		
-		$options = get_option( 'mstw_tr_options' );
+		//$options = get_option( 'mstw_tr_options' );
 		
 		// Set the roster table format. If default in [shortcode] atts, 
 		// then use the default setting from admin page.
-		if ( $roster_type == 'default' or $roster_type == '' ) 
-			$roster_type = $options['roster_type'];
+		//if ( $roster_type == 'default' or $roster_type == '' ) 
+		//	$roster_type = $options['roster_type'];
 		
-		if ( $show_title == 1 ) {
+		if ( $attribs['show_title'] == 1 ) {
 			//Set the title color
 			
 			$term_obj = get_term_by( 'slug', $team, 'mstw_tr_team', OBJECT );
-			//mstw_log_msg( ' in mstw_tr_build_roster ... $team:' . $team );
-			//mstw_log_msg( $term_obj );
+			
 			$team_name = ( $term_obj ) ? $term_obj->name : $team;
 			
-			$team_class = 'mstw_tr_roster_title mstw_tr_roster_title_' . $team;
+			$team_class = 'mstw-tr-roster-title mstw-tr-roster-title_' . $team;
 			
-			$title_h1 = '<h1 class="' . $team_class . '">'; 
+			$title_h1 = "<h1 class='$team_class'>\n"; 
 			
 			$output .= $title_h1 . $team_name . ' Roster' . '</h1>';
 		}
 		
 		// Set the sort order	
-		switch ( $sort_order ) {
+		switch ( $attribs['sort_order'] ) {
 			case'numeric':
 				$sort_key = 'player_number';
 				$order_by = 'meta_value_num';
@@ -149,40 +157,37 @@
 		if( $posts ) {
 			// Make table of posts
 			// Start with the table header
-
-			$team_class = 'mstw-tr-table-' . $team;
-			$output .= '<table class="mstw-tr-table ' . $team_class . '">';
 			
-			$output .= mstw_tr_build_roster_table_header( $attribs );
+			//
+			// include the right html if the 'use team colors' option is set
+			// this is all hidden for use by the jQuery script
+			//
+			$output .= mstw_tr_build_team_colors_html( $team, $attribs );
 			
+			$team_class = 'mstw-tr-table_' . $team;
 			
+			$output .= "<div class='mstw-tr-scroll-wrapper'>";
 			
-			// Keeps track of even and odd rows. Start with row 1 = odd.
-			$even_and_odd = array('even', 'odd');
-			$row_cnt = 1; 
+			$output .= "<table class='mstw-tr-table $team_class'>\n";
+			
+			$output .= mstw_tr_build_roster_table_header( $roster_type, $attribs );
 			
 			// Loop through the posts and make the rows
 			foreach($posts as $post){
-				// set up some housekeeping to make styling in the loop easier
-				// WE DON'T DO THE CSS THIS WAY ANYMORE
-				//$even_or_odd_row = $even_and_odd[$row_cnt]; 
-				//$row_class = 'mstw-tr-' . $even_or_odd_row;
-				
-				//$row_tr = '<tr class="' . $row_class . '">'; 
+				 
 				$row_tr = '<tr>';
-				//$row_td = '<td class="' . $row_class . '">'; 
 				$row_td = '<td>';
 				
 				// create the row
 				$row_string = $row_tr;	
 
 				// PHOTO COLUMN
-				if ( $show_photos ) {
+				if ( $attribs['show_photos'] ) {
 					$row_string .= '<td>' . mstw_tr_build_player_photo( $post, $team, $attribs, 'table' ) . '</td>';
 				}
 				
 				// NUMBER COLUMN
-				if ( $show_number ) {
+				if ( $attribs['show_number'] ) {
 					$row_string .= mstw_tr_add_player_number( $post, $row_td );
 				}
 				
@@ -190,12 +195,12 @@
 				$row_string .= '<td>' . mstw_tr_build_player_name( $post, $attribs, 'table'  ) . '</td>';  
 				
 				// POSITION COLUMN
-				if ( $show_position ) {
+				if ( $attribs['show_position'] ) {
 					$row_string .= $row_td . get_post_meta( $post->ID, 'player_position', true ) . '</td>';
 				}
 				
 				// BATS/THROWS COLUMN (baseball)
-				if ( $show_bats_throws ) {
+				if ( $attribs['show_bats_throws'] ) {
 					
 					//$bats = get_post_meta( $post->ID, 'player_bats', true );
 					//$throws = get_post_meta( $post->ID, 'player_throws', true );
@@ -204,32 +209,32 @@
 				}	
 				
 				// HEIGHT COLUMN
-				if ( $show_height ) {
+				if ( $attribs['show_height'] ) {
 					$row_string .= $row_td . get_post_meta( $post->ID, 'player_height', true ) . '</td>';
 				}
 				
 				// WEIGHT COLUMN
-				if ( $show_weight ) {
+				if ( $attribs['show_weight'] ) {
 					$row_string =  $row_string . $row_td . get_post_meta( $post->ID, 'player_weight', true ) . '</td>';
 				}
 				
 				// YEAR (in school) COLUMN
-				if ( $show_year ) {
+				if ( $attribs['show_year'] ) {
 					$row_string =  $row_string . $row_td . get_post_meta( $post->ID, 'player_year', true ) . '</td>';
 				}
 				
 				// AGE column
-				if ( $show_age ) {
+				if ( $attribs['show_age'] ) {
 					$row_string =  $row_string . $row_td . get_post_meta( $post->ID, 'player_age', true ) . '</td>';
 				}
 				
 				// EXPERIENCE column
-				if ( $show_experience ) {
+				if ( $attribs['show_experience'] ) {
 					$row_string =  $row_string . $row_td . get_post_meta( $post->ID, 'player_experience', true ) . '</td>';
 				}
 				
 				// HOMETOWN column
-				if ( $show_home_town ) {
+				if ( $attribs['show_home_town'] ) {
 					if ( $roster_type == 'college' or $roster_type == 'baseball-college' ) {
 						$row_string .=  $row_td . get_post_meta( $post->ID, 'player_home_town', true ) . 
 						' (' . get_post_meta( $post->ID, 'player_last_school', true ) . ') </td>';
@@ -240,37 +245,39 @@
 				}
 				
 				// LAST SCHOOL column
-				if ( $show_last_school ) {
+				if ( $attribs['show_last_school'] ) {
 					if ( $roster_type == 'pro' or $roster_type == 'baseball-pro' ) {
 						$row_string .= $row_td . get_post_meta( $post->ID, 'player_last_school', true ) . 
 						' (' . get_post_meta( $post->ID, 'player_country', true ) . ') </td>';
 					}
-					else if ( $roster_type == 'custom' ) {
+					else if ( 'custom' == $roster_type ) {
 						$row_string .= $row_td . get_post_meta( $post->ID, 'player_last_school', true )  . '</td>';
 					}
 				}
 				
 				// COUNTRY column
-				if ( $show_country and $roster_type == 'custom' ) {
+				if ( $attribs['show_country']  and 'custom' == $roster_type ) {
 					$row_string .= $row_td . get_post_meta( $post->ID, 'player_country', true )  . '</td>';
 				}
 				
 				// OTHER column
-				if ( $show_other_info and $roster_type == 'custom' ) {
+				if ( $attribs['show_other_info'] and 'custom' == $roster_type ) {
 					$row_string .= $row_td . get_post_meta( $post->ID, 'player_other', true ) .'</td>';
 				}
 				
 				$output = $output . $row_string;
 				
-				$row_cnt = 1- $row_cnt;  // Get the styles right
 				
 			} // end of foreach post or end of table content
 			
 			$output .= '</table>';
+			$output .= '</div>'; //scroll-wrapper
 		}
 		else { // No posts were found
 		
-			$output =  $output . '<h3>' . sprintf( __( 'Sorry, No players found for team: %s', 'mstw-team-rosters' ), $team ) . '</h3>';
+			//$output =  $output . '<h3>' . sprintf( __( 'Sorry, No players found for team: %s', 'mstw-team-rosters' ), $team ) . '</h3>';
+			
+			$output = sprintf( __( "%sNo players found on team: '%s'%s", 'mstw-team-rosters' ), '<h1>', $team, '</h1>' );
 			
 		}
 		
@@ -280,11 +287,11 @@
  }
  
  if( !function_exists( 'mstw_tr_build_roster_table_header' ) ) {
-	function mstw_tr_build_roster_table_header( $args ) {
+	function mstw_tr_build_roster_table_header( $roster_type, $args ) {
 		// leave this open and check on styles from the admin settings
 			$ret_html = '<thead><tr>';
 			
-			$roster_type = $args['roster_type'];
+			//$roster_type = $args['roster_type'];
 			
 			// Check the PHOTO Column
 			if ( $args['show_photos'] ) {
@@ -335,31 +342,33 @@
 			
 			// HOMETOWN column
 			if ( $args['show_home_town'] ) {
-				if ( $roster_type == 'college' or $roster_type == 'baseball-college' ) {
+				if( false !== strpos( $roster_type, 'college' ) ) {
 					$ret_html .= '<th>' . $args['home_town_label'] . ' ('. $args['last_school_label'] . ')' . '</th>';
 				}
-				else if ( $roster_type == 'custom' ) {
+				else if ( 'custom' == $roster_type ) {
 					$ret_html .= '<th>' . $args['home_town_label'] . '</th>';
 				}
 			}
 			
 			// LAST SCHOOL column
 			if ( $args['show_last_school'] ) {
-				if ( $roster_type == 'pro' or $roster_type == 'baseball-pro' ) {
-					$ret_html .= '<th>' . $args['last_school_label'] . ' ('. $args['country_label'] . ')' . '</th>';
+				if( false != strpos( $roster_type, 'pro' ) ) {
+					$ret_html .= '<th>' . $args['last_school_label'] 
+										. ' ('. $args['country_label'] 
+										. ')' . '</th>';	
 				}
-				else if ( $roster_type == 'custom' ) {
+				else if ( 'custom' == $roster_type ) {
 					$ret_html .= '<th>' . $args['last_school_label'] . '</th>';
 				}
 			}
 			
 			// COUNTRY column
-			if ( $args['show_country'] and $roster_type == 'custom' ) {
+			if ( $args['show_country'] and 'custom' == $roster_type ) {
 				$ret_html .= '<th>' . $args['country_label'] . '</th>';
 			}
 			
 			// OTHER column
-			if ( $args['show_other_info'] and $roster_type == 'custom' ) {
+			if ( $args['show_other_info'] and 'custom' == $roster_type ) {
 				$ret_html .= '<th>' . $args['other_info_label'] . '</th>';
 			}
 			
@@ -411,4 +420,3 @@
 		
 	 } //End: mstw_tr_add_player_name()
  }
-?>

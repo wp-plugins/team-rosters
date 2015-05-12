@@ -241,6 +241,10 @@ if( !function_exists( 'mstw_tr_validate_settings' ) ) {
 		// only replace existing settings with valid $input values
 		$output = get_option( 'mstw_tr_options' );
 		
+		if( array_key_exists( 'team', $output ) ) {
+			unset( $output['team'] );
+		}
+		
 		// Get current tab so we know what fields to validate and save
 		// Default to first/main settings tab
 		$current_tab = ( isset( $_POST['current_tab'] ) ) ? $_POST['current_tab'] : 'data-fields-columns-tab';
@@ -279,12 +283,12 @@ if( !function_exists( 'mstw_tr_validate_settings' ) ) {
 						break;	
 				}
 				
-				mstw_add_admin_notice( 'mstw_tr_admin_messages','updated', $msg );
+				mstw_add_admin_notice( 'mstw-tr-admin-notice','updated', $msg );
 			}
 			else {
 				// Don't change nuthin'
 				mstw_log_msg( 'Reset cancelled.' );
-				mstw_add_admin_notice( 'mstw_tr_admin_messages', 'updated', 'Settings reset to defaults canceled.' );
+				mstw_add_admin_notice( 'mstw-tr-admin-notice', 'updated', 'Settings reset to defaults canceled.' );
 			}
 		}
 		else {
@@ -317,7 +321,7 @@ if( !function_exists( 'mstw_tr_validate_settings' ) ) {
 										) {	
 									// set error message and don't change settings
 									$msg = sprintf( __( 'Error with %s = \'%s\'. Reset to previous value.', 'mstw-team-roster' ), $key, $input[$key] );
-									mstw_add_admin_notice( 'mstw_tr_admin_messages', 'error', $msg );
+									mstw_add_admin_notice( 'mstw-tr-admin-notice', 'error', $msg );
 								} else {
 									$output[$key] = abs( intval( $input[$key] ) );
 								}
@@ -338,22 +342,31 @@ if( !function_exists( 'mstw_tr_validate_settings' ) ) {
 					$output['use_team_colors'] = isset( $input['use_team_colors'] ) and $input['use_team_colors'] == 1 ? 1 : 0;
 					
 					foreach( $input as $key => $value ) {
-						$sanitized_color = mstw_sanitize_hex_color( $input[$key] );
-						// decide what to do - save new setting 
-						// or display error & revert to last setting
-						if ( isset( $sanitized_color ) ) {
-							// blank input is valid
-							$output[$key] = $sanitized_color;
+						switch( $key ) {
+							case 'use_team_colors':
+								// handled this one above
+								break;
+							default:
+								// all the color settings
+								$sanitized_color = mstw_sanitize_hex_color( $input[$key] );
+								// decide what to do - save new setting 
+								// or display error & revert to last setting
+								if ( isset( $sanitized_color ) ) {
+									// blank input is valid
+									$output[$key] = $sanitized_color;
+								}
+								else  {
+									// there's an error. Reset to the last stored value ...
+									// don't need to do this but $output[$key] = $options[$key];
+									// and add error message
+									$msg = sprintf( __( 'Error: %s reset to the default.', 'mstw-team-roster' ), $key );
+									mstw_add_admin_notice( 'mstw-tr-admin-notice', 'error', $msg );
+								}
+								break;
 						}
-						else  {
-							// there's an error. Reset to the last stored value ...
-							// don't need to do this but $output[$key] = $options[$key];
-							// and add error message
-							$msg = sprintf( __( 'Error: %s reset to the default.', 'mstw-team-roster' ), $key );
-							mstw_ss_add_admin_notice( 'error', $msg );
-						}
+						
 					}
-					
+							
 					$msg = __( 'Roster table colors settings updated.', 'mstw-team-roster' );
 					break;
 					
@@ -384,7 +397,7 @@ if( !function_exists( 'mstw_tr_validate_settings' ) ) {
 										) {	
 									// set error message and don't change settings
 									$msg = sprintf( __( 'Error with %s = \'%s\'. Reset to previous value.', 'mstw-team-roster' ), $key, $input[$key] );
-									mstw_add_admin_notice( 'mstw_tr_admin_messages', 'error', $msg );
+									mstw_add_admin_notice( 'mstw-tr-admin-notice', 'error', $msg );
 								} else {
 									$output[$key] = abs( intval( $input[$key] ) );
 								}
@@ -403,7 +416,7 @@ if( !function_exists( 'mstw_tr_validate_settings' ) ) {
 									// don't need to do this but $output[$key] = $options[$key];
 									// and add error message
 									$msg = sprintf( __( 'Error: %s reset to the default.', 'mstw-team-roster' ), $key );
-									mstw_ss_add_admin_notice( 'error', $msg );
+									mstw_add_admin_notice( 'mstw-tr-admin-notice', 'error', $msg );
 								}
 								break;
 						
@@ -417,7 +430,7 @@ if( !function_exists( 'mstw_tr_validate_settings' ) ) {
 			
 			// set updated message
 			
-			mstw_add_admin_notice( 'mstw_tr_admin_messages', 'updated', $msg );
+			mstw_add_admin_notice( 'mstw-tr-admin-notice', 'updated', $msg );
 			
 		} // End: else validate options, not reset
 		

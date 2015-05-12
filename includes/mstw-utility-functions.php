@@ -4,7 +4,7 @@
  * 	'Helper functions' used throughout the MSTW plugin family
  *
  *	MSTW Wordpress Plugins (http://shoalsummitsolutions.com)
- *	Copyright 2014 Mark O'Donnell (mark@shoalsummitsolutions.com)
+ *	Copyright 2014-15 Mark O'Donnell (mark@shoalsummitsolutions.com)
  *
  *	This program is free software: you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
@@ -840,7 +840,8 @@ if ( !function_exists( 'mstw_user_has_ss_rights' ) ) {
 //
 if ( !function_exists ( 'mstw_admin_notice' ) ) {
 	function mstw_admin_notice( $transient = 'mstw_admin_messages' ) {
-		
+		mstw_log_msg( 'in mstw_admin_notice ...' );
+		mstw_log_msg( '$transient= ' . $transient );
 		if ( get_transient( $transient ) !== false ) {
 			// get the types and messages
 			$messages = get_transient( $transient );
@@ -876,24 +877,27 @@ if ( !function_exists ( 'mstw_admin_notice' ) ) {
 //
 if ( !function_exists ( 'mstw_add_admin_notice' ) ) {
 	function mstw_add_admin_notice( $transient = 'mstw_admin_messages', $type = 'updated', $notice ) {
-		//default type to 'updated'
-		if ( !( $type == 'updated' or $type == 'error' or $type =='update-nag' or $type == 'warning' ) ) $type = 'updated';
+		//mstw_log_msg( 'in mstw_add_admin_notice ..' );
+		//mstw_log_msg( '$transient= ' . $transient . ' $notice= ' . $notice );
 		
-		//set the admin message
-		$new_msg = array( array(
-							'type'	=> $type,
-							'notice'	=> $notice
-							)
+		$valid_types = array( 'updated', 'error', 'update-nag', 'warning' );
+		
+		// change any invalid type to 'updated'
+		$type = ( in_array( $type, $valid_types ) ) ? $type : 'updated'; 
+		
+		// set the admin message
+		$new_msg = array( array( 'type'	=> $type,
+								 'notice'	=> $notice,
+								),
 						);
 
-		//either create or add to the sss_admin transient
+		// create and/or add to the specified transient
 		$existing_msgs = get_transient( $transient );
 		
 		if ( $existing_msgs === false ) {
 			// no transient exists, create it with the current message
 			set_transient( $transient, $new_msg, HOUR_IN_SECONDS );
-		} 
-		else {
+		} else {
 			// transient exists, append current message to it
 			$new_msgs = array_merge( $existing_msgs, $new_msg );
 			set_transient ( $transient, $new_msgs, HOUR_IN_SECONDS );

@@ -5,7 +5,7 @@
  */
 
 /*-----------------------------------------------------------------------------------
-Copyright 2012-13  Mark O'Donnell  (email : mark@shoalsummitsolutions.com)
+Copyright 2012-15  Mark O'Donnell  (email : mark@shoalsummitsolutions.com)
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -81,8 +81,8 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		//
 		// Add custom admin messages for adding/editting custom taxonomy terms
 		//
-		//add_filter('term_updated_messages', 'mstw_tr_updated_term_messages');
-		//
+		add_filter( 'term_updated_messages', 'mstw_tr_updated_term_messages');
+		
 	} else {
 		die( __( 'You is no admin. You a cheater!', 'mstw-team-rosters' ) );
 	}
@@ -93,19 +93,12 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 	if( !function_exists( 'mstw_tr_admin_init' ) ) {
 		function mstw_tr_admin_init( ){
 		
-			//THIS INCLUDE SHOULD GO AWAY! Use mstw-utility-functions.php instead.
-			require_once  'mstw-admin-utils.php';
-			
 			include_once 'mstw-tr-player-cpt-admin.php';
 			
 			include_once 'mstw-tr-team-tax-admin.php';
 			
 			include_once 'mstw-tr-settings.php';
 			
-			
-		
-			include_once 'mstw-tr-data-migration-page.php';
-
 			// Settings for the fields and columns display and label controls.
 			if ( false == get_option( 'mstw_tr_options' ) ) {
 				add_option( 'mstw_tr_options' );
@@ -286,7 +279,8 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 
 	function mstw_tr_register_menu_pages( ) {
 		//mstw_log_msg( 'including mstw-tr-import-class' );
-		include_once 'mstw-tr-import-class.php';
+		include_once 'mstw-tr-csv-import-class.php';
+		//include_once 'mstw-tr-import-class.php';
 		
 		//Top Level Menu
 		
@@ -465,7 +459,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		//mstw_log_msg( 'in mstw_tr_updated_term_messages ... ' );
 		//mstw_log_msg( $messages );
 		
-		 $messages['mstw_tr_team'] = array(
+		$messages['mstw_tr_team'] = array(
 					0 => '',
 					1 => __( 'Team added.', 'mstw-team-rosters' ),
 					2 => __( 'Team deleted.', 'mstw-team-rosters' ),

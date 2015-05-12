@@ -22,20 +22,23 @@
 
  
  // ----------------------------------------------------------------
-// Remove the row actions
-//	
-add_filter( 'mstw_tr_team_row_actions', 'mstw_tr_team_row_actions' ); //, 10, 2 );
+ // Remove the row actions
+ //	
+ add_filter( 'mstw_tr_team_row_actions', 'mstw_tr_team_row_actions' ); //, 10, 2 );
 
-function mstw_tr_team_row_actions( $actions ) { //, $post ) {
-		 
-	unset( $actions['inline hide-if-no-js'] );
-	unset( $actions['view'] );
-	unset( $actions['delete'] );
-	unset( $actions['edit'] );
+if( !function_exists( 'mstw_tr_team_row_actions' ) ) {
+	function mstw_tr_team_row_actions( $actions ) { //, $post ) {
+		//mstw_log_msg( 'in mstw_tr_team_row_actions( ) ... ' );
 		
-	return $actions;
-	
-} //End: mstw_tr_team_row_actions( )
+		unset( $actions['inline hide-if-no-js'] );
+		unset( $actions['view'] );
+		//unset( $actions['delete'] );
+		//unset( $actions['edit'] );
+		
+		return $actions;
+
+	} //End: mstw_tr_team_row_actions( )
+ }
 
  //----------------------------------------------------------------------
  // Add MSTW SS team link to team taxonomy add & edit screens
@@ -45,7 +48,7 @@ function mstw_tr_team_row_actions( $actions ) { //, $post ) {
 
  if( !function_exists( 'mstw_tr_team_add_form' ) ) {
 	function mstw_tr_team_add_form( ) {
-		//mstw_log_msg( 'in mstw_tr_team_add_form_fields() ... ' );
+		//mstw_log_msg( 'in mstw_tr_team_add_form_fields( ) ... ' );
 		
 		if( !is_plugin_active( 'mstw-schedules-scoreboards/mstw-schedules-scoreboards.php' ) ) {
 		?>

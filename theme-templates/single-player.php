@@ -22,18 +22,47 @@
  *	You should have received a copy of the GNU General Public License
  *	along with this program. If not, see <http://www.gnu.org/licenses/>.
  *-------------------------------------------------------------------------*/
- ?>
+  
+	get_header( ); 
+ 
+	//mstw_log_msg( 'in single-player.php ... ' );
+		
+	// Get the settings from the admin page
+	$options = get_option( 'mstw_tr_options' );
+	
+	// merge them with the defaults, so every setting has a value
+	$options = wp_parse_args( $options, mstw_tr_get_defaults( ) );
+		
+	// Set the roster format based on the page args & plugin settings 
+	$roster_type = ( isset( $_GET['roster_type'] ) && $_GET['roster_type'] != '' ) ? 
+						$_GET['roster_type'] : 
+						$options['roster_type'];
+	
+	// Get the settings for the roster format
+	$settings = mstw_tr_get_fields_by_roster_type( $roster_type ); 
 
- <?php get_header(); ?>
+	// The roster type settings trump all other settings
+	$options = wp_parse_args( $settings, $options );
+	
+	// Find the player's team - use the first one
+	$player_teams = wp_get_object_terms($post->ID, 'mstw_tr_team');
+		
+	if( !empty( $player_teams ) and !is_wp_error( $player_teams ) ) {
+		$team_name = $player_teams[0]->name;
+		$team_slug = $player_teams[0]->slug;
+	} else {
+		$team_name = __( 'Unspecified', 'mstw-team-rosters' );
+		$team_slug = __( 'unknown', 'mstw-team-rosters' );
+	}
+ ?>
 
 	<div id="primary">
 		<div id="content" role="main">
 
-		<?php //while ( have_posts() ) : the_post(); ?>
-
+		<!-- Add the back link -->
 		<nav id="nav-single">
 			<h3 class="assistive-text"><?php _e( 'Post navigation', 'mstw-team-rosters' ); ?></h3>
-			<span class="nav-previous">
+			<span class="nav-previous nav-previous_single-player">
 				<?php 
 				$back = ( isset( $_SERVER['HTTP_REFERER'] ) ) ? $_SERVER['HTTP_REFERER'] : '';
 				if( isset( $back ) && $back != '' ) {
@@ -51,73 +80,20 @@
 		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
 		<?php
-		mstw_log_msg( 'in single-player.php ... ' );
+		// Set up the hidden fields for jScript CSS 
+		$hidden_fields = mstw_tr_build_team_colors_html( $team_slug, $options );
+		//mstw_log_msg( 'mstw_tr_build_team_colors_html( ) ... returned:' );
+		//mstw_log_msg( $hidden_fields );
+		echo $hidden_fields;
 		
-		//Handle the display settings (options) & roster_type (format)
-		$options = get_option( 'mstw_tr_options' );
-		
-		mstw_log_msg( '$options = ' );
-		mstw_log_msg( $options );
-		
-		
-		$options = wp_parse_args( $options, mstw_tr_get_defaults( ) );
-		
-		//mstw_log_msg( '$defaults= ' );
-		//mstw_log_msg( mstw_tr_get_data_fields_columns_defaults( ) );
-		
-		mstw_log_msg( '$options merged with defaults = ' );
-		mstw_log_msg( $options );
-		
-		//			
-		// Set the roster format based on the page args & plugin settings
-		//   
-		$roster_type = ( isset( $_GET['roster_type'] ) && $_GET['roster_type'] != '' ) ? 
-							$_GET['roster_type'] : 
-							$options['roster_type'];
-		
-		$settings = mstw_tr_set_fields_by_format( $roster_type ); 
-		
-		mstw_log_msg( '$fields by format for ' . $roster_type . '] = ' );
-		mstw_log_msg( $settings );
-		
-		$options = wp_parse_args( $settings, $options );
-		
-		mstw_log_msg( '$options merged with fields by format = ' );
-		mstw_log_msg( $options );
-		
-		//$options = wp_parse_args( $options, mstw_tr_get_defaults( ) );
-		
-		//mstw_log_msg( 'in single_player.php ... ' );
-		//mstw_log_msg( $options );
-		
-		// find the player's team slug ... 
-		// use the first one in the list
-		$player_teams = wp_get_object_terms($post->ID, 'mstw_tr_team');
-		
-		if( !empty( $player_teams ) and !is_wp_error( $player_teams ) ) {
-			$team_name = $player_teams[0]->name;
-			$team_slug = $player_teams[0]->slug;
-		}
-		else {
-			$team_name = __( 'Unspecified', 'mstw-team-rosters' );
-			$team_slug = __( 'unknown', 'mstw-team-rosters' );
-		}
-
 		// Build the single player page title
 		if ( $options['sp_show_title'] ) {	
-			echo "<h1 class='player-head-title player-head-title-$team_slug'>$team_name</h1>";
+			echo "<h1 class='player-head-title player-head-title_$team_slug'>$team_name</h1>";
 		}
-		
-		// Build the player profile header
 		?>
 		
-		<div class="player-header player-header-<?php echo( $team_slug ) ?>">
+		<div class="player-header player-header_<?php echo( $team_slug ) ?>">
 
-			<?php /*First, figure out the player's photo 
-					may want to include this div in mstw_tr_build_player_photo 
-					depends on the other usage ... in galleries? ... in tables??>
-				  */ ?>
-			
 			<div id = "player-photo">
 				<?php 
 				echo mstw_tr_build_player_photo( $post, $team_slug, $options, 'profile' );
@@ -211,8 +187,13 @@
 			
 			<div id='team-logo'>
 				<?php
+				
 				if ( $options['sp_show_logo'] ) {
-					echo mstw_tr_build_profile_logo( $post, $team_slug, $options, 'profile' );
+					//mstw_log_msg( 'in single-player.php ...' );
+					//mstw_log_msg( 'calling mstw_tr_build_profile_logo( $team_slug )' );
+					//mstw_log_msg( $team_slug );
+					
+					echo mstw_tr_build_profile_logo( $team_slug );
 				} 
 				?>
 			</div> <!-- #team-logo -->
@@ -222,7 +203,7 @@
 		
 		<?php if( ( $bio = $post->post_content ) != '' ) {  ?>
 		
-			<div class="player-bio player-bio-<?php echo $team_slug; ?> ">
+			<div class="player-bio player-bio_<?php echo $team_slug; ?> ">
 					
 			<?php $sp_content_title = ( $options['sp_content_title'] == '' ) ? 
 					__( 'Player Bio', 'mstw-loc-domain' ) : 

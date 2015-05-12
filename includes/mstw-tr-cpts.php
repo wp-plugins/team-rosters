@@ -157,7 +157,10 @@ function mstw_tr_register_cpts( ) {
 			'hierarchical' 			=> false, //behave like tags
 			//'update_count_callback'	=> '',
 			'query_var' 			=> true, 
-			'rewrite' 				=> true,
+			'rewrite' 				=> array(
+											'slug' 			=> 'team',
+											'with_front' 	=> false,
+											),
 			//'capabilities'			=> array( ),
 			//'sort'					=> null,
 		);
@@ -206,7 +209,7 @@ function mstw_tr_register_cpts( ) {
 									)
 		);
 		
-	register_post_type( 'mstw_ss_team', $args);
+	//register_post_type( 'mstw_ss_team', $args);
 	
 
 } //End: mstw_tr_register_cpts( )

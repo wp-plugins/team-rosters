@@ -27,9 +27,34 @@
 //add_shortcode( 'mstw_roster_gallery', 'mstw_tr_roster_gallery_handler' );
 
  if( !function_exists( 'mstw_tr_roster_gallery_handler' ) ) {
-	function mstw_tr_roster_gallery_handler( $atts ) {
-		
+	function mstw_tr_roster_gallery_handler( $atts ) {	
 		//mstw_log_msg( 'in mstw_tr_roster_gallery_handler ... ' );
+		
+		//mstw_log_msg( 'player gallery shortcode arguments=' );
+		//mstw_log_msg( $atts );
+		
+		//
+		// the roster type comes from the shortcode args; defaults to 'custom'
+		//
+		if ( array_key_exists( 'roster_type', $atts ) ) {
+			$roster_type = ( mstw_tr_is_valid_roster_type( $atts['roster_type'] ) ) 
+							 ? $atts['roster_type'] : 'custom';
+		} else {
+			$roster_type = 'custom';
+		}
+		
+		//mstw_log_msg( '$roster_type= ' . $roster_type );
+		
+		//
+		// the team comes from the shortcode args; must be provided
+		//
+		if ( array_key_exists( 'team', $atts ) ) {
+			$team = $atts['team'];
+		} else {
+			return '<h3>No team specified in shortcode.</h3>';
+		}
+		
+		//mstw_log_msg( '$team= ' . $team );
 
 		// get the options set in the admin screen
 		$options = get_option( 'mstw_tr_options' );
@@ -37,54 +62,18 @@
 		// and merge them with the defaults
 		$args = wp_parse_args( $options, mstw_tr_get_defaults( ) );
 		
-		// then merge the parameters passed to the shortcode with the result									
+		// then merge the parameters passed to the shortcode 
 		$attribs = shortcode_atts( $args, $atts );
 		
-		$format_settings = mstw_tr_set_fields_by_format( $attribs['roster_type'] );
-		$test_attribs = wp_parse_args( $attribs, $format_settings );
-		//mstw_log_msg( '$test_attribs:' );
-		//mstw_log_msg( $test_attribs );
-		
-		$attribs = mstw_tr_set_fields( $attribs['roster_type'], $attribs );
-		//mstw_log_msg( '$test_attribs vs. $attribs:' );
-		//mstw_log_msg( array_diff( $attribs, $test_attribs ) );
-		
-		//get the team slug
-		if ( $attribs['team'] == 'no-team-specified' )
-			return '<h3>No Team Specified </h3>';
-		else
-			$team_slug = $attribs['team'];
-			
-		// Set the sort order	
-		switch ( $attribs['sort_order'] ) {
-			case'numeric':
-				$sort_key = 'player_number';
-				$order_by = 'meta_value_num';
-				break;
-			case 'alpha-first':
-				$sort_key = 'player_first_name';
-				$order_by = 'meta_value';
-				break;
-			default: // alpha by last
-				$sort_key = 'player_last_name';
-				$order_by = 'meta_value';
-				break;
+		// if a specific roster_type is specified, it takes priority over all
+		// including the other shortcode args
+		if( 'custom' != $roster_type ) {
+			$fields = mstw_tr_get_fields_by_roster_type( $roster_type );
+			//mstw_log_msg( ' $fields' );
+			//mstw_log_msg( $fields );
+			$attribs = wp_parse_args( $fields, $attribs );
 		}
-		
-		// Get the posts		
-		$posts = get_posts(array( 'numberposts' => -1,
-								  'post_type' => 'mstw_tr_player',
-								  'mstw_tr_team' => $team_slug, 
-								  'orderby' => $order_by, 
-								  'meta_key' => $sort_key,
-								  'order' => 'ASC' 
-								));		
-		
-		//Now gotta grab the posts
-		
-		$mstw_tr_gallery = mstw_tr_build_gallery( $team_slug, $posts, $attribs, $attribs['roster_type'] );
-		
-		return $mstw_tr_gallery;
+		return mstw_tr_build_gallery( $team, $roster_type, $attribs );
 	}
  }
 ?>
