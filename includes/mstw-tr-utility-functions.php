@@ -49,9 +49,11 @@
  * 13. mstw_tr_admin_notice: displays team rosters admin notices 
  * 14. mstw_tr_build_colors_html - builds the HTML for team colors
  *		when the 'use team colors' display option is set 
- * 15. mstw_tr_find_team_in_ss - Determines if a team is linked to a team 
+ * 15. mstw_tr_build_hidden_fields: builds the hidden fields for the 
+ *		JavaScript to use when using the teams DB colors.
+ * 16. mstw_tr_find_team_in_ss - Determines if a team is linked to a team 
  *		in the Schedules & Scoreboards plugin DB
- *
+ * 17. mstw_tr_build_team_logo: Builds the HTML for a team logo 
  *--------------------------------------------------------------------------*/
  
  //-----------------------------------------------------------
@@ -170,6 +172,8 @@
 				'sp_show_title'			=> 1,
 				'sp_show_logo'			=> 0,
 				'sp_content_title'		=> __( 'Player Bio', 'mstw-team-rosters' ),
+				
+				'sp_use_team_colors'	=> 0,
 				
 				'sp_image_width'		=> 150,
 				'sp_image_height'		=> 150,
@@ -489,7 +493,7 @@
 	
 		if( $posts ) {
 			// Set up the hidden fields for jScript CSS 
-			$output = mstw_tr_build_team_colors_html( $team_slug, $options );
+			$output = mstw_tr_build_team_colors_html( $team_slug, $options, 'gallery' );
 			
 			foreach( $posts as $post ) { // ( have_posts( ) ) : the_post();
 				
@@ -824,7 +828,7 @@
  //			the Schedules & Scoreboards DB.
  //	
  if ( !function_exists( 'mstw_tr_build_team_colors_html' ) ) {
-	function mstw_tr_build_team_colors_html( $team = null, $options = null ) {
+	function mstw_tr_build_team_colors_html( $team = null, $options = null, $type = 'table' ) {
 		//mstw_log_msg( 'in mstw_tr_build_team_colors_html ...' );
 		//mstw_log_msg( 'mstw_ss_team post type exists: ' . post_type_exists( 'mstw_ss_team' ) );
 		
@@ -833,56 +837,77 @@
 		// return if $team is not specified or mstw_ss_team doesn't exist
 		if( $team && post_type_exists( 'mstw_ss_team' ) ) {
 			
-			// check that 'use_team_colors' is set
-			if ( isset( $options ) 
-				 && array_key_exists( 'use_team_colors', $options ) 
-			     && $options['use_team_colors'] ) {
-	 
-				//Check if $team is linked to a team in the MSTW S&S DB
-				$team_obj = mstw_tr_find_team_in_ss( $team );
+			//Check that $team is linked to a team in the MSTW S&S DB
+			if( $team_obj = mstw_tr_find_team_in_ss( $team ) ) {
+				//mstw_log_msg( 'found $team_obj ...' );
+				//mstw_log_msg( 'ID= ' . $team_obj->ID );
 				
-				if( $team_obj ) {
-					//mstw_log_msg( 'found $team_obj ...' );
-					//mstw_log_msg( 'ID= ' . $team_obj->ID );
-					
-					// jQuery looks first for this element
-					$html .= "<mstw-team-colors class='$team' id='$team' style='display: none'>\n";
-					
-					$bkgd_color = get_post_meta( $team_obj->ID, 'team_primary_bkgd_color', true );
-					if( $bkgd_color ) {
-						$html .= "<team-color id='bkgd-color' >$bkgd_color</team-color>\n";
+				// check that 'use_team_colors' is set for tables or
+				//	'sp_use_team_colors' is set for profiles & galleries
+				if ( isset( $options ) ) {
+					if ( 'table' == $type ) {
+						if( array_key_exists( 'use_team_colors', $options ) && $options['use_team_colors'] ) {
+						  $html .= mstw_tr_build_hidden_fields( $team, $team_obj );
+						}
+					} 
+					else {
+						if( array_key_exists( 'sp_use_team_colors', $options ) && $options['sp_use_team_colors'] ) {
+						   $html .= mstw_tr_build_hidden_fields( $team, $team_obj );
+						}
 					}
-					
-					$text_color = get_post_meta( $team_obj->ID, 'team_primary_text_color', true );
-					if( $text_color ) {
-						$html .= "<team-color id='text-color' >$text_color</team-color>\n";
-					}
-					
-					$accent_1 = get_post_meta( $team_obj->ID, 'team_accent_color_1', true );
-					if( $accent_1 ) {
-						$html .= "<team-color id='accent-1' >$accent_1</team-color>\n";
-					}
-					
-					$accent_2 = get_post_meta( $team_obj->ID, 'team_accent_color_2', true );
-					if( $accent_2 ) {
-						$html .= "<team-color id='accent-2' >$accent_2</team-color>\n";
-					}
-					
-					$html .= "</mstw-team-colors>\n";
-					
-				} //End if( $team_obj)
-				//} //End: if ( array_key_exists( $team, $team_links ) ...
+
+				} //End: if ( isset( $options ) )
 				
-			} //End: if ( isset( $options )
-			
+			} //End: if( $team_obj = mstw_tr_find_team_in_ss( $team ) )
+				
 		} //End: if( $team && post_type_exists( 'mstw_ss_team' ) )
 				
 		return $html;
+		
 	} //End: mstw_tr_build_team_colors_html()
  }
 
  //-----------------------------------------------------------
- //	15. mstw_tr_find_team_in_ss: Determines if the $team is linked 
+ //	15. mstw_tr_build_hidden_fields: builds the hidden fields for the 
+ //			JavaScript to use when using the teams DB colors. Called 
+ //			by mstw_tr_build_team_colors_html()
+ //	
+ if ( !function_exists( 'mstw_tr_build_hidden_fields' ) ) {
+	function mstw_tr_build_hidden_fields( $team, $team_obj ) {
+		//mstw_log_msg( 'in mstw_tr_build_hidden_fields ...' ); 
+					
+		// jQuery looks first for this element
+		$html .= "<mstw-team-colors class='$team' id='$team' style='display: none'>\n";
+		
+		$bkgd_color = get_post_meta( $team_obj->ID, 'team_primary_bkgd_color', true );
+		if( $bkgd_color ) {
+			$html .= "<team-color id='bkgd-color' >$bkgd_color</team-color>\n";
+		}
+		
+		$text_color = get_post_meta( $team_obj->ID, 'team_primary_text_color', true );
+		if( $text_color ) {
+			$html .= "<team-color id='text-color' >$text_color</team-color>\n";
+		}
+		
+		$accent_1 = get_post_meta( $team_obj->ID, 'team_accent_color_1', true );
+		if( $accent_1 ) {
+			$html .= "<team-color id='accent-1' >$accent_1</team-color>\n";
+		}
+		
+		$accent_2 = get_post_meta( $team_obj->ID, 'team_accent_color_2', true );
+		if( $accent_2 ) {
+			$html .= "<team-color id='accent-2' >$accent_2</team-color>\n";
+		}
+		
+		$html .= "</mstw-team-colors>\n";
+				
+		return $html;
+		
+	} //End: mstw_tr_build_hidden_fields()
+ }
+
+ //-----------------------------------------------------------
+ //	16. mstw_tr_find_team_in_ss: Determines if the $team is linked 
  //		to a team in the Schedules & Scoreboards plugin DB. 
  //		ARGUMENTS:
  //		RETURNS:
@@ -912,7 +937,7 @@
  }
  
  //-----------------------------------------------------------
- //	16. mstw_tr_build_team_logo: Builds the HTML for a team logo 
+ //	17. mstw_tr_build_team_logo: Builds the HTML for a team logo 
  //		ARGUMENTS:
  //			$team_slug - $slug for the team IN THE TR DB
  //		RETURNS:

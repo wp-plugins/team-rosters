@@ -375,12 +375,19 @@ if( !function_exists( 'mstw_tr_validate_settings' ) ) {
 					// checkboxes are unique
 					$output['sp_show_title'] = isset( $input['sp_show_title'] ) and $input['sp_show_title'] == 1 ? 1 : 0;
 					$output['sp_show_logo'] = isset( $input['sp_show_logo'] ) and $input['sp_show_logo'] == 1 ? 1 : 0;
+					$output['sp_use_team_colors'] = isset( $input['sp_use_team_colors'] ) and $input['sp_use_team_colors'] == 1 ? 1 : 0;
 					
 					foreach( $input as $key => $value ) {
 						switch( $key ) {
-							case 'sp_content_title':  // text settings
 							case 'sp_show_title':
 							case 'sp_show_logo':
+							case 'sp_use_team_colors':
+								//These checkboxes have been handled above
+								//Can't do it here!
+								break;
+								
+							case 'sp_content_title':  // text settings
+							
 								$output[$key] = ( sanitize_text_field( $input[$key] ) == $input[$key] ) ? $input[$key] : $output[$key];
 								break;
 							

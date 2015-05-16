@@ -162,7 +162,7 @@
 			// include the right html if the 'use team colors' option is set
 			// this is all hidden for use by the jQuery script
 			//
-			$output .= mstw_tr_build_team_colors_html( $team, $attribs );
+			$output .= mstw_tr_build_team_colors_html( $team, $attribs, 'table' );
 			
 			$team_class = 'mstw-tr-table_' . $team;
 			

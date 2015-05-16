@@ -107,6 +107,16 @@
 					'page' => $display_on_page,
 					'section' => $page_section,
 				),
+				array( 	// USE TEAM COLORS
+					'type' => 'checkbox', 
+					'id' => 'sp_use_team_colors',
+					'name'	=> 'mstw_tr_options[sp_use_team_colors]',
+					'value' => mstw_safe_ref( $options, 'sp_use_team_colors' ), 
+					'title' => __( 'Use Team Colors:', 'mstw-team-rosters' ),
+					'page' => $display_on_page,
+					'section' => $page_section,
+					'desc' => __( 'Use the colors from the Teams table in MSTW Schedules & Scoreboards. IGNORED if the MSTW Schedules & Scoreboards version 4.0 or hire is not installed/activated. Note: There is a separate setting for roster tables.', 'mstw-team-rosters' ),
+				),
 				array( 	// PLAYER TILE BACKGROUND COLOR
 					'type' => 'text', 
 					'id' => 'sp_main_bkgd_color',

@@ -97,8 +97,9 @@
 				$( 'div.player-header_' + team_slug + ' #player-name-nbr' ).css({
 						'color': colors['text-color']
 						});		
-				$( 'div.player-header_' + team_slug + ' #player-info').css({
-						'border-left-color': colors['accent-1']
+				$( 'div.player-header_' + team_slug + ' table#player-info').css({
+						'border-left-color': colors['accent-1'],
+						'color': colors['text-color']
 						});	
 				$( 'div.player-bio_' + team_slug ).css({
 						'color': colors['bkgd-color'],
