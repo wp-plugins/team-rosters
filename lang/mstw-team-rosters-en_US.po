@@ -1,0 +1,1610 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Team Rosters\n"
+"POT-Creation-Date: 2015-06-10 20:06-0800\n"
+"PO-Revision-Date: 2015-06-10 20:07-0800\n"
+"Last-Translator: Mark O'Donnell <mark@shoalsummitsolutions.com>\n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.1\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
+"X-Poedit-Basepath: ../..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: team-rosters\n"
+
+#: team-rosters/mstw-team-rosters.php:146
+#, php-format
+msgid ""
+"%s requires WordPress %s or higher, and has been deactivated! Please upgrade "
+"WordPress and try again."
+msgstr ""
+
+#: team-rosters/mstw-team-rosters.php:172
+msgid "MSTW Admin"
+msgstr ""
+
+#: team-rosters/mstw-team-rosters.php:201
+msgid "MSTW Team Rosters Admin"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:87
+msgid "You is no admin. You a cheater!"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:286
+#: team-rosters/includes/mstw-tr-admin.php:287
+msgid "Team Rosters"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:300
+#: team-rosters/includes/mstw-tr-admin.php:301
+#: team-rosters/includes/mstw-tr-cpts.php:39
+#: team-rosters/includes/mstw-tr-cpts.php:84
+#: team-rosters/includes/mstw-tr-cpts.php:86
+#: team-rosters/includes/mstw-tr-csv-import-class.php:167
+#: team-rosters/includes/mstw-tr-team-tax-admin.php:173
+msgid "Players"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:314
+#: team-rosters/includes/mstw-tr-admin.php:315
+#: team-rosters/includes/mstw-tr-cpts.php:120
+#: team-rosters/includes/mstw-tr-csv-import-class.php:123
+msgid "Teams"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:326
+#: team-rosters/includes/mstw-tr-admin.php:327
+msgid "Settings"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:375
+#: team-rosters/includes/mstw-tr-admin.php:378
+msgid "Player updated."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:376
+msgid "Custom field updated."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:377
+msgid "Custom field deleted."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:379
+msgid "Player restored to revision"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:380
+msgid "Player published."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:381
+msgid "Player saved."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:382
+msgid "Player submitted."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:383
+msgid "Player scheduled for publication."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:384
+msgid "Player draft updated."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:421
+msgid "Team added."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:422
+msgid "Team deleted."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:423
+msgid "Team updated."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:424
+msgid "Team not added."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:425
+msgid "Team not updated."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-admin.php:426
+msgid "Teams deleted."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:40
+msgid "CPT for Players in MSTW Team Rosters Plugin"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:85
+msgid "Player"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:87
+msgid "Add New Player"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:88
+msgid "Add Player"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:89
+msgid "Edit Player"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:90
+msgid "New Player"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:92
+msgid "View Player"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:93
+msgid "Search Players"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:94
+msgid "No Players Found"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:95
+msgid "No Players Found In Trash"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:105
+msgid "MSTW Teams"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:106
+msgid "Team"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:107
+msgid "Search Teams"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:109
+msgid "All Teams"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:112
+msgid "Edit Team"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:113
+msgid "Update Team"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:114
+msgid "Add New Team"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:115
+msgid "New Team Name"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:116
+msgid "Add Player to one or more Teams (separate Teams with commas)."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:117
+msgid "Add or Remove Teams"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:118
+msgid "Choose from the most used teams"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-cpts.php:119
+msgid "No Teams Found"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:117
+msgid "Import CSV Files"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:126
+msgid "Teams CSV file:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:133
+#: team-rosters/includes/mstw-tr-csv-import-class.php:256
+msgid "Import Teams"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:169
+#, php-format
+msgid ""
+"The importer will use the \"player-slug\" column in the CSV file to assign "
+"teams to a player if that column is not empty.%s Otherwise, the player will "
+"be assigned to the team selected in the \"Select Team to Import\" dropdown. "
+"%sOtherwise, the player will be imported but will not be assigned to a team."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:175
+msgid "Select Team to Import:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:178
+msgid ""
+"This team will be used as the default if there is no entry for a player in "
+"the player_team column."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:182
+msgid "Move Player Photos:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:185
+msgid ""
+"If checked, photo files will be imported from their current locations to the "
+"media library.If unchecked, photo files will remain in their current "
+"locations."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:189
+msgid "Players CSV file:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:192
+msgid "Select the CSV players file to import."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:260
+msgid "team"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:260
+msgid "teams"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:262
+#: team-rosters/includes/mstw-tr-csv-import-class.php:370
+msgid "Import Players"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:266
+msgid "player"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:266
+msgid "players"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:286
+msgid "Failed to load file, aborting."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:396
+msgid "No first or last name."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:402
+msgid "No title imported"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:409
+#, php-format
+msgid "Unknown import type \"%s\"."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:444
+#: team-rosters/includes/mstw-tr-csv-import-class.php:453
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:111
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:117
+msgid "----"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:445
+#: team-rosters/includes/mstw-tr-csv-import-class.php:454
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:112
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:118
+#: team-rosters/includes/mstw-tr-utility-functions.php:776
+#: team-rosters/includes/mstw-tr-utility-functions.php:777
+msgid "R"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:446
+#: team-rosters/includes/mstw-tr-csv-import-class.php:455
+msgid "r"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:447
+#: team-rosters/includes/mstw-tr-csv-import-class.php:456
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:113
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:119
+#: team-rosters/includes/mstw-tr-utility-functions.php:780
+#: team-rosters/includes/mstw-tr-utility-functions.php:781
+msgid "L"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:448
+#: team-rosters/includes/mstw-tr-csv-import-class.php:457
+msgid "l"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:449
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:114
+#: team-rosters/includes/mstw-tr-utility-functions.php:784
+#: team-rosters/includes/mstw-tr-utility-functions.php:785
+msgid "B"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:450
+msgid "b"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-csv-import-class.php:710
+msgid "No team name or slug found."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:52
+#: team-rosters/includes/mstw-tr-settings.php:112
+#: team-rosters/includes/mstw-tr-settings.php:154
+msgid "Data Fields & Columns"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:63
+msgid "Show Player Photos:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:64
+msgid "Show Photos in roster tables\" (Default: Hide)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:73
+msgid "Photo Column Label:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:74
+msgid "(Default: Photo)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:83
+msgid "Show Number:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:84
+msgid "Show or hide the Number field/column. (Default: Show)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:93
+msgid "Number Label:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:94
+msgid "Label for the Number field/column. (Default: Nbr)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:103
+msgid "Name Label:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:104
+msgid "Name field/column cannot be hidden. (Default: Name)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:113
+msgid "Show Position:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:114
+msgid "Show or hide the Position field/column. (Default: Show)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:123
+msgid "Position Label:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:124
+msgid "Label for the Position field/column. (Default: Pos)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:133
+msgid "Show Height:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:134
+msgid "Show or hide the Height field/column. (Default: Show)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:143
+msgid "Height Label:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:144
+msgid "Label for the Height field/column. (Default: Ht)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:153
+msgid "Show Weight:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:154
+msgid "Show or hide the Weight field/column. (Default: Show)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:163
+msgid "Weight Label:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:164
+msgid "Label for the Weight field/column. (Default: Wt)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:173
+msgid "Show Year:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:174
+msgid "Show or hide the Year field/column. (Default: Hide)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:183
+msgid "Year Label:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:184
+msgid "Label for the Year field/column. (Default: Year)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:193
+msgid "Show Experience:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:194
+msgid "Show or hide the Experience field/column. (Default: Hide)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:203
+msgid "Experience Label:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:204
+msgid "Label for the Experience field/column. (Default: Exp)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:213
+msgid "Show Age:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:214
+msgid "Show or hide the Age field/column. (Default: Hide)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:223
+msgid "Age Label:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:224
+msgid "Label for the Age field/column. (Default: Age)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:233
+msgid "Show Home Town:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:234
+msgid "Show or hide the Home Town field/column. (Default: Hide)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:243
+msgid "Home Town Label:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:244
+msgid "Label for the Home Town field/column. (Default: Home Town)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:253
+msgid "Show Last School:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:254
+msgid "Show or hide the Last School field/column. (Default: Hide)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:263
+msgid "Last School Label:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:264
+msgid "Label for the Last School field/column. (Default: Last School)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:273
+msgid "Show Country:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:274
+msgid "Show or hide the Country field/column. (Default: Hide)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:283
+msgid "Country Label:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:284
+msgid "Label for the Country field/column. (Default: Country)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:293
+msgid "Show Bats/Throws:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:294
+msgid "Show or hide the Bats/Throws field/column. (Default: Hide)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:303
+msgid "Bats/Throws Label:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:304
+msgid "Label for the Bats/Throws field/column. (Default: Bat/Thw)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:313
+msgid "Show Other Info:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:314
+msgid "Show or hide the Other Info field/column. (Default: Hide)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:323
+msgid "Other Info Label:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:324
+msgid "Label for the Other Info field/column. (Default: Other)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-data-fields-columns-settings.php:340
+msgid ""
+"Settings to control the visibility of data fields & table columns as well as "
+"to change their labels to \"re-purpose\" the fields. "
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:38
+msgid "Player Bio:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:48
+msgid "Player Photo"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:71
+msgid "Set featured image"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:71
+msgid "Set Player Photo"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:73
+msgid "Remove featured image"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:73
+msgid "Remove Player Photo"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:88
+msgid "Player Data"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:167
+msgid "First Name:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:175
+msgid "Last Name:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:183
+msgid "Number:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:191
+msgid "Position:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:199
+msgid "Height:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:207
+msgid "Weight:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:215
+msgid "Year:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:218
+msgid ""
+"This field is intended for the player's year in school, for example, "
+"\"Freshman\", \"10\" (10th grade), or \"Redshirt Soph\". It can be changed "
+"by changing the Year Label in the settings screen."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:223
+msgid "Experience:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:226
+msgid ""
+"This field is intended to be the player's experience, for example, \"3 years"
+"\" or \"2V\" (2 varsity seasons). It can be changed by changing the "
+"Experience Label in the settings screen."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:231
+msgid "Age:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:239
+msgid "Home Town:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:242
+msgid ""
+"This field is typically combined with the last school in US college and high "
+"school rosters."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:247
+msgid "Last School:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:250
+msgid ""
+"This field is typically combined with the home town in US college and high "
+"school rosters. It could be changed to \"last team\" in international/pro "
+"rosters."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:255
+msgid "Country:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:258
+msgid ""
+"This field is intended for international teams, but it could changed to "
+"\"State\" for US college teams."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:264
+msgid "Bats:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:267
+msgid ""
+"This is a baseball specific field, but it could be used for cricket, say. It "
+"is combined with the \"Throws\" field in baseball specific formats."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:273
+msgid "Throws:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:276
+msgid ""
+"This is a baseball specific field. It is combined with the \"Bats\" field in "
+"baseball specific formats."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:281
+msgid "Other Info:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:284
+msgid "This field is a spare. It is intended to be re-purposed by site admins."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:381
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:101
+msgid "First Name"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:382
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:100
+msgid "Last Name"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:389
+msgid "Team(s)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-cpt-admin.php:507
+msgid "Show All Teams"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:52
+msgid "Player Profile & Gallery Settings"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:65
+msgid "Show Player Profile Title:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:66
+msgid "If checked, this will be the team name."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:75
+msgid "Show Team Logo:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:76
+msgid ""
+"Show team logo at the top right. Only works if team is linked to MSTW "
+"Schedules & Scoreboards database."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:85
+msgid "Player Profile (Bio) Title:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:86
+msgid "Label content in the player \"Bio\". (Default: Bio)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:95
+msgid "Player Photo Width:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:96
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:106
+msgid ""
+"In pixels. (Defaults to blank, which means the stylesheet setting will be "
+"used; 150px out of the box.)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:105
+msgid "Player Photo Height:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:115
+#: team-rosters/includes/mstw-tr-roster-color-settings.php:57
+msgid "Use Team Colors:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:118
+msgid ""
+"Use the colors from the Teams table in MSTW Schedules & Scoreboards. IGNORED "
+"if the MSTW Schedules & Scoreboards version 4.0 or hire is not installed/"
+"activated. Note: There is a separate setting for roster tables."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:125
+msgid "Player Tile Header Background Color:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:135
+msgid "Player Tile Header Text Color:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:145
+msgid "Player Gallery Links Color:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:155
+msgid "Player Profile Border Color:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:165
+msgid "Player Bio Title Text Color:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:175
+msgid "Player Bio Text Color:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:185
+msgid "Player Bio Background Color:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-player-profiles-galleries-settings.php:203
+msgid ""
+"Unless otherwise noted, these settings will apply to both the Single Player "
+"Profile and Team Gallery pages. "
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-color-settings.php:46
+msgid "Table Color Settings"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-color-settings.php:60
+msgid ""
+"Use the colors from the Teams table in MSTW Schedules & Scoreboards. IGNORED "
+"if the MSTW Schedules & Scoreboards version 4.0 or hire is not installed/"
+"activated. Note: There is a separate setting for player profiles and "
+"galleries."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-color-settings.php:67
+msgid "Roster Table Title:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-color-settings.php:76
+msgid "Roster Table Links:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-color-settings.php:85
+msgid "Table Header Background:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-color-settings.php:94
+msgid "Table Header Text:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-color-settings.php:103
+msgid "Even Row Background:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-color-settings.php:112
+msgid "Even Row Text:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-color-settings.php:121
+msgid "Odd Row Background:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-color-settings.php:130
+msgid "Odd Row Text:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-color-settings.php:139
+msgid "Table Borders:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-color-settings.php:155
+msgid ""
+"Note that these settings will apply to ALL the [shortcode] roster tables, "
+"overriding the default styles. However they can be overridden by more "
+"specific stylesheet rules for specific teams. See the plugin documentation "
+"for more details."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:49
+msgid "Roster Table Settings"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:62
+msgid "Show Roster Table Titles:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:63
+msgid "Titles will display as \"Team Name Roster\" (Default: Hide)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:72
+#: team-rosters/includes/mstw-utility-functions.php:561
+#: team-rosters/includes/mstw-utility-functions.php:576
+#: team-rosters/includes/mstw-utility-functions.php:586
+#: team-rosters/includes/mstw-utility-functions.php:606
+#: team-rosters/includes/mstw-utility-functions.php:614
+#: team-rosters/includes/mstw-utility-functions.php:625
+msgid "Custom"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:73
+msgid "Pro"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:74
+msgid "College"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:75
+msgid "High School"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:76
+msgid "Pro Baseball"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:77
+msgid "College Baseball"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:78
+msgid "High School Baseball"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:80
+msgid "Roster Table Format:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:81
+msgid ""
+"Default: Custom, which is what you want if you are customizing the columns "
+"in the Data Fields & Columns tab."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:90
+msgid "Add Links to Player Profiles:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:91
+msgid ""
+"This setting applies to both roster tables and player galleries. Default: No "
+"Links (Unchecked)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:102
+msgid "Number"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:104
+msgid "Sort Roster By:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:105
+msgid "Default: Last Name"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:114
+msgid "Ascending"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:115
+msgid "Descending"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:117
+msgid "Sort Order:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:118
+msgid "Default: Ascending (1, 2, 3 ... or a, b, c ...)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:127
+msgid "Last, First"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:128
+msgid "First Last"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:129
+msgid "First Name Only"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:130
+msgid "Last Name Only"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:132
+msgid "Display Players By:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:133
+msgid "Default: Last, First"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:143
+msgid "Table Photo Width:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:144
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:154
+msgid ""
+"In pixels. (Defaults to blank, which means the stylesheet setting will be "
+"used; 64px out of the box.)"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:153
+msgid "Table Photo Height:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table-settings.php:170
+msgid ""
+"Note that these settings will apply to all the [shortcode] roster tables, "
+"overriding the settings and style defaults, as applicable. These settings "
+"can be overridden by more specific stylesheet rules for specific teams. See "
+"the plugin documentation for details."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-roster-table.php:285
+#: team-rosters/includes/mstw-tr-utility-functions.php:609
+#, php-format
+msgid "%sNo players found on team: '%s'%s"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:45
+msgid "Team Rosters Plugin Settings"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:91
+msgid "Save Changes"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:94
+msgid "Reset Defaults"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:113
+#: team-rosters/includes/mstw-tr-settings.php:159
+msgid "Roster Tables"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:114
+#: team-rosters/includes/mstw-tr-settings.php:164
+msgid "Roster Table Colors"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:115
+#: team-rosters/includes/mstw-tr-settings.php:169
+msgid "Player Profiles & Galleries"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:147
+msgid "For more information:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:148
+msgid "MSTW Team Rosters Admin Users Manual"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:149
+msgid "See MSTW Team Rosters in Action"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:150
+msgid "MSTW Team Rosters on WordPress.org"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:189
+msgid "Data Fields & Columns Settings:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:190
+msgid ""
+"This screen controls the visibility of data fields and the corresponding "
+"columns, the field/column labels, and some format elements of the schedule "
+"tables, schedule sliders, and countdown timers. "
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:191
+msgid ""
+"Note that these settings apply to ALL schedule tables, sliders, and timers "
+"on the site. To control individual tables, sliders, and timers, set the "
+"corresponding arguments in the shortcodes."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:192
+#: team-rosters/includes/mstw-tr-settings.php:202
+#: team-rosters/includes/mstw-tr-settings.php:212
+#: team-rosters/includes/mstw-tr-settings.php:222
+msgid "See the Game Schedules Users Manual for more documentation."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:199
+msgid "Roster Tables Settings:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:200
+msgid ""
+"This screen controls the default colors for the schedule tables, sliders, "
+"and countdown timers.  These global defaults are very useful for setting the "
+"colors of all displays, especially if your site is for a single team or "
+"organization. Note that these settings apply to ALL schedule tables and "
+"sliders on the website."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:201
+msgid ""
+"Unique CSS tags are provided for each team, allowing control of individual "
+"tables, sliders, and countdown timers. Using these tags, different color "
+"schemes can be applied to different. To do so, the plugin's stylesheet - "
+"mstw-gs-styles.css - must be edited. An admin with a knowledge of CSS can "
+"simply inspect the HTML elements in a browser and style them as desired. "
+"Those not experienced with CSS, may find some of the tutorials and code "
+"snippets on <a href=\"http://shoalsummitsolutions.com\" target=\"_blank"
+"\">ShoalSummitSolutions.com</a> may be of use. <br/> <a href=\"http://dev."
+"shoalsummitsolutions.com/schedule-test/\" target=\"_blank\">Examples are "
+"provided on the MSTW plugin development site.</a>"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:209
+msgid "Roster Table Color Settings:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:210
+msgid ""
+"This screen controls the date time formats for the schedule tables, sliders, "
+"and countdown timers, as well as the admin screens. There are a number of "
+"built-in formats and the capability to provide any custom format. "
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:211
+msgid ""
+"Note that these settings apply to ALL schedule tables, sliders, and timers "
+"on the site. To control individual tables, sliders, or timers, set the "
+"corresponding arguments in the shortcodes."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:219
+msgid "Player Profiles & Galleries Settings:"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:220
+msgid ""
+"This screen controls the visibility of columns, their labels, and some "
+"format elements of the Venue tables. "
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:221
+msgid ""
+"Note that these settings apply to ALL venue tables on the site. To control "
+"individual tables, set the corresponding arguments in the shortcodes."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:270
+msgid "Data fields & columns settings reset to defaults."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:274
+msgid "Roster table settings reset to defaults."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:278
+msgid "Roster table color settings reset to defaults."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:282
+msgid "Player profile & gallery settings reset to defaults."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:302
+msgid "Data fields & columns settings updated."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:323
+#: team-rosters/includes/mstw-tr-settings.php:406
+#, php-format
+msgid "Error with %s = '%s'. Reset to previous value."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:335
+msgid "Roster tables settings updated."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:362
+#: team-rosters/includes/mstw-tr-settings.php:425
+#, php-format
+msgid "Error: %s reset to the default."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:370
+msgid "Roster table colors settings updated."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-settings.php:433
+msgid "Player profiles & galleries settings updated."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-team-tax-admin.php:56
+#: team-rosters/includes/mstw-tr-team-tax-admin.php:106
+msgid ""
+"Install the MSTW Schedules & Scoreboards plugin to link team rosters to the "
+"Teams database in that plugin."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-team-tax-admin.php:65
+msgid ""
+"Install the lastest version of the MSTW Schedules & Scoreboards plugin to "
+"link team rosters to the Teams database in that plugin."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-team-tax-admin.php:73
+#: team-rosters/includes/mstw-tr-team-tax-admin.php:135
+msgid "Team from MSTW Schedules & Scoreboards"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-team-tax-admin.php:79
+#: team-rosters/includes/mstw-tr-team-tax-admin.php:143
+msgid "Link team to a team from the MSTW Schedules & Scoreboards Teams DB."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-team-tax-admin.php:116
+msgid "MSTW Schedules & Scoreboards"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-team-tax-admin.php:118
+msgid "Plugin found, but please update to the latest version."
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-team-tax-admin.php:172
+msgid "Team Name"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-team-tax-admin.php:174
+msgid "Slug"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-team-tax-admin.php:175
+msgid "MSTW SS Linked Team"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-team-tax-admin.php:197
+msgid "None"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-utility-functions.php:86
+msgid "Nbr"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-utility-functions.php:88
+msgid "Name"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-utility-functions.php:90
+msgid "Photo"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-utility-functions.php:92
+msgid "Pos"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-utility-functions.php:94
+msgid "Ht"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-utility-functions.php:96
+msgid "Wt"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-utility-functions.php:98
+msgid "Year"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-utility-functions.php:100
+msgid "Exp"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-utility-functions.php:102
+msgid "Age"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-utility-functions.php:104
+msgid "Home Town"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-utility-functions.php:106
+msgid "Last School"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-utility-functions.php:108
+msgid "Country"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-utility-functions.php:110
+msgid "Bat/Thw"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-utility-functions.php:112
+msgid "Other"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-utility-functions.php:173
+#: team-rosters/theme-templates/single-player.php:209
+msgid "Player Bio"
+msgstr ""
+
+#: team-rosters/includes/mstw-tr-utility-functions.php:663
+msgid "No player photo found."
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:154
+msgid "Mon"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:155
+msgid "Tue"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:156
+msgid "Wed"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:157
+msgid "Thr"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:158
+msgid "Fri"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:159
+msgid "Sat"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:160
+msgid "Sun"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:163
+msgid "Monday"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:164
+msgid "Tuesday"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:165
+msgid "Wednesday"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:166
+msgid "Thursday"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:167
+msgid "Friday"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:168
+msgid "Saturday"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:169
+msgid "Sunday"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:172
+msgid "January"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:173
+msgid "February"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:174
+msgid "March"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:175
+msgid "April"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:176
+#: team-rosters/includes/mstw-utility-functions.php:190
+msgid "May"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:177
+msgid "June"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:178
+msgid "July"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:179
+msgid "August"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:180
+msgid "September"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:181
+msgid "October"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:182
+msgid "November"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:183
+msgid "December"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:186
+msgid "Jan"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:187
+msgid "Feb"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:188
+msgid "Mar"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:189
+msgid "Apr"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:191
+msgid "Jun"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:192
+msgid "Jul"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:193
+msgid "Aug"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:194
+msgid "Sep"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:195
+msgid "Oct"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:196
+msgid "Nov"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:197
+msgid "Dec"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:323
+msgid "Default Field"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:324
+msgid "Default Label"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:554
+msgid "Show"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:555
+msgid "Hide"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:562
+msgid "Tuesday, 07 April 01:15 pm"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:563
+msgid "Tuesday, 7 April 01:15 pm"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:564
+msgid "Tuesday, 07 April 1:15 pm"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:565
+msgid "Tuesday, 7 April 1:15 pm"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:566
+#: team-rosters/includes/mstw-utility-functions.php:567
+msgid "Tuesday, 7 April 13:15"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:568
+msgid "07 April 13:15"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:569
+msgid "7 April 13:15"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:570
+msgid "07 April 01:15 pm"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:571
+msgid "7 April 01:15 pm"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:580
+msgid "Formats for 7 April 2013 13:15."
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:591
+msgid "07 Apr 2013"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:592
+msgid "7 Apr 2013"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:593
+msgid "Tues, 07 Apr 2013"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:594
+msgid "Tues, 7 Apr 13"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:595
+msgid "Tuesday, 7 Apr"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:596
+msgid "Tuesday, 07 April 2013"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:597
+msgid "Tuesday, 7 April 2013"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:598
+msgid "Tues, 07 Apr"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:599
+msgid "Tues, 7 Apr"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:600
+msgid "07 Apr"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:601
+msgid "7 Apr"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:609
+msgid "Formats for 7 Apr 2013. Default: 2013-04-07"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:615
+msgid "08:00 (24hr)"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:616
+msgid "8:00 (24hr)"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:617
+msgid "08:00 am"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:618
+msgid "08:00 AM"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:619
+msgid "8:00 am"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:620
+msgid "8:00 AM"
+msgstr ""
+
+#: team-rosters/includes/mstw-utility-functions.php:628
+msgid "Formats for eight in the morning. Default: 08:00"
+msgstr ""
+
+#: team-rosters/theme-templates/single-player.php:54
+msgid "Unspecified"
+msgstr ""
+
+#: team-rosters/theme-templates/single-player.php:55
+msgid "unknown"
+msgstr ""
+
+#: team-rosters/theme-templates/single-player.php:64
+msgid "Post navigation"
+msgstr ""
+
+#: team-rosters/theme-templates/single-player.php:72
+msgid "Return to roster"
+msgstr ""

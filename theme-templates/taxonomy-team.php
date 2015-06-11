@@ -53,13 +53,7 @@
 		<?php echo "<h1 class='team-head-title team-head-title_$team_slug'>$team_name</h1>"; ?>
 	</header>
 
-	<?php
-	// Set up the hidden fields for jScript CSS 
-	//$hidden_fields = mstw_tr_build_team_colors_html( $team_slug, $options );
-	//mstw_log_msg( 'mstw_tr_build_team_colors_html( ) ... returned:' );
-	//mstw_log_msg( $hidden_fields );
-	//echo $hidden_fields;
-		
+	<?php	
 	echo mstw_tr_build_gallery( $team_slug, $roster_type, $options );
 	?>
 

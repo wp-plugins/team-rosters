@@ -47,6 +47,7 @@
  *			check if the CURRENT USER has admin rights for MSTW Schedules & Scoreboards plugin
  * 17. mstw_admin_notice - Displays all admin notices; callback for admin_notices action
  * 18. mstw_add_admin_notice - Adds admin notices to transient for display on admin_notices hook
+ * 19. mstw_add_role_caps - adds the MSTW capabilities to a WP role
  *----------------------------------------------------------------------------*/
  
 //------------------------------------------------------------------------------
@@ -793,7 +794,6 @@ if ( !function_exists( 'mstw_has_admin_rights' ) ) {
 	} //End: mstw_has_admin_rights( )
 }
 
-
 //-------------------------------------------------------------------------------
 // 16. mstw_has_plugin_rights - check if the CURRENT USER has 
 //							Schedules & Scoreboards admin rights
@@ -816,7 +816,7 @@ if ( !function_exists( 'mstw_user_has_plugin_rights' ) ) {
 }
 
 //-------------------------------------------------------------------------------
-// 16.1 mstw_has_ss_rights - check if the CURRENT USER has 
+// 16.1 mstw_user_has_ss_rights - check if the CURRENT USER has 
 //							Schedules & Scoreboards admin rights
 //		ARGUMENTS: 	none
 //		RETURNS: 	true if the current user has rights
@@ -831,7 +831,6 @@ if ( !function_exists( 'mstw_user_has_ss_rights' ) ) {
 	} //End: mstw_user_has_ss_rights( )
 }
 
-
 //----------------------------------------------------------------
 // 17. mstw_admin_notice - Displays all admin notices; callback for admin_notices action
 //		ARGUMENTS: 	$transient - transient where messages are stored
@@ -840,8 +839,9 @@ if ( !function_exists( 'mstw_user_has_ss_rights' ) ) {
 //
 if ( !function_exists ( 'mstw_admin_notice' ) ) {
 	function mstw_admin_notice( $transient = 'mstw_admin_messages' ) {
-		mstw_log_msg( 'in mstw_admin_notice ...' );
-		mstw_log_msg( '$transient= ' . $transient );
+		//mstw_log_msg( 'in mstw_admin_notice ...' );
+		//mstw_log_msg( '$transient= ' . $transient );
+		
 		if ( get_transient( $transient ) !== false ) {
 			// get the types and messages
 			$messages = get_transient( $transient );
@@ -886,23 +886,74 @@ if ( !function_exists ( 'mstw_add_admin_notice' ) ) {
 		$type = ( in_array( $type, $valid_types ) ) ? $type : 'updated'; 
 		
 		// set the admin message
-		$new_msg = array( array( 'type'	=> $type,
-								 'notice'	=> $notice,
-								),
+		$new_msgs = array( array( 
+							'type'	=> $type,
+							'notice'	=> $notice,
+							),
 						);
 
 		// create and/or add to the specified transient
 		$existing_msgs = get_transient( $transient );
 		
-		if ( $existing_msgs === false ) {
-			// no transient exists, create it with the current message
-			set_transient( $transient, $new_msg, HOUR_IN_SECONDS );
-		} else {
-			// transient exists, append current message to it
-			$new_msgs = array_merge( $existing_msgs, $new_msg );
-			set_transient ( $transient, $new_msgs, HOUR_IN_SECONDS );
+		// transient exists, append current message to it
+		if ( $existing_msgs !== false ) {
+			$new_msgs = array_merge( $existing_msgs, $new_msgs );
 		}
+		set_transient ( $transient, $new_msgs, HOUR_IN_SECONDS );
+		
 	} //End: function mstw_add_admin_notice( )
 }
 
+//------------------------------------------------------------------------
+// 19. mstw_add_role_caps - adds the MSTW capabilities to either the $role_obj or 
+//		$role_name using the custom post type names (from the capability_type 
+//		arg in register_post_type( )
+//
+//	ARGUMENTS:
+//		$role_obj: a WP role object to which to add the MSTW capabilities. Will
+//					be used of $role_name is none (the default)
+//		$role_name: a WP role name to which to add the MSTW capabilities. Will
+//					be used if present (not null)
+//		$cpt: the custom post type for the capabilities 
+//				( map_meta_cap is set in register_post_type() )
+//		$cpt_s: the plural of the custom post type
+//				( $cpt & $cpt_s must match the capability_type argument
+//					in register_post_type( ) )
+//	RETURN: none
+//
+if( function_exists( 'mstw_add_role_caps' ) ) {
+	function mstw_add_role_caps( $role_obj = null, $role_name = null, $cpt, $cpt_s ) {
+		//if( function_exists( 'mstw_log_msg' ) ) {
+		//	mstw_log_msg( 'in mstw_add_role_caps ...' );
+		//}
+		
+		$cap = array( 'edit_', 'read_', 'delete_' );
+		$caps = array( 'edit_', 'edit_others_', 'publish_', 'read_private_', 'delete_', 'delete_published_', 'delete_others_', 'edit_private_', 'edit_published_' );
+		
+		if ( $role_name != null ) {
+			$role_obj = get_role( $role_name );
+		}
+		
+		if( $role_obj != null ) {
+			//'singular' capabilities
+			foreach( $cap as $c ) {
+				$role_obj -> add_cap( $c . $cpt );
+			}
+			
+			//'plural' capabilities
+			foreach ($caps as $c ) {
+				$role_obj -> add_cap( $c . $cpt_s );
+			}
+			
+			$role_obj -> add_cap( 'read' );
+		}
+		else {
+			$role_name = ( $role_name == null ) ? 'null' : $role_name;
+			if( function_exists( 'mstw_log_msg' ) ) {
+				mstw_log_msg( 'Bad args passed to mstw_add_role_caps( ). $role_name = ' . $role_name . ' and $role_obj = null' );
+			}
+		}
+		
+	} //End: mstw_add_role_caps( )
+}
 ?>

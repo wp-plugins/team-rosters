@@ -3,7 +3,7 @@
 	Plugin Name: Team Rosters
 	Plugin URI: http://wordpress.org/extend/plugins/team-rosters/
 	Description: The Team Rosters Plugin defines a custom type - Player - for use in the MySportTeamWebite framework. It generates a roster table view and player bio view.
-	Version: 3.1.2
+	Version: 4.0
 	Author: Mark O'Donnell
 	Author URI: http://shoalsummitsolutions.com
 	Text Domain: mstw-team-rosters
@@ -92,39 +92,12 @@
  function mstw_tr_add_shortcodes( ) {
 	 //mstw_log_msg( 'in mstw_tr_add_shortcodes ...' );
 	 
+	remove_shortcode( 'mstw-tr-gallery' );
+	add_shortcode( 'mstw-tr-gallery', 'mstw_tr_roster_gallery_handler' );
 	
-	remove_shortcode( 'mstw_roster_gallery' );
-	add_shortcode( 'mstw_roster_gallery', 'mstw_tr_roster_gallery_handler' );
+	remove_shortcode( 'mstw-tr-roster' );
+	add_shortcode( 'mstw-tr-roster', 'mstw_tr_roster_table_handler' );
 	
-		  
-	//if (shortcode_exists( 'mstw_roster_gallery' ) ) 
-	//	mstw_log_msg( 'mstw_roster_gallery shortcode exists' );
-	//else
-	//	mstw_log_msg( 'mstw_roster_gallery shortcode does not exist' );
-	
-		
-	//if (function_exists( 'mstw_tr_roster_gallery_handler' ) ) 
-	//	mstw_log_msg( 'mstw_tr_roster_gallery_handler exists' );
-	//else
-	//	mstw_log_msg( 'mstw_tr_roster_gallery_handler does not exist' );
-	
-	remove_shortcode( 'mstw_roster_table' );
-	add_shortcode( 'mstw_roster_table', 'mstw_tr_roster_table_handler' );
-	
-	//if (shortcode_exists( 'mstw_roster_table' ) ) 
-	//	mstw_log_msg( 'mstw_roster_table shortcode exists' );
-	//else
-	//	mstw_log_msg( 'mstw_roster_table shortcode does not exist' );
-	 
-	/*remove_shortcode( 'mstw_roster_gallery' );
-	add_shortcode( 'mstw_roster_gallery', 'mstw_tr_roster_table_handler' );
-	
-	if (shortcode_exists( 'mstw_roster_gallery' ) ) 
-		mstw_log_msg( 'mstw_roster_gallery shortcode exists' );
-	else
-		mstw_log_msg( 'mstw_roster_gallery shortcode does not exist' );*/
-
-
  }
 
 
@@ -132,41 +105,31 @@
  // On activation, check the version of WP and set up the 'mstw_tr'
  //		roles and capabilites
  //
- register_activation_hook( __FILE__, 'mstw_tr_activate' );	
+ register_activation_hook( __FILE__, 'mstw_tr_register_activation_hook' );	
 
- function mstw_tr_activate( ) {
+ function mstw_tr_register_activation_hook( ) {
+	// Need mstw-utility-functions.php for mstw_log_msg() 
+	// and mstw_requires_wordpress_version()
+	require_once( plugin_dir_path( __FILE__ ) . 'includes/mstw-utility-functions.php' );
+	mstw_log_msg( 'in mstw_tr_register_activation_hook( ) ...' );
 	
-	mstw_tr_check_wp_version( '4.0' ); //tested - OK
+	// In this file so don't need to load mstw-utility-functions
+	// for mstw_requires_wordpress_version( )
+	//mstw_requires_wordpress_version( '4.0' );
+	mstw_tr_check_wp_version( '4.0' ); 
 	
+	// This is not currently used; just good practice
 	update_option( 'mstw_team_rosters_activated', 1 );
 	
-	//THIS IS A MESS. NEED TO FIX
-	//mstw_tr_add_user_roles( );
+	mstw_tr_add_user_roles( );
 	
-	/*$result = add_role( 'mstw_tr_admin', 'MSTW Team Rosters Admin', 
-						array(	'read'						=> true,
-								'edit_mstw_tr_player' 				=> true,
-								'read_mstw_tr_player' 				=> true,
-								'delete_mstw_tr_player' 			=> true,
-								'edit_mstw_tr_players'				=> true,
-								'edit_others_mstw_tr_players'		=> true,
-								'edit_others_mstw_tr_players'		=> true,
-								'publish_mstw_tr_players'			=> true,
-								'read_private_mstw_tr_players'		=> true,
-								'delete_mstw_tr_players'			=> true,
-								'delete_private_mstw_tr_players'	=> true,
-								'delete_published_mstw_tr_players'	=> true,
-								'delete_others_mstw_tr_players'		=> true,
-								'edit_private_mstw_tr_players'		=> true,
-								'edit_published_mstw_tr_players'	=> true
-								)
-								
-							);*/
-	}
+ } //End: mstw_tr_register_activation_hook()
+
 	
-// ----------------------------------------------------------------
-// Create the mstw_tr_admin role on activation
-//
+ // ----------------------------------------------------------------
+ // Create the mstw_tr_admin role on activation
+ //
+ if( !function_exists( '' ) ) {
 	function mstw_tr_check_wp_version( $version = '4.0' ) {
 		global $wp_version;
 		
@@ -185,33 +148,44 @@
 			die( $die_msg );
 
 		}
-	}
-	
-	//------------------------------------------------------------------------
-	// Creates the MSTW Team Roster roles and adds the MSTW capabilities
-	//		to those roles as well as the WP administrator and editor roles
-	//
-	// THIS IS A MESS!!!
-	//
+	} //End: mstw_tr_check_wp_version()
+ }
+ 
+ //------------------------------------------------------------------------
+ // Creates the MSTW Team Roster roles and adds the MSTW capabilities
+ // to those roles as well as the WP administrator and editor roles
+ //
+ if( !function_exists( 'mstw_tr_add_user_roles' ) ) {
 	function mstw_tr_add_user_roles( ) {
-
+		//if( function_exists( 'mstw_log_msg' ) ) {
+		//	mstw_log_msg( 'in mstw_tr_add_user_roles ...' );
+		//}
+	
+		//
+		// mstw_admin role - can do everything in all MSTW plugins
+		//
+		
 		//This allows a reset of capabilities for development
 		remove_role( 'mstw_admin' );
 		
-		$result = 	add_role( 'mstw_admin', __( 'MSTW Admin', 'mstw-team-rosters' ),
+		$role = 	add_role( 'mstw_admin',
+							  __( 'MSTW Admin', 'mstw-team-rosters' ),
 							  array( 'manage_mstw_plugins'  => true,
-									 'edit_posts' 			=> true
+									 'edit_posts' => true
 									 //true allows; use false to deny
 									) 
 							 );
 							 
-		if ( $result != null ) {
-			$result->add_cap( 'view_mstw_menus' );
-			mstw_tr_add_caps( $result, null, 'schedule', 'schedules' );
-			mstw_tr_add_caps( $result, null, 'team', 'teams' );
-			mstw_tr_add_caps( $result, null, 'game', 'games' );
-			mstw_tr_add_caps( $result, null, 'sport', 'sports' );
-			mstw_tr_add_caps( $result, null, 'venue', 'venues' );
+		// add_role() failed, so try to get it					 
+		if( null == $role ) {
+			$role = get_role( 'mstw_admin' );
+		}
+								 
+		if ( $role != null ) {
+			$role->add_cap( 'view_mstw_menus' );
+			$role->add_cap( 'edit_mstw_tr_settings' );
+			$role->add_cap( 'manage_tr_teams' );
+			mstw_tr_add_caps( $role, null, 'player', 'players' );
 		}
 		else 
 			mstw_log_msg( "Oops, failed to add MSTW Admin role. Already exists?" );
@@ -223,21 +197,19 @@
 		//This allows a reset of capabilities for development
 		remove_role( 'mstw_tr_admin' );
 		
-		$result = 	add_role( 'mstw_tr_admin',
-							  __( 'MSTW Schedules & Scoreboards Admin', 'mstw-schedules-scoreboards' ),
+		$role = 	add_role( 'mstw_tr_admin',
+							  __( 'MSTW Team Rosters Admin', 'mstw-schedules-scoreboards' ),
 							  array( 'manage_mstw_schedules'  => true, 
 									  'read' => true
 									  //true allows; use false to deny
 									) 
 							 );
 		
-		if ( $result != null ) {
-			$result->add_cap( 'view_mstw_tr_menus' );
-			mstw_tr_add_caps( $result, null, 'schedule', 'schedules' );
-			mstw_tr_add_caps( $result, null, 'team', 'teams' );
-			mstw_tr_add_caps( $result, null, 'game', 'games' );
-			mstw_tr_add_caps( $result, null, 'sport', 'sports' );
-			mstw_tr_add_caps( $result, null, 'venue', 'venues' );
+		if ( $role != null ) {
+			$role->add_cap( 'view_mstw_tr_menus' );
+			$role->add_cap( 'edit_mstw_tr_settings' );
+			$role->add_cap( 'manage_tr_teams' );
+			mstw_tr_add_caps( $role, null, 'player', 'players' );
 		}
 		else {
 			mstw_log_msg( "Oops, failed to add MSTW Schedules & Scoreboards Admin role. Already exists?" );
@@ -247,25 +219,24 @@
 		// site admins can play freely
 		//
 		$role = get_role( 'administrator' );
-		
-		mstw_tr_add_caps( $role, null, 'schedule', 'schedules' );
-		mstw_tr_add_caps( $role, null, 'team', 'teams' );
-		mstw_tr_add_caps( $role, null, 'game', 'games' );
-		mstw_tr_add_caps( $role, null, 'sport', 'sports' );
-		mstw_tr_add_caps( $result, null, 'venue', 'venues' );
+		$role->add_cap( 'view_mstw_tr_menus' );
+		$role->add_cap( 'edit_mstw_tr_settings' );
+		$role->add_cap( 'manage_tr_teams' );
+		mstw_tr_add_caps( $role, null, 'player', 'players' );
+		//mstw_tr_add_caps( $role, null, 'team', 'teams' );
 		
 		//
 		// site editors can play freely
 		//
 		$role = get_role( 'editor' );
+		$role->add_cap( 'view_mstw_tr_menus' );
+		$role->add_cap( 'edit_mstw_tr_settings' );
+		$role->add_cap( 'manage_tr_teams' );
+		mstw_tr_add_caps( $role, null, 'player', 'players' );
+		//mstw_tr_add_caps( $role, null, 'team', 'teams' );
 		
-		mstw_tr_add_caps( $role, null, 'schedule', 'schedules' );
-		mstw_tr_add_caps( $role, null, 'team', 'teams' );
-		mstw_tr_add_caps( $role, null, 'game', 'games' );
-		mstw_tr_add_caps( $role, null, 'sport', 'sports' );
-		mstw_tr_add_caps( $result, null, 'venue', 'venues' );
-	
 	} //End: mstw_tr_add_user_roles( )
+}
 
 //------------------------------------------------------------------------
 // Adds the MSTW capabilities to either the $role_obj or $role_name using
@@ -284,7 +255,14 @@
 //					in register_post_type( ) )
 //	RETURN: none
 //
+if( !function_exists( 'mstw_tr_add_caps' ) ) {
 	function mstw_tr_add_caps( $role_obj = null, $role_name = null, $cpt, $cpt_s ) {
+		//if( function_exists( 'mstw_log_msg' ) ) {
+			//mstw_log_msg( 'in mstw_tr_add_caps ...' );
+			//mstw_log_msg( '$cpt= ' . $cpt );
+			//mstw_log_msg( '$cpt_s= ' . $cpt_s );
+		//}
+		
 		$cap = array( 'edit_', 'read_', 'delete_' );
 		$caps = array( 'edit_', 'edit_others_', 'publish_', 'read_private_', 'delete_', 'delete_published_', 'delete_others_', 'edit_private_', 'edit_published_' );
 		
@@ -311,6 +289,7 @@
 		}
 		
 	} //End: mstw_tr_add_caps( )
+}
 	
  //-----------------------------------------------------------------
  // filter the single_player template. first look for single-player.php 
@@ -374,7 +353,31 @@
 		 
  } //End: mstw_tr_taxonomy_team_template( )	
 
+//------------------------------------------------------------------------
+// Add some links to the plugins page
+//
+add_filter( 'plugin_action_links', 'mstw_tr_plugin_action_links', 10, 2 );
 
+function mstw_tr_plugin_action_links( $links, $file ) {
+	static $this_plugin;
+
+    if ( !$this_plugin ) {
+        $this_plugin = plugin_basename( __FILE__ );
+    }
+
+    if ( $file == $this_plugin ) {
+        // The "page" query string value must be equal to the slug
+        // of the Settings admin page we defined earlier
+		
+		$site_url = site_url( '/wp-admin/edit.php?post_type=mstw_tr_player&page=mstw-tr-settings' );
+		
+		$settings_link = "<a href='$site_url'>Settings</a>";
+		
+        array_unshift( $links, $settings_link );
+    }
+
+    return $links;
+}
 	
  // ----------------------------------------------------------------
  // Add the CSS code to the header

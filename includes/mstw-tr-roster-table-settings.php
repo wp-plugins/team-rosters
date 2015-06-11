@@ -88,11 +88,11 @@
 					'name'	=> 'mstw_tr_options[links_to_profiles]',
 					'value' => mstw_safe_ref( $options, 'links_to_profiles' ), 
 					'title' => __( 'Add Links to Player Profiles:', 'mstw-team-rosters' ),
-					'desc'	=> __( 'Default: No Links (Unchecked)' ),
+					'desc'	=> __( 'This setting applies to both roster tables and player galleries. Default: No Links (Unchecked)' ),
 					'page' => $display_on_page,
 					'section' => $page_section,
 				),
-				array( 	// SORT ORDER
+				array( 	// SORT BY FIELD
 					'type' => 'select-option', 
 					'id' => 'sort_order',
 					'name'	=> 'mstw_tr_options[sort_order]',
@@ -103,6 +103,19 @@
 										),
 					'title' => __( 'Sort Roster By:', 'mstw-team-rosters' ),
 					'desc'	=> __( 'Default: Last Name', 'mstw-team-rosters' ),
+					'page' => $display_on_page,
+					'section' => $page_section,
+				),
+				array( 	// SORT ORDER
+					'type' => 'select-option', 
+					'id' => 'sort_asc_desc',
+					'name'	=> 'mstw_tr_options[sort_asc_desc]',
+					'value' => mstw_safe_ref( $options, 'sort_asc_desc' ), 
+					'options' => array(	__( 'Ascending', 'mstw-team-rosters' )=> 'asc', 
+										__( 'Descending', 'mstw-team-rosters' ) => 'desc'		
+										),
+					'title' => __( 'Sort Order:', 'mstw-team-rosters' ),
+					'desc'	=> __( 'Default: Ascending (1, 2, 3 ... or a, b, c ...)', 'mstw-team-rosters' ),
 					'page' => $display_on_page,
 					'section' => $page_section,
 				),

@@ -33,9 +33,7 @@
  *		for the table colors options (ONLY)
  * 5. mstw_tr_get_bio_gallery_defaults() - returns the defaults 
  *		for the player profile & team gallery (ONLY)
- * 6. mstw_tr_set_options_by_format() - Sets the options based on one 
- *		of the six built-in roster type
- * 6.5 mstw_tr_set_fields: returns wp_parse_args( $settings, $defaults )
+ * 6. mstw_tr_set_fields_by_format: returns wp_parse_args( $settings, $defaults )
  *		NEED TO RECONCILE THIS WITH #6 above
  * 7. mstw_tr_build_gallery() - Builds the player gallery on the front end.
  * 8. mstw_tr_build_player_photo - Constructs the html for the player profile 
@@ -129,6 +127,7 @@
 				'roster_type'			=> 'custom',
 				'links_to_profiles'		=> 1,
 				'sort_order'			=> 'alpha', //sort by last name
+				'sort_asc_desc'			=> 'asc',
 				'name_format'			=> 'last-first',
 				'table_photo_width'		=> '',
 				'table_photo_height'	=> '',
@@ -466,7 +465,7 @@
 		//mstw_log_msg( 'in mstw_tr_build_gallery ... ' );
 		//mstw_log_msg( $options );
 
-		// Set the sort order	
+		// Set the sort field	
 		switch ( $options['sort_order'] ) {
 			case 'numeric':
 				$sort_key = 'player_number';
@@ -481,6 +480,16 @@
 				$order_by = 'meta_value';
 				break;
 		}
+		
+		// Set sort order
+		switch ( $options['sort_asc_desc'] ) {
+			case 'desc':
+				$sort_order = 'DESC';
+				break;
+			default:
+				$sort_order = 'ASC';
+				break;	
+		}
 			
 		// Get the team roster		
 		$posts = get_posts( array( 'numberposts' => -1,
@@ -488,7 +497,7 @@
 								   'mstw_tr_team' => $team_slug, 
 								   'orderby' => $order_by, 
 								   'meta_key' => $sort_key,
-								   'order' => 'ASC' 
+								   'order' => $sort_order 
 								));	
 	
 		if( $posts ) {
@@ -831,6 +840,7 @@
 	function mstw_tr_build_team_colors_html( $team = null, $options = null, $type = 'table' ) {
 		//mstw_log_msg( 'in mstw_tr_build_team_colors_html ...' );
 		//mstw_log_msg( 'mstw_ss_team post type exists: ' . post_type_exists( 'mstw_ss_team' ) );
+		//mstw_log_msg( '$team = ' . $team );
 		
 		$html = ''; // default return string
 		
@@ -910,9 +920,10 @@
  //	16. mstw_tr_find_team_in_ss: Determines if the $team is linked 
  //		to a team in the Schedules & Scoreboards plugin DB. 
  //		ARGUMENTS:
+ //			$team = TEAM ROSTERS team slug
  //		RETURNS:
  //			null if team is not linked
- //			team object from the SS plugin if linked
+ //			team object FROM SCHEDULES & SCOREBOARDS if linked
  //	
  if ( !function_exists( 'mstw_tr_find_team_in_ss' ) ) {
 	function mstw_tr_find_team_in_ss( $team = null ) {

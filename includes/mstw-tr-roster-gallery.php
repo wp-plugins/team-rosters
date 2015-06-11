@@ -24,7 +24,6 @@
 // Handles the shortcode parameters, if there were any, 
 // then calls mstw_tr_build_gallery( ) to create the output
 // --------------------------------------------------------------------------------------
-//add_shortcode( 'mstw_roster_gallery', 'mstw_tr_roster_gallery_handler' );
 
  if( !function_exists( 'mstw_tr_roster_gallery_handler' ) ) {
 	function mstw_tr_roster_gallery_handler( $atts ) {	

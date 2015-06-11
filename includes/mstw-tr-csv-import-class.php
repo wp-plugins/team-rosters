@@ -120,7 +120,7 @@
 				<form class="add:the-list: validate" method="post" enctype="multipart/form-data" action="">
 					
 					<table class='form-table'>
-					<thead><tr><th><?php echo __( 'Teams', 'mstw-team-rosters' ) ?></th></tr></thead>
+					<thead><tr><th><?php _e( 'Teams', 'mstw-team-rosters' ) ?></th></tr></thead>
 						
 						<tr>  <!-- CSV file selection field -->
 							<td><label for="csv_teams_import"><?php _e( 'Teams CSV file:', 'mstw-team-rosters' ); ?></label></td>
@@ -164,7 +164,7 @@
 					<table class='form-table'>
 						<thead>
 							<tr><th colspan=2>
-								<?php echo __( 'Players', 'mstw-team-rosters' ) ?>
+								<?php _e( 'Players', 'mstw-team-rosters' ) ?>
 								<br/>
 								<span class='description' style='font-weight: normal'><?php printf( __( 'The importer will use the "player-slug" column in the CSV file to assign teams to a player if that column is not empty.%s Otherwise, the player will be assigned to the team selected in the "Select Team to Import" dropdown. %sOtherwise, the player will be imported but will not be assigned to a team.', 'mstw-team-rosters' ), '<br/>', '<br/>' ) ?></span>
 							</th></tr>
@@ -175,21 +175,21 @@
 								<td><label for="csv_import_team"><?php _e( 'Select Team to Import:', 'mstw-team-rosters' ) ?></label></td>
 								<td><?php wp_dropdown_categories( $args ) ?>
 								<br/>
-								<span class='description' >This team will be used as the default if there is no entry for a player in the player_team column.</span>
+								<span class='description' ><?php _e( 'This team will be used as the default if there is no entry for a player in the player_team column.', 'mstw-team-rosters' ) ?></span>
 								</td>
 							</tr>
 							<tr>
 								<td><label for="csv_move_photos"><?php _e( 'Move Player Photos:', 'mstw-team-rosters') ?></label></td>
 								<td><input name="csv_move_photos" id="csv_move_photos" type="checkbox" value="1" />
 								<br/>
-								<span class='description' >If checked, photo files will be imported from their current locations to the media library.If unchecked, photo files will remain in their current locations.</span>
+								<span class='description' ><?php _e( 'If checked, photo files will be imported from their current locations to the media library.If unchecked, photo files will remain in their current locations.', 'mstw-team-rosters' ) ?></span>
 								</td>
 							</tr>
 							<tr> <!-- CSV file selection field -->
 								<td><label for="csv_players_import"><?php _e( 'Players CSV file:', 'mstw-team-rosters') ?></label></td>
 								<td><input name="csv_players_import" id="csv_players_import" type="file" value="" aria-required="true" />
 								<br/>
-								<span class='description' >Select the CSV players file to import.</span>
+								<span class='description' ><?php _e( 'Select the CSV players file to import.', 'mstw-team-rosters' ) ?></span>
 								</td>
 							</tr>
 							<tr> <!-- Submit button -->
@@ -427,19 +427,8 @@
 			$post_id = wp_insert_post( $new_post );
 			add_action( 'save_post_' . $type, 'mstw_tr_save_' . $save_suffix, 20, 2 );
 			
-			
-			/*
-			 * What the hell is this??
-			 *
-			if ( 'page' !== $type && !$post_id ) {
-				// cleanup new categories on failure
-				foreach ($cats['cleanup'] as $c) {
-					wp_delete_term( $c, 'category' );
-				}
-			}
-			 */
-			 
 			return $post_id;
+			
 		} //End function create_post()
 		
 		/*-------------------------------------------------------------
@@ -676,7 +665,7 @@
 			$team_slug = ( array_key_exists( 'team_slug', $data ) ) ? $data['team_slug'] : '' ;
 			$team_description = ( array_key_exists( 'team_description', $data ) ) ? $data['team_description'] : '' ;		
 			//ADD SS team link info - will be for 4.0+
-			$team_link = ( array_key_exists( 'team_link', $data ) ) ? $data['team_link'] : '' ;
+			$team_link = ( array_key_exists( 'team_ss_link', $data ) ) ? $data['team_ss_link'] : '' ;
 			
 			//check if team name & team slug is specified
 			if( $team_slug != '' && $team_name != '' ) {
@@ -698,7 +687,7 @@
 				
 				$args = array( 'description' => $team_description,
 							   'slug'		 => $team_slug,
-							  );
+							  ); 
 						  
 				$result = wp_insert_term( $team_name, 'mstw_tr_team', $args );
 			}

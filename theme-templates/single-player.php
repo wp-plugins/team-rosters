@@ -81,7 +81,7 @@
 
 		<?php
 		// Set up the hidden fields for jScript CSS 
-		$hidden_fields = mstw_tr_build_team_colors_html( $team_slug, $options );
+		$hidden_fields = mstw_tr_build_team_colors_html( $team_slug, $options, 'profile' );
 		//mstw_log_msg( 'mstw_tr_build_team_colors_html( ) ... returned:' );
 		//mstw_log_msg( $hidden_fields );
 		echo $hidden_fields;

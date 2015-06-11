@@ -25,10 +25,6 @@
  // Handles the displayshortcode parameters, and display settings if there were any, 
  // then calls mstw_tr_build_roster_table() to create the output
  // --------------------------------------------------------------------------------------
- //I have no idea why I needed to remove_shortcode before adding it, but I did
- //remove_shortcode( 'mstw_roster_table' );
- 
- //add_shortcode( 'mstw_roster_table', 'mstw_tr_roster_table_handler' );
  
  if ( !function_exists( 'mstw_tr_roster_table_handler' ) ) {
 	function mstw_tr_roster_table_handler( $atts = null ){
@@ -127,7 +123,7 @@
 			$output .= $title_h1 . $team_name . ' Roster' . '</h1>';
 		}
 		
-		// Set the sort order	
+		// Set the sort field	
 		switch ( $attribs['sort_order'] ) {
 			case'numeric':
 				$sort_key = 'player_number';
@@ -143,6 +139,15 @@
 				break;
 		}
 		
+		// Set sort order
+		switch ( $attribs['sort_asc_desc'] ) {
+			case 'desc':
+				$sort_order = 'DESC';
+				break;
+			default:
+				$sort_order = 'ASC';
+				break;	
+		}
 		
 		// Get the team roster		
 		$posts = get_posts( array( 'numberposts' => -1,
@@ -150,7 +155,7 @@
 								   'mstw_tr_team' => $team, 
 								   'orderby' => $order_by, 
 								   'meta_key' => $sort_key,
-								   'order' => 'ASC' 
+								   'order' => $sort_order 
 								   ) 
 							);						
 		
@@ -352,7 +357,7 @@
 			
 			// LAST SCHOOL column
 			if ( $args['show_last_school'] ) {
-				if( false != strpos( $roster_type, 'pro' ) ) {
+				if( false !== strpos( $roster_type, 'pro' ) ) {
 					$ret_html .= '<th>' . $args['last_school_label'] 
 										. ' ('. $args['country_label'] 
 										. ')' . '</th>';	

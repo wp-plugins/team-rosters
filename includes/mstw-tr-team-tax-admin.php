@@ -59,31 +59,39 @@ if( !function_exists( 'mstw_tr_team_row_actions' ) ) {
 		}
 		else { 
 			//build a list of S&S teams
+			if( !function_exists( 'mstw_ss_build_teams_list' ) ) {
+			?>
+				<div class="form-field">
+					<p class="plugin-not-installed"><?php _e( 'Install the lastest version of the MSTW Schedules & Scoreboards plugin to link team rosters to the Teams database in that plugin.' , 'mstw-team-rosters' )?></p>
+				</div>
+			<?php	
+			}
+			else {
+				?>
+				<div class="form-field">
+				
+				<label for="test"><?php _e( 'Team from MSTW Schedules & Scoreboards' , 'mstw-team-rosters' ) ?></label>
+				<?php
+				$id = 'tr-ss-team-link';
+				$args = array(
+							'type'       => 'select-option',
+							'id'         => $id,
+							'desc'       => __( 'Link team to a team from the MSTW Schedules & Scoreboards Teams DB.', 'mstw-team-rosters' ),
+							'title'		 => 'Team from MSTW Schedules & Scoreboards',
+							'curr_value' => '',
+							'options'    => mstw_ss_build_teams_list( ),
+							'label_for'  => $id,
+							'class'      => $id,
+							'name'		 => $id,
+							);
+				
+				mstw_build_admin_edit_field( $args );
+				
+				?>
+				</div> <!--form-field> -->
 
-			?>
-			<div class="form-field">
-			
-			<label for="test"><?php _e( 'Team from MSTW Schedules & Scoreboards' , 'mstw-team-rosters' ) ?></label>
 			<?php
-			$id = 'tr-ss-team-link';
-			$args = array(
-						'type'       => 'select-option',
-						'id'         => $id,
-						'desc'       => __( 'Link team to a team from the MSTW Schedules & Scoreboards Teams DB.', 'mstw-team-rosters' ),
-						'title'		 => 'Team from MSTW Schedules & Scoreboards',
-						'curr_value' => '',
-						'options'    => mstw_ss_build_teams_list( ),
-						'label_for'  => $id,
-						'class'      => $id,
-						'name'		 => $id,
-						);
-			
-			mstw_build_admin_edit_field( $args );
-			
-			?>
-			</div> <!--form-field> -->
-			
-		<?php
+			}
 		}
 	} //End: mstw_tr_team_add_form( )
  }
@@ -101,42 +109,53 @@ if( !function_exists( 'mstw_tr_team_row_actions' ) ) {
 		}
 		else { 
 			//build a list of S&S teams
-			
-			//find the current value
-			$team_slug = $team_obj->slug; 
-			//mstw_log_msg( '$team_slug= ' . $team_slug );
-			
-			$team_links = get_option( 'mstw_tr_ss_team_links' );
-				
-			$curr_link = ( $team_links && array_key_exists( $team_slug, $team_links ) ) ? $team_links[$team_slug] : -1;
-			
+			if( !function_exists( 'mstw_ss_build_teams_list' ) ) {
 			?>
-			<tr class="form-field">
-				<th scope="row">
-					<label for="tr-ss-team-link"><?php _e( 'Team from MSTW Schedules & Scoreboards' , 'mstw-team-rosters' ) ?></label>
-				</th>
-				<td>
-					<?php
-					$id = 'tr-ss-team-link';
-					$args = array(
-								'type'       => 'select-option',
-								'id'         => $id,
-								'desc'       => __( 'Link team to a team from the MSTW Schedules & Scoreboards Teams DB.', 'mstw-team-rosters' ),
-								'title'		 => '',
-								'curr_value' => $curr_link,
-								'options'    => mstw_ss_build_teams_list( ),
-								'label_for'  => $id,
-								'class'      => $id,
-								'name'		 => $id,
-								);
-					
-					mstw_build_admin_edit_field( $args );
-					
-					?>
-				</td>
-			</tr> <!-- .form-field> -->
+				<tr class="form-field">
+					<th scope="row">
+					<?php _e( 'MSTW Schedules & Scoreboards' , 'mstw-team-rosters' )?>
+					</th>
+					<td><?php _e( 'Plugin found, but please update to the latest version.' , 'mstw-team-rosters' )?></td>
+				</tr>
+		<?php	
+			}
 			
-		<?php
+			else {
+				//find the current value
+				$team_slug = $team_obj->slug; 
+				//mstw_log_msg( '$team_slug= ' . $team_slug );
+				
+				$team_links = get_option( 'mstw_tr_ss_team_links' );
+					
+				$curr_link = ( $team_links && array_key_exists( $team_slug, $team_links ) ) ? $team_links[$team_slug] : -1;
+				
+				?>
+				<tr class="form-field">
+					<th scope="row">
+						<label for="tr-ss-team-link"><?php _e( 'Team from MSTW Schedules & Scoreboards' , 'mstw-team-rosters' ) ?></label>
+					</th>
+					<td>
+						<?php
+						$id = 'tr-ss-team-link';
+						$args = array(
+									'type'       => 'select-option',
+									'id'         => $id,
+									'desc'       => __( 'Link team to a team from the MSTW Schedules & Scoreboards Teams DB.', 'mstw-team-rosters' ),
+									'title'		 => '',
+									'curr_value' => $curr_link,
+									'options'    => mstw_ss_build_teams_list( ),
+									'label_for'  => $id,
+									'class'      => $id,
+									'name'		 => $id,
+									);
+						
+						mstw_build_admin_edit_field( $args );
+						
+						?>
+					</td>
+				</tr> <!-- .form-field> -->
+			<?php
+			}
 		}
 	} //End: mstw_tr_team_edit_form( )
  }
@@ -187,7 +206,7 @@ if ( !function_exists( 'mstw_tr_manage_team_columns' ) ) {
 		if ( $tr_ss_links && array_key_exists( $team_slug, $tr_ss_links ) ) {
 			$ss_slug = $tr_ss_links[$team_slug];
 			$ss_team_obj = get_page_by_path( $ss_slug, OBJECT, 'mstw_ss_team' );
-			$out = ( $ss_team_obj ) ? get_the_title( $ss_team_obj->ID ) : ''; 
+			$out = ( $ss_team_obj ) ? get_the_title( $ss_team_obj->ID ) : $out; 
 		}
 		
 		return $out;    

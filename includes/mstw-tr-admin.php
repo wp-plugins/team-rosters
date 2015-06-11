@@ -280,121 +280,78 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 	function mstw_tr_register_menu_pages( ) {
 		//mstw_log_msg( 'including mstw-tr-import-class' );
 		include_once 'mstw-tr-csv-import-class.php';
-		//include_once 'mstw-tr-import-class.php';
 		
 		//Top Level Menu
-		
-		$rosters_page = add_menu_page( __( 'Team Rosters', 'mstw-team-rosters' ), //$page_title, 
-					   __( 'Team Rosters', 'mstw-team-rosters' ), //$menu_title, 
-					   'read', //$capability, 
-					   'edit.php?post_type=mstw_tr_player', 
-					   null, 
-					   plugins_url( 'images/mstw-admin-menu-icon.png', dirname( __FILE__ ) ), //$menu_icon
-					   "58.75" //menu order
-					 );
-		//mstw_log_msg( 'admin_print_styles-' . $rosters_page );
-		
-		//Players			 
-		$players_page = add_submenu_page( 
-							'edit.php?post_type=mstw_tr_player', 
-							__( 'Players', 'mstw-team-rosters' ), //page title
-							__( 'Players', 'mstw-team-rosters' ), //menu title
-							'read', // Capability required to see this option.
-							'edit.php?post_type=mstw_tr_player', // Slug name to refer to this menu
-							null							
-							); // Callback to output content
-						
-		add_action( 'admin_print_styles-' . $players_page, 'mstw_tr_load_admin_styles');
-		
-		/*
-		//TESTING SS TEAMS
-		//
-		$test_page = add_submenu_page( 
-							'edit.php?post_type=mstw_tr_player', 
-							__( 'SS Teams', 'mstw-team-rosters' ), //page title
-							__( 'SS Teams', 'mstw-team-rosters' ), //menu title
-							'read', // Capability required to see this option.
-							'my-test-slug', //'edit.php?post_type=mstw_ss_team', // Slug name to refer to this menu
-							'test_callback' //'edit.php?post_type=mstw_ss_team' //					
-							); // Callback to output content
+		if( mstw_user_has_plugin_rights( 'tr' ) ) {
+			$rosters_page = add_menu_page( __( 'Team Rosters', 'mstw-team-rosters' ), //$page_title, 
+						   __( 'Team Rosters', 'mstw-team-rosters' ), //$menu_title, 
+						   'read', //$capability, 
+						   'edit.php?post_type=mstw_tr_player', 
+						   null, 
+						   plugins_url( 'images/mstw-admin-menu-icon.png', dirname( __FILE__ ) ), //$menu_icon
+						   "58.75" //menu order
+						 );
+			
+			//
+			//Players
+			//
+			$players_page = add_submenu_page( 
+								'edit.php?post_type=mstw_tr_player', 
+								__( 'Players', 'mstw-team-rosters' ), //page title
+								__( 'Players', 'mstw-team-rosters' ), //menu title
+								'read', // Capability required to see this option.
+								'edit.php?post_type=mstw_tr_player', // Slug name to refer to this menu
+								null							
+								); // Callback to output content
 							
-		add_action( "load-$test_page", 'test_redirect' );
-		*/
-		
-		//mstw_log_msg( 'admin_print_styles-' . $players_page );
-		
-		//Teams (taxonomy)			 
-		$teams_page = add_submenu_page( 
-							'edit.php?post_type=mstw_tr_player', //parent page
-							__( 'Teams', 'mstw-team-rosters' ), //page title
-							__( 'Teams', 'mstw-team-rosters' ), //menu title
-							'read', // Capability required to see this option.
-							'edit-tags.php?taxonomy=mstw_tr_team&post_type=mstw_tr_player', // Slug name to refer to this menu
-							null							
-							); // Callback to output content
-		
-		
-						
-		// Settings
-		$settings_page = add_submenu_page( 	
-							'edit.php?post_type=mstw_tr_player',  //parent slug
-							__( 'Settings', 'mstw-team-rosters' ),   //page title
-							__( 'Settings', 'mstw-team-rosters' ),  //menu title
-							'read',  //user capability required to access
-							'mstw-tr-settings',  //unique menu slug
-							'mstw_tr_settings_page'  //callback to display page
-							);					
-							
-		//
-		// Load the settings help pages
-		//
-		add_action( "load-$settings_page", 'mstw_tr_settings_help' );
-		
-		/*
-		// Data Migration (from 3.1.2)
-		//
-		if ( true ) {
-		//if( post_type_exists( 'player' ) and get_option( 'mstw_team_rosters_activated' ) ) {
-		$migration_page = add_submenu_page (
-							'edit.php?post_type=mstw_tr_player',  //parent slug
-							__( 'Migrate Data from Version 3.1.2', 'mstw-team-rosters' ),   //page title
-							__( '3.1.2 Data Migration', 'mstw-team-rosters' ),  //menu title
-							'read',  //user capability required to access
-							'mstw-tr-data-migration',  //unique menu slug
-							'mstw_tr_data_migration_page'  //callback to display page
-							);
-		}
-		*/
+			add_action( 'admin_print_styles-' . $players_page, 'mstw_tr_load_admin_styles');
+			
+			//
+			//Teams (taxonomy)
+			//			
+			$teams_page = add_submenu_page( 
+								'edit.php?post_type=mstw_tr_player', //parent page
+								__( 'Teams', 'mstw-team-rosters' ), //page title
+								__( 'Teams', 'mstw-team-rosters' ), //menu title
+								'read', // Capability required to see this option.
+								'edit-tags.php?taxonomy=mstw_tr_team&post_type=mstw_tr_player', // Slug name to refer to this menu
+								null							
+								); // Callback to output content
+				
+			//
+			// Settings
+			//
+			$settings_page = add_submenu_page( 	
+								'edit.php?post_type=mstw_tr_player',  //parent slug
+								__( 'Settings', 'mstw-team-rosters' ),   //page title
+								__( 'Settings', 'mstw-team-rosters' ),  //menu title
+								'read',  //user capability required to access
+								'mstw-tr-settings',  //unique menu slug
+								'mstw_tr_settings_page'  //callback to display page
+								);	
 
-		//
-		// CSV Import
-		$plugin = new MSTW_TR_ImporterPlugin;
-		
-		add_submenu_page(	'edit.php?post_type=mstw_tr_player',
-							'Import Roster from CSV File',			//page title
-							'CSV Roster Import',					//menu title
-							'manage_options',
-							'mstw-tr-csv-import',
-							array( $plugin, 'form' )
-						);
-							
-		// Now also add action to load java scripts ONLY when you're on this page
-	}
-	
-	/*
-	function test_callback( ) {
-		return;
-		echo '<h1>Test Callback</h1>';
-		//ob_start();
-		//wp_redirect( 'http://mstw.dev/wp-admin/edit.php?post_type=mstw_tr_player', 302 );
-		//exit;
-	}
-	
-	function test_redirect( ) {
-		wp_redirect( 'http://mstw.dev/wp-admin/edit.php?post_type=mstw_ss_team', 302 );
-		exit;
-	}
-	*/
+			add_action( 'option_page_capability_mstw_tr_settings', 'mstw_tr_set_option_page_capabilities' );
+								
+			//
+			// Load the settings help pages
+			//
+			add_action( "load-$settings_page", 'mstw_tr_settings_help' );
+			
+			//
+			// CSV Import
+			//
+			$plugin = new MSTW_TR_ImporterPlugin;
+			
+			add_submenu_page(	'edit.php?post_type=mstw_tr_player',
+								'Import Roster from CSV File',			//page title
+								'CSV Roster Import',					//menu title
+								'read',
+								'mstw-tr-csv-import',
+								array( $plugin, 'form' )
+							);
+								
+		} //End: if( mstw_user_has_plugin_rights( )
+	} //End: mstw_tr_register_menu_pages()
 	
  //-----------------------------------------------------------------------
  // Enqueue admin styles - only if on players admin page
@@ -474,6 +431,19 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 		return $messages;
 		
 	} //End: mstw_tr_updated_term_messages( )
+ }
+ 
+ //-----------------------------------------------------------------------
+ // Filter the capability so user that can see the setting menu can edit the settings
+ //
+ if( !function_exists( 'mstw_tr_set_option_page_capabilities' ) ) {
+	function mstw_tr_set_option_page_capabilities( $capability ) {
+		mstw_log_msg( 'in mstw_tr_set_option_page_capabilities ...' );
+		mstw_log_msg( '$capability before = ' . $capability );
+		$capability = 'edit_mstw_tr_settings';
+		mstw_log_msg( '$capability after = ' . $capability );
+		return $capability; //'edit_mstw_tr_settings'; //
+	} //End mstw_tr_set_option_page_capabilities()
  }
  
 ?>
