@@ -1,0 +1,72 @@
+player_first_name,player_last_name,player_number,player_height,player_weight,player_position,player_year,player_experience,player_age,player_home_town,player_last_school,player_country,player_bats,player_throws,player_other,player_photo,player_bio
+Matt,Cain,38,"6'3""",230,RHP,,7,18,"Dothan, AL",N/A,USA,R,R,,,"<p>3-time All-Star. SF Giants Willie McCovey Award Winner.</p>
+"
+Pablo,Sandoval,48,"5'11""",240,3B,,4,26,Puerto Cabello,N/A,Venezuela,B,R,,,<p>World Series MVP. 2-time All-Star. Will swing at anything 
+Marco,Scutaro,19,"5'10""",185,2B,,10,35,San Felipe,N/A,Venezuela,R,R,,,"<blockquote>THIS IS A BLOCK QUOTE. Clutch hitter. NLCS MVP. Played for 5 different teams.</blockquote>
+
+
+
+<ul>
+	<li>bullet 1</li>
+
+	<li>bullet 2</li>
+
+	<li>bullet 3</li>
+
+</ul>
+
+<ol>
+  <li>bullet 1</li>
+  <li>bullet 2</li>
+  <li>bullet 3</li>
+</ol>
+
+<h2>Testing the &lt;pre&gt; tag ...</h2>
+<pre>
+<table class=""form-table"">
+		
+<?php
+$admin_fields = array ( 
+		'player_first_name' => array (
+			'type' 		=> 'text',
+			'curr_value' 	=> get_post_meta( $post->ID, 'player_first_name', true ), //$first_name,
+			'label' 	=> __( 'First Name:', 'mstw-team-rosters' ),
+			'maxlength' 	=> $std_length,
+			'size' 		=> $std_size,
+			'desc' 		=> __( '', 'mstw-team-rosters' ),
+			),
+		'player_last_name' => array (
+			'type' => 'text',
+			'curr_value' => get_post_meta( $post->ID, 'player_first_name', true ), //$last_name,
+			'label' =>  __( 'Last Name:', 'mstw-team-rosters' ),
+			'maxlength' => $std_length,
+			'size' => $std_size,
+			'desc' => __( '', 'mstw-team-rosters' ),
+						),
+
+</pre>
+
+The pre tag has ended."
+Hunter,Pence,8,"6'4""",220,RF,,5,29,"Fort Worth, TX",Texas-Arlington,USA,R,R,,,"<p>2-time All-Star. Houston Astros MVP.</p>
+
+<img src=""http://dev.shoalsummitsolutions.com/wp-content/uploads/2014/12/bengals-125x125.png"" alt=""Bengals"" width=""125"" height=""125"" class=""aligncenter size-full wp-image-2132"" />
+"
+Angel,Pagan,16,"6'2""",200,CF,,6,31,Rio Piedras,Indian River CC,Puerto Rico,B,R,,,"<p>Spark plug for the batting order. Has played for 4 NL teams.</p>
+"
+Buster,Posey,28,"6'1""",220,C,,3,25,"Leesburg, GA",Florida State,USA,R,R,,http://dev.shoalsummitsolutions.com/wp-content/uploads/2014/01/buster-posey-150x150.png,"<p>Rookie of the Year, NL MVP, 2-time All Star</p>
+"
+Tim,Lincecum,55,"5'11""",170,RHP,,5,28,"Bellvue, WA",Washington,USA,L,R,,http://dev.shoalsummitsolutions.com/wp-content/uploads/2014/01/tim-lincecum-150x150.png,"<p>2-time Cy Young Award Winner</p>
+"
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,

@@ -1,0 +1,64 @@
+player_title,player_slug,player_first_name,player_last_name,player_number,player_height,player_weight,player_position,player_year,player_experience,player_age,player_home_town,player_last_school,player_country,player_bats,player_throws,player_other,player_teams,player_photo,player_bio
+Matt Cain,matt-cain,Matt,Cain,38,"6'3""",230,RHP,,7,18,"Dothan, AL",N/A,USA,R,R,,2012-sf-giants;,,"<p>3-time All-Star. SF Giants Willie McCovey Award Winner.</p>
+"
+Pablo Sandoval,pablo-sandoval,Pablo,Sandoval,48,"5'11""",240,3B,,4,26,Puerto Cabello,N/A,Venezuela,B,R,,2012-sf-giants;,,<p>World Series MVP. 2-time All-Star. Will swing at anything 
+Marco Scutaro,marco-scutaro,Marco,Scutaro,19,"5'10""",185,2B,,10,35,San Felipe,N/A,Venezuela,R,R,,2012-sf-giants;,,"<blockquote>THIS IS A BLOCK QUOTE. Clutch hitter. NLCS MVP. Played for 5 different teams.</blockquote>
+
+
+
+<ul>
+	<li>bullet 1</li>
+
+	<li>bullet 2</li>
+
+	<li>bullet 3</li>
+
+</ul>
+
+<ol>
+  <li>bullet 1</li>
+  <li>bullet 2</li>
+  <li>bullet 3</li>
+</ol>
+
+<h2>Testing the &lt;pre&gt; tag ...</h2>
+<pre>
+<table class=""form-table"">
+		
+<?php
+$admin_fields = array ( 
+		'player_first_name' => array (
+			'type' 		=> 'text',
+			'curr_value' 	=> get_post_meta( $post->ID, 'player_first_name', true ), //$first_name,
+			'label' 	=> __( 'First Name:', 'mstw-team-rosters' ),
+			'maxlength' 	=> $std_length,
+			'size' 		=> $std_size,
+			'desc' 		=> __( '', 'mstw-team-rosters' ),
+			),
+		'player_last_name' => array (
+			'type' => 'text',
+			'curr_value' => get_post_meta( $post->ID, 'player_first_name', true ), //$last_name,
+			'label' =>  __( 'Last Name:', 'mstw-team-rosters' ),
+			'maxlength' => $std_length,
+			'size' => $std_size,
+			'desc' => __( '', 'mstw-team-rosters' ),
+						),
+
+</pre>
+
+The pre tag has ended."
+Hunter Pence,hunter-pence,Hunter,Pence,8,"6'4""",220,RF,,5,29,"Fort Worth, TX",Texas-Arlington,USA,R,R,,2012-sf-giants;,,"<p>2-time All-Star. Houston Astros MVP.</p>
+
+<img src=""http://dev.shoalsummitsolutions.com/wp-content/uploads/2014/12/bengals-125x125.png"" alt=""Bengals"" width=""125"" height=""125"" class=""aligncenter size-full wp-image-2132"" />
+"
+Angel Pagan,angel-pagan,Angel,Pagan,16,"6'2""",200,CF,,6,31,Rio Piedras,Indian River CC,Puerto Rico,B,R,,2012-sf-giants;,,"<p>Spark plug for the batting order. Has played for 4 NL teams.</p>
+"
+Buster Posey,buster-posey,Buster,Posey,28,"6'1""",220,C,,3,25,"Leesburg, GA",Florida State,USA,R,R,,2012-sf-giants;,http://dev.shoalsummitsolutions.com/wp-content/uploads/2014/01/buster-posey-150x150.png,"<p>Rookie of the Year, NL MVP, 2-time All Star</p>
+"
+Tim Lincecum,tim-lincecum,Tim,Lincecum,55,"5'11""",170,RHP,,5,28,"Bellvue, WA",Washington,USA,L,R,,2012-sf-giants;,http://dev.shoalsummitsolutions.com/wp-content/uploads/2014/01/tim-lincecum-150x150.png,"<p>2-time Cy Young Award Winner</p>
+"
+Jim Breech,jim-breech,Jim,Breech,3,"5'6""",161,K,SR,14,56,"Sacramento, CA",California,USA,,,,cal-bears;,http://dev.shoalsummitsolutions.com/wp-content/uploads/2012/12/jim-breech-150x150.jpg,
+Craig Morton,craig-morton,Craig,Morton,4,"6'4""",214,QB,Soph,19,67,"Campbell, CA",Campbell HS,USA,,,,cal-bears;,http://dev.shoalsummitsolutions.com/wp-content/uploads/2012/11/craig-morton-150x150.jpg,Morton played for Marv Levy at Cal. Then played for the Dallas Cowboys and the Denver Broncos.
+Wesley Walker,wesley-walker,Wesley,Walker,99,"5'11""",180,WR,SR,4V,59,"Somewhere, CA",Concord DeLaSalle,USA,,,,cal-bears;,,Wesley went on to have a great NFL career with the New York Jets.
+Joe Roth,joe-roth,Joe,Roth,12,"6'4""",195,QB,SR,2V,Deceased,"La Mesa, CA",Grossmont College,USA,,,,cal-bears;,http://dev.shoalsummitsolutions.com/wp-content/uploads/2012/11/joe-roth-150x150.jpg,Joe died after his senior season.
+Ed White,ed-white,Ed ,White,70,"6'3""",245,DG,SR,4V,76,"Indio, CA",Indio HS,USA,,,,cal-bears;,http://dev.shoalsummitsolutions.com/wp-content/uploads/2012/11/ed-white-150x150.jpg,"<strong>""Big"" Ed White was a consensus All-American in 1968.</strong>"
