@@ -77,11 +77,6 @@
  if ( !function_exists( 'mstw_tr_get_data_fields_columns_defaults' ) ) {
 	function mstw_tr_get_data_fields_columns_defaults( ) {
 		$defaults = array(	
-				//'team'					=> 'no-team-specified',
-				//'show_title'			=> 1,
-				//'roster_type'			=> 'custom',
-				//'sort_order'			=> 'alpha',
-				//'name_format'			=> 'last-first',
 				'show_number'			=> 1,
 				'number_label'			=> __( 'Nbr', 'mstw-team-rosters' ),
 				//always show the name
@@ -196,133 +191,6 @@
 		
 		return mstw_tr_get_fields_by_roster_type( $format );
 		
-		//
-		// REMOVE WHEN CHECKED OUT
-		//
-		/*
-		switch ( $format) {
-			case 'baseball-high-school':
-			case 'baseball-college':
-			case 'baseball-pro':
-				$show_bats_throws = 1;
-			break;
-			default:
-				$show_bats_throws = 0;
-				break;
-		}
-
-		switch ( $format ) {
-			case 'baseball-high-school':
-			case 'high-school':
-				$settings = array(	
-					//'team'					=> 'no-team-specified',
-					'roster_type'			=> $format,
-					//'show_title'			=> 1,
-					//'sort_order'			=> 'alpha',
-					//'name_format'			=> 'last-first',
-					//'name_label'			=> __( 'Name', 'mstw-team-rosters' ),
-					'show_number'			=> 1,
-					//'number_label'			=> __( 'Number', 'mstw-team-rosters' ),
-					'show_position'			=> 1,
-					'show_height'			=> 1,
-					//'height_label'			=> __( 'Height', 'mstw-team-rosters' ),
-					//'show_weight'			=> 1,
-					//'weight_label'			=> __( 'Weight', 'mstw-team-rosters' ),
-					'show_year'				=> 1,
-					//'year_label'			=> __( 'Year', 'mstw-team-rosters' ),
-					'show_experience'		=> 0,
-					//'experience_label'		=> __( 'Exp', 'mstw-team-rosters' ),
-					'show_age'				=> 0,
-					//'age_label'				=> __( 'Age', 'mstw-team-rosters' ),
-					'show_home_town'		=> 0,
-					//'home_town_label'		=> __( 'Home Town', 'mstw-team-rosters' ),
-					'show_last_school'		=> 0,
-					//'last_school_label'		=> __( 'Last School', 'mstw-team-rosters' ),
-					'show_country'			=> 0,
-					//'country_label'			=> __( 'Country', 'mstw-team-rosters' ),
-					'show_bats_throws'		=> $show_bats_throws,
-					//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-team-rosters' ),
-					'show_other_info'		=> 0,
-					//'other_info_label'		=> __( 'Other', 'mstw-team-rosters' ),
-				);
-				break;
-				
-			case 'baseball-college':
-			case 'college':
-				$settings = array(	
-					//'team'					=> 'no-team-specified',
-					'roster_type'			=> $format,
-					//'show_title'			=> 1,
-					//'sort_order'			=> 'alpha',
-					//'name_format'			=> 'last-first',
-					//'name_label'			=> __( 'Name', 'mstw-team-rosters' ),
-					'show_number'			=> 1,
-					//'number_label'			=> __( 'Number', 'mstw-team-rosters' ),
-					'show_position'			=> 1,
-					'show_height'			=> 1,
-					//'height_label'			=> __( 'Height', 'mstw-team-rosters' ),
-					//'show_weight'			=> 1,
-					//'weight_label'			=> __( 'Weight', 'mstw-team-rosters' ),
-					'show_year'				=> 1,
-					//'year_label'			=> __( 'Year', 'mstw-team-rosters' ),
-					'show_experience'		=> 1,
-					//'experience_label'		=> __( 'Exp', 'mstw-team-rosters' ),
-					'show_age'				=> 0,
-					//'age_label'				=> __( 'Age', 'mstw-team-rosters' ),
-					'show_home_town'		=> 1,
-					//'home_town_label'		=> __( 'Home Town', 'mstw-team-rosters' ),
-					'show_last_school'		=> 1,
-					//'last_school_label'		=> __( 'Last School', 'mstw-team-rosters' ),
-					'show_country'			=> 0,
-					//'country_label'			=> __( 'Country', 'mstw-team-rosters' ),
-					'show_bats_throws'		=> $show_bats_throws,
-					//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-team-rosters' ),
-					'show_other_info'		=> 0,
-					//'other_info_label'		=> __( 'Other', 'mstw-team-rosters' ),
-				);		
-				break;
-			
-			case 'pro':
-			case 'baseball-pro':
-				$settings = array(	
-					//'team'					=> 'no-team-specified',
-					'roster_type'			=> $format,
-					//'show_title'			=> 1,
-					//'sort_order'			=> 'alpha',
-					//'name_format'			=> 'last-first',
-					//'name_label'			=> __( 'Name', 'mstw-team-rosters' ),
-					'show_number'			=> 1,
-					//'number_label'			=> __( 'Number', 'mstw-team-rosters' ),
-					'show_position'			=> 1,
-					'show_height'			=> 1,
-					//'height_label'			=> __( 'Height', 'mstw-team-rosters' ),
-					//'show_weight'			=> 1,
-					//'weight_label'			=> __( 'Weight', 'mstw-team-rosters' ),
-					'show_year'				=> 0,
-					//'year_label'			=> __( 'Year', 'mstw-team-rosters' ),
-					'show_experience'		=> 1,
-					//'experience_label'		=> __( 'Exp', 'mstw-team-rosters' ),
-					'show_age'				=> 1,
-					//'age_label'				=> __( 'Age', 'mstw-team-rosters' ),
-					'show_home_town'		=> 0,
-					//'home_town_label'		=> __( 'Home Town', 'mstw-team-rosters' ),
-					'show_last_school'		=> 1,
-					//'last_school_label'		=> __( 'Last School', 'mstw-team-rosters' ),
-					'show_country'			=> 1,
-					//'country_label'			=> __( 'Country', 'mstw-team-rosters' ),
-					'show_bats_throws'		=> $show_bats_throws,
-					//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-team-rosters' ),
-					'show_other_info'		=> 0,
-					//'other_info_label'		=> __( 'Other', 'mstw-team-rosters' ),
-				);
-				break;
-				
-			default:  // custom roster format
-				$settings = get_option( 'mstw_tr_options' );
-				break;
-		}
-		return $settings;
-		*/
 	} //End: mstw_tr_set_fields_by_format()
  }
 
@@ -341,109 +209,58 @@
 		switch ( $roster_type ) {
 			case 'baseball-high-school':
 			case 'high-school':
-				$settings = array(	
-					//'team'					=> 'no-team-specified',
-					'roster_type'			=> $roster_type,
-					//'show_title'			=> 1,
-					//'sort_order'			=> 'alpha',
-					//'name_format'			=> 'last-first',
-					//'name_label'			=> __( 'Name', 'mstw-team-rosters' ),
-					'show_number'			=> 1,
-					//'number_label'			=> __( 'Number', 'mstw-team-rosters' ),
+				$settings = array(					
+					'roster_type'			=> $roster_type,					
+					'show_number'			=> 1,					
 					'show_position'			=> 1,
 					'show_height'			=> 1,
-					//'height_label'			=> __( 'Height', 'mstw-team-rosters' ),
-					//'show_weight'			=> 1,
-					//'weight_label'			=> __( 'Weight', 'mstw-team-rosters' ),
 					'show_year'				=> 1,
-					//'year_label'			=> __( 'Year', 'mstw-team-rosters' ),
 					'show_experience'		=> 0,
-					//'experience_label'		=> __( 'Exp', 'mstw-team-rosters' ),
 					'show_age'				=> 0,
-					//'age_label'				=> __( 'Age', 'mstw-team-rosters' ),
 					'show_home_town'		=> 0,
-					//'home_town_label'		=> __( 'Home Town', 'mstw-team-rosters' ),
 					'show_last_school'		=> 0,
-					//'last_school_label'		=> __( 'Last School', 'mstw-team-rosters' ),
 					'show_country'			=> 0,
-					//'country_label'			=> __( 'Country', 'mstw-team-rosters' ),
 					'show_bats_throws'		=> $show_bats_throws,
-					//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-team-rosters' ),
 					'show_other_info'		=> 0,
-					//'other_info_label'		=> __( 'Other', 'mstw-team-rosters' ),
 				);
 				break;
 				
 			case 'baseball-college':
 			case 'college':
 				$settings = array(	
-					//'team'					=> 'no-team-specified',
 					'roster_type'			=> $roster_type,
-					//'show_title'			=> 1,
-					//'sort_order'			=> 'alpha',
-					//'name_format'			=> 'last-first',
-					//'name_label'			=> __( 'Name', 'mstw-team-rosters' ),
 					'show_number'			=> 1,
-					//'number_label'			=> __( 'Number', 'mstw-team-rosters' ),
 					'show_position'			=> 1,
 					'show_height'			=> 1,
-					//'height_label'			=> __( 'Height', 'mstw-team-rosters' ),
-					//'show_weight'			=> 1,
-					//'weight_label'			=> __( 'Weight', 'mstw-team-rosters' ),
 					'show_year'				=> 1,
-					//'year_label'			=> __( 'Year', 'mstw-team-rosters' ),
 					'show_experience'		=> 1,
-					//'experience_label'		=> __( 'Exp', 'mstw-team-rosters' ),
 					'show_age'				=> 0,
-					//'age_label'				=> __( 'Age', 'mstw-team-rosters' ),
 					'show_home_town'		=> 1,
-					//'home_town_label'		=> __( 'Home Town', 'mstw-team-rosters' ),
 					//this is shown in Home Town(Last School) column
 					'show_last_school'		=> 1,
-					//'last_school_label'		=> __( 'Last School', 'mstw-team-rosters' ),
 					'show_country'			=> 0,
-					//'country_label'			=> __( 'Country', 'mstw-team-rosters' ),
 					'show_bats_throws'		=> $show_bats_throws,
-					//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-team-rosters' ),
 					'show_other_info'		=> 0,
-					//'other_info_label'		=> __( 'Other', 'mstw-team-rosters' ),
 				);		
 				break;
 			
 			case 'pro':
 			case 'baseball-pro':
 				$settings = array(	
-					//'team'					=> 'no-team-specified',
 					'roster_type'			=> $roster_type,
-					//'show_title'			=> 1,
-					//'sort_order'			=> 'alpha',
-					//'name_format'			=> 'last-first',
-					//'name_label'			=> __( 'Name', 'mstw-team-rosters' ),
 					'show_number'			=> 1,
-					//'number_label'			=> __( 'Number', 'mstw-team-rosters' ),
 					'show_position'			=> 1,
 					'show_height'			=> 1,
-					//'height_label'			=> __( 'Height', 'mstw-team-rosters' ),
-					//'show_weight'			=> 1,
-					//'weight_label'			=> __( 'Weight', 'mstw-team-rosters' ),
 					'show_year'				=> 0,
-					//'year_label'			=> __( 'Year', 'mstw-team-rosters' ),
 					'show_experience'		=> 1,
-					//'experience_label'		=> __( 'Exp', 'mstw-team-rosters' ),
 					'show_age'				=> 1,
-					//'age_label'				=> __( 'Age', 'mstw-team-rosters' ),
 					'show_home_town'		=> 0,
-					//'home_town_label'		=> __( 'Home Town', 'mstw-team-rosters' ),
 					'show_last_school'		=> 1,
-					//'last_school_label'		=> __( 'Last School', 'mstw-team-rosters' ),
 					//show the country as part of the last_school(country) column
 					//so don't need to set here
 					'show_country'			=> 1,
-					//'country_label'			=> __( 'Country', 'mstw-team-rosters' ),
 					'show_bats_throws'		=> $show_bats_throws,
-					//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-team-rosters' ),
 					'show_other_info'		=> 0,
-					//'other_info_label'		=> __( 'Other', 'mstw-team-rosters' ),
 				);
 				break;
 				

@@ -30,7 +30,7 @@ The major enhancements in version 4.0 are:
 * Additional color settings have been provided on the admin settings screen, and the code to apply these settings has been re-factored to improve performance 
 * The new WordPress Color Selector has been added to the admin settings screen.
 * Additional CSS tags have been added to the display code to allow any team's rosters to be uniquely styled via the plugin's stylesheet. This functionality supports websites with multiple teams (leagues or clubs) with multiple colors, as shown on the [Shoal Summit Solutions Plugin Development Site](http://shoalsummitsolutions.com/dev/test-roster-plugin/). 
-* The player name format can now be controlled on the admin setting screen. Several formats are available, perhaps most importantly a first name only format is now available to address privacy concerns with young players (screenshot-5).
+* The player name format can now be controlled on the admin setting screen. Several formats are available, perhaps most importantly a first name only format is now available to address privacy concerns with young players.
 * While the six built-in roster formats remain (high-school, college, pro, baseball-high-school, baseball-college, and baseball-pro), roster and player displays are now highly configurable. Between the admin display settings and the plugin's stylesheet, you can take (almost) complete control of your roster displays.
 * The plugin is internationalized and ready for translation. The current translations in the /lang directory now require updating, especially for the extensive additions to the admin screens. I am happy to help translators.
 
@@ -73,16 +73,10 @@ Complete installation instructions are available on [shoalsummitsolutions.com](h
 The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are available on shoalsummitsolutions.com.
 
 == Screenshots ==
-// NEEDS TO BE REDONE
 
-1. Edit All Players admin screen
-2. Edit Single Player admin screen
-3. Sample of a Roster Table [shortcode] display
-4. Sample of Single Player (bio) page
-5. Display Settings admin screen
-6. Sample Player Gallery page
-7. Teams (taxonomy) admin screen
-8. CSV File Import Screen
+1. Sample Roster Table
+2. Sample Single Player Bio
+3. Sample Player Gallery
 
 == Changelog ==
 
