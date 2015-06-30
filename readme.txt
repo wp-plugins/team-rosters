@@ -75,8 +75,8 @@ The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are ava
 == Screenshots ==
 
 1. Sample Roster Table
-2. Sample Single Player Bio
-3. Sample Player Gallery
+2. Sample Player Gallery
+3. Sample Single Player Bio
 
 == Changelog ==
 
