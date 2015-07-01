@@ -167,7 +167,7 @@
 							'label' 		=> __( 'First Name:', 'mstw-team-rosters' ),
 							'maxlength' 	=> $std_length,
 							'size' 			=> $std_size,
-							'desc' 			=> __( '', 'mstw-team-rosters' ),
+							'desc' 			=> '',
 							),
 						'player_last_name' => array (
 							'type' => 'text',
@@ -175,7 +175,7 @@
 							'label' =>  __( 'Last Name:', 'mstw-team-rosters' ),
 							'maxlength' => $std_length,
 							'size' => $std_size,
-							'desc' => __( '', 'mstw-team-rosters' ),
+							'desc' => '',
 							),
 						'player_number' => array (
 							'type' => 'text',
@@ -183,7 +183,7 @@
 							'label' =>  __( 'Number:', 'mstw-team-rosters' ),
 							'maxlength' => $std_length,
 							'size' => $std_size,
-							'desc' => __( '', 'mstw-team-rosters' ),
+							'desc' => '',
 							),	
 						'player_position' => array (
 							'type' => 'text',
@@ -191,7 +191,7 @@
 							'label' =>  __( 'Position:', 'mstw-team-rosters' ),
 							'maxlength' => $std_length,
 							'size' => $std_size,
-							'desc' => __( '', 'mstw-team-rosters' ),
+							'desc' => '',
 							),
 						'player_height' => array (
 							'type' => 'text',
@@ -199,7 +199,7 @@
 							'label' =>  __( 'Height:', 'mstw-team-rosters' ),
 							'maxlength' => $std_length,
 							'size' => $std_size,
-							'desc' => __( '', 'mstw-team-rosters' ),
+							'desc' => '',
 							),
 						'player_weight' => array (
 							'type' => 'text',
@@ -207,7 +207,7 @@
 							'label' =>  __( 'Weight:', 'mstw-team-rosters' ),
 							'maxlength' => $std_length,
 							'size' => $std_size,
-							'desc' => __( '', 'mstw-team-rosters' ),
+							'desc' => '',
 							),
 						'player_year' => array (
 							'type' => 'text',
@@ -231,7 +231,7 @@
 							'label' =>  __( 'Age:', 'mstw-team-rosters' ),
 							'maxlength' => $std_length,
 							'size' => $std_size,
-							'desc' => __( '', 'mstw-team-rosters' ),
+							'desc' => '',
 							),
 						'player_home_town' => array (
 							'type' => 'text',
@@ -283,20 +283,6 @@
 							'size' => $std_size,
 							'desc' => __( 'This field is a spare. It is intended to be re-purposed by site admins.', 'mstw-team-rosters' ),
 							),
-						/*
-						'player_photo' => array (
-								'type'	=> 'media-uploader',
-								//'type' => 'text',
-								'curr_value' => $player_photo,
-								'label' => __( 'Player Photo:', 'mstw-schedules-scoreboards' ),
-								'maxlength' => $std_length,
-								'size' => $std_size,
-								'desc' => __( 'Enter the full path to any file, or click the button to access the media library. Recommended size 41x28px.', 'mstw-schedules-scoreboards' ),
-								'btn_label' => __( 'Upload from Media Library', 'mstw-schedules-scoreboards' ),
-								'img_width' => 41,
-								),
-							*/
-
 						);
 			mstw_build_admin_edit_screen( $admin_fields );
 		?>
