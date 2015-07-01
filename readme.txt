@@ -4,7 +4,7 @@ Donate link: http://shoalsummitsolutions.com
 Tags: sports,games,roster,sports teams,team roster,sports roster,sports team roster  
 Requires at least: 3.4.2
 Tested up to: 4.2.2
-Stable tag: 3.1.2
+Stable tag: 4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -94,6 +94,7 @@ The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are ava
 * Added a setting to control the addition of links to single player profile pages from the player names in roster tables 
 * Integrated mstw_utility_functions - removed old mstw-admin-utils.php 
 * Added if ( !function_exists( 'function_name' ) ) wrappers to all include files
+* The problem with filtering the All Players admin screen by Team MAY BE corrected. This bug only appeared on a few installations, so it's difficult to test. If it rears its ugly head on your site, the first thing to try is to deactivate all other plugins, including any other MSTW plugins, and re-activate them one by one. Please let me know, and I'll work with you to fix it.
 * Cleaned up many details in admin UI
 
 = 3.1.2 =
