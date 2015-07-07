@@ -752,12 +752,13 @@
 		//Check if $team is linked to a team in the MSTW S&S DB
 		$team_links = get_option( 'mstw_tr_ss_team_links' );
 		
-		if ( array_key_exists( $team, $team_links ) && $team_links[ $team ] != -1 ) {
-			$link = $team_links[ $team ];
-			//mstw_log_msg( "link exists: $team ===> $link " );
-					
-			$retval = get_page_by_path( $team_links[ $team ], OBJECT, 'mstw_ss_team' );
-			
+		if( is_array( $team_links ) ) {
+			if ( array_key_exists( $team, $team_links ) && $team_links[ $team ] != -1 ) {
+				$link = $team_links[ $team ];
+				//mstw_log_msg( "link exists: $team ===> $link " );
+						
+				$retval = get_page_by_path( $team_links[ $team ], OBJECT, 'mstw_ss_team' );	
+			}
 		}
 		
 		return $retval;	

@@ -119,7 +119,7 @@ that class's MIT license & copyright (2008) from Kazuyoshi Tlacaelel.
 			//mstw_log_msg( plugins_url( 'mstw-tr-admin-styles.css', __FILE__ ) );
 			mstw_tr_load_admin_styles( );
 			
-			ob_start();
+			//ob_start();
 		
 			
 		} //End: mstw_tr_admin_init()
