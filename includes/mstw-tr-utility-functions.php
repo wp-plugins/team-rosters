@@ -588,7 +588,10 @@
 			if ( 1 == $i ) {
 				$html .= '/';
 			}
+			//mstw_log_msg( "in mstw_tr_build_bats_throws ... " . $bats_throws[ $i ] );
+			
 			switch ( $bats_throws[ $i ] ) {
+				
 				case 1:
 				case __( 'R', 'mstw-team-rosters' ):
 					$html .= __( 'R', 'mstw-team-rosters' );
@@ -597,7 +600,7 @@
 				case __( 'L', 'mstw-team-rosters' ):
 					$html .= __( 'L', 'mstw-team-rosters' );
 					break;
-				case 2:
+				case 3:
 				case __( 'B', 'mstw-team-rosters' ):
 					$html .= __( 'B', 'mstw-team-rosters' );
 					break;
@@ -704,7 +707,7 @@
 		//mstw_log_msg( 'in mstw_tr_build_hidden_fields ...' ); 
 					
 		// jQuery looks first for this element
-		$html .= "<mstw-team-colors class='$team' id='$team' style='display: none'>\n";
+		$html = "<mstw-team-colors class='$team' id='$team' style='display: none'>\n";
 		
 		$bkgd_color = get_post_meta( $team_obj->ID, 'team_primary_bkgd_color', true );
 		if( $bkgd_color ) {
