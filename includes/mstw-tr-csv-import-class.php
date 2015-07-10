@@ -43,11 +43,6 @@
 		 * save it to the db if needed and return it.
 		 */
 		function process_option( $name, $default, $params ) {
-			//mstw_log_msg( 'in process_option ... ' );
-			//mstw_log_msg( '$name= ' . $name );
-			//mstw_log_msg( '$default= ' . $default );
-			//mstw_log_msg( '$params= ' );
-			//mstw_log_msg( $params );
 			
 			if ( array_key_exists( $name, $params ) ) {
 				$value = stripslashes( $params[$name] );
@@ -85,13 +80,7 @@
 		 * Plugin's admin user interface
 		 *
 		 */
-		function form( ) {
-			//mstw_log_msg( 'In MSTW_TR_ImporterPlugin form method ...' );
-			//mstw_log_msg( '$_POST:' );
-			//mstw_log_msg( $_POST );
-			//mstw_log_msg( '$_REQUEST:' );
-			//mstw_log_msg( $_REQUEST );
-			
+		function form( ) {			
 			//
 			// THIS NEEDS STRAIGHTENING OUT
 			//
@@ -100,12 +89,7 @@
 			$csv_teams_import = $this->process_option( 'csv_teams_import', 0, $_POST );
 			$move_photos = $this->process_option( 'csv_move_photos', 0, $_POST );
 			
-			//mstw_log_msg( '$_SERVER[\'REQUEST_METHOD\']=' . $_SERVER['REQUEST_METHOD'] );
-			
 			if ( 'POST' == $_SERVER['REQUEST_METHOD'] ) {
-				//$this->post(compact('opt_draft', 'import_team'));
-				//mstw_log_msg( 'compact= ' );
-				//mstw_log_msg( compact( 'submit_value', 'import_team', 'photo_dir' ) );
 				$this->post( compact( 'submit_value', 'import_team', 'move_photos' ) );
 			}
 
@@ -241,12 +225,6 @@
 		 * @return void
 		 */
 		function post( $options ) {
-			//mstw_log_msg( 'In post method ... ' );
-			//mstw_log_msg( '$options: ' );
-			//mstw_log_msg( $options );
-			//mstw_log_msg( $_POST );
-			//mstw_log_msg( $_POST );
-			
 			if ( !$options ) {
 				mstw_log_msg( 'Houston, we have a problem ... no $options' );
 				return;
@@ -254,13 +232,11 @@
 			
 			switch( $options['submit_value'] ) {
 				case __( 'Import Teams', 'mstw-team-rosters' ):
-					//mstw_log_msg( 'In post( ) method: Importing Teams ...' );
 					$file_id = 'csv_teams_import';
 					//$msg_str is only used in summary messages
 					$msg_str = array( __( 'team', 'mstw-team-rosters' ), __( 'teams', 'mstw-team-rosters' ) );
 					break;
 				case __( 'Import Players', 'mstw-team-rosters' ):
-					//mstw_log_msg( 'In post() method: Importing Players ...' );
 					$file_id = 'csv_players_import';
 					//$msg_str is only used in summary messages
 					$msg_str = array( __( 'player', 'mstw-team-rosters' ), __( 'players', 'mstw-team-rosters' ) );
@@ -279,7 +255,6 @@
 			$csv = new MSTW_CSV_DataSource;
 			
 			$file = $_FILES[$file_id]['tmp_name'];
-			//mstw_log_msg( "CSV File: $file" );
 			$this->stripBOM($file);
 
 			if (!$csv->load($file)) {
@@ -295,10 +270,6 @@
 			$imported = 0;
 			$comments = 0;
 			foreach ( $csv->connect( ) as $csv_data ) {
-				//$total = $skipped + $imported;
-				//mstw_log_msg( 'Displaying CSV Data ... ' . $total );
-				//mstw_log_msg( $csv_data );
-	
 				if ( empty( $csv_data ) or !$csv_data ) {
 					mstw_log_msg( 'No CSV data. $csv_data is empty.' );
 				}
@@ -307,7 +278,6 @@
 				switch( $file_id ) {
 					case 'csv_teams_import': 
 						if ( $this->create_team_taxonomy_term( $csv_data, $options, $imported+1 ) ) {
-							//mstw_log_msg( 'created team ' . $csv_data['team_name'] );
 							$imported++;
 						}
 						else {
@@ -357,28 +327,21 @@
 			$this->print_messages();
 		} //End: post( )
 
-		function create_post( $data, $options ) {
-			//mstw_log_msg( 'in create_post ...' );
-			//mstw_log_msg( $options );
-			
-			//extract( $options );
-			
+		function create_post( $data, $options ) {			
 			$data = array_merge( $this->defaults, $data );
 			
 			// figure out what custom post type we're importing
 			switch ( $options[ 'submit_value'] ) {
 				case __( 'Import Players', 'mstw-team-rosters' ) :
-					//mstw_log_msg( ' We are importing players ... ' );
 					$type = 'mstw_tr_player';
 					//this is used to add_action/remove_action below
 					$save_suffix = 'player_meta';
 					
 					// need a player title to proceed
 					if ( isset( $data['player_title'] ) && !empty( $data['player_title'] ) ) {
-						$temp_title = $data['player_title'];
-						//mstw_log_msg( 'title: ' . $temp_title );
-						
-					} else { 
+						$temp_title = $data['player_title'];	
+					} 
+					else { 
 						//no title in CSV, figure it out from first & last names
 						$temp_title = '';
 						$temp_first_name = '';
@@ -435,32 +398,31 @@
 		 *	Add the fields from a row of CSV player data to a newly created post
 		 *-----------------------------------------------------------*/
 		function create_player_fields( $post_id, $data, $options ) {
-			//mstw_log_msg( 'in create_player_fields ... ' );
-			//mstw_log_msg( '$data[player_teams]' );
-			//mstw_log_msg( $data['player_teams'] );
-			//mstw_log_msg( '$options' );
-			//mstw_log_msg( $options );
 			
-			$bats_list = array(  __( '----', 'mstw-team-rosters' )  => 0, 
+			$bats_list = array(  __( '----', 'mstw-team-rosters' )  => 0,
+								 '0'								=> 0,
 								 __( 'R', 'mstw-team-rosters' ) 	=> 1,
 								 __( 'r', 'mstw-team-rosters' ) 	=> 1,
+								 '1'								=> 1,
 								 __( 'L', 'mstw-team-rosters' ) 	=> 2,
 								 __( 'l', 'mstw-team-rosters' ) 	=> 2,
+								 '2'								=> 2,
 								 __( 'B', 'mstw-team-rosters' ) 	=> 3,
 								 __( 'b', 'mstw-team-rosters' ) 	=> 3,
+								 '3'								=> 3,
 								);
 							
-			$throws_list = array( __( '----', 'mstw-team-rosters' ) => 0, 
+			$throws_list = array( __( '----', 'mstw-team-rosters' ) => 0,
+								  '0'								=> 0,			
 								  __( 'R', 'mstw-team-rosters' ) 	=> 1,
 								  __( 'r', 'mstw-team-rosters' ) 	=> 1,
+								  '1'								=> 1,
 								  __( 'L', 'mstw-team-rosters' ) 	=> 2, 
 								  __( 'l', 'mstw-team-rosters' ) 	=> 2,
+								  '2'								=> 2,
 								);
 			
 			foreach ( $data as $k => $v ) {
-				//if ( $k == strtolower( 'player_teams' ) ) {
-				//	mstw_log_msg( 'Found player_teams = ' . $v );
-				//}
 				switch ( strtolower( $k ) ) {
 					case 'player_title':
 					case 'player_slug':
@@ -482,13 +444,12 @@
 					case 'player_throws':
 						//Need to switch indices
 						$throws = ( array_key_exists( $v, $throws_list ) and $throws_list[ $v ] ) ? $throws_list[ $v ] : 0 ;
-						$k = strtolower( $k );
 						$ret = update_post_meta( $post_id, $k, $throws );
 						break;
 					case 'player_bats':
 						//Need to switch indices
 						$bats = ( array_key_exists( $v, $bats_list ) and $bats_list[ $v ] ) ? $bats_list[ $v ] : 0 ;
-						$k = strtolower( $k );
+						//$k = strtolower( $k );
 						$ret = update_post_meta( $post_id, $k, $bats );
 						break;
 						
@@ -510,18 +471,12 @@
 						$ret = update_post_meta( $post_id, $k, $v );
 						break;
 					case 'player_teams':
-						//mstw_log_msg( "player_teams value= $v" );
-						//mstw_log_msg( "is $v empty? " . empty( $v ) );
 						if( !empty( $v ) ) {
 							//build team(s) from the player_teams column
-							//mstw_log_msg( 'CSV Player Teams string: ' . $v );
 							
 							//array_filter() removes empty strings from array
 							//	created by str_getcsv()
 							$teams_array = array_filter( str_getcsv( $v, ';', '"' ) );
-							
-							//mstw_log_msg( 'Player: ' . $temp_title . ' Teams: ' );
-							//mstw_log_msg( $teams_array );
 							
 							wp_set_object_terms( $post_id, $teams_array, 'mstw_tr_team' );
 				
@@ -541,7 +496,6 @@
 								// Going to move photos from another server
 								
 								//Try to download player photo
-								//mstw_log_msg( "player_photo = $v" );
 								$temp_photo = download_url( $v );
 								
 								//Check for errors downloading
@@ -551,8 +505,6 @@
 								}
 								else {
 									//Sucessfully downloaded file
-									//mstw_log_msg( "Downloaded file $v to:" );
-									//mstw_log_msg( $temp_photo );
 									$file_array = array( 'name' => basename( $v ),
 														'tmp_name' => $temp_photo,
 													  );
@@ -566,7 +518,6 @@
 									} 
 									else {
 										//Success
-										//mstw_log_msg( "Attachment ID: $id" );
 										$post_meta_id = set_post_thumbnail( $post_id, $id );
 										
 										if( $post_meta_id === false ) {
@@ -580,7 +531,6 @@
 								// Going to use photos already on this server
 								$thumbnail_id = $this->find_attachment_id_from_url( $v );
 								if( $thumbnail_id and $thumbnail_id != -1 ) {
-									//mstw_log_msg( 'thumbnail ID= ' . $thumbnail_id );
 									if( set_post_thumbnail( $post_id, $thumbnail_id ) === false ) {
 										mstw_log_msg( 'Failed to set_post_thumbnail. Post= ' . $post_id . ' thumbnail= ' . $thumbnail_id );
 									}
@@ -611,23 +561,13 @@
 		 *
 		 *-----------------------------------------------------------*/
 		function find_attachment_id_from_url( $url ) {
-			//mstw_log_msg( 'in find_attachment_id_from_url ...' );
-			//mstw_log_msg( '$url= ' . $url );
 			
 			// Split the $url into two pars with the wp-content directory as the separator
 			$parsed_url = explode( parse_url( WP_CONTENT_URL, PHP_URL_HOST ), $url );
 			
-			//mstw_log_msg( 'WP_CONTENT_URL: ' . WP_CONTENT_URL );
-			//mstw_log_msg( 'PHP_URL_HOST: ' . PHP_URL_HOST );
-			//mstw_log_msg( '$parsed_url: ' );
-			//mstw_log_msg( $parsed_url );
-			
 			// Get the host of the current site and the host of the $url, ignoring www
 			$this_host = str_ireplace( 'www.', '', parse_url( home_url( ), PHP_URL_HOST ) );
 			$file_host = str_ireplace( 'www.', '', parse_url( $url, PHP_URL_HOST ) );
-			
-			//mstw_log_msg( '$this_host: ' . $this_host );
-			//mstw_log_msg( '$file_host: ' . $file_host );
 
 			// Return nothing if there aren't any $url parts or if the current host and $url host do not match
 			if ( ! isset( $parsed_url[1] ) || empty( $parsed_url[1] ) || ( $this_host != $file_host ) ) {
@@ -639,9 +579,6 @@
 				global $wpdb;
 
 				$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM {$wpdb->prefix}posts WHERE guid RLIKE %s;", $parsed_url[1] ) );
-				
-				//mstw_log_msg( '$attachment:' );
-				//mstw_log_msg( $attachment );
 		
 				// Returns -1 if no attachment is found
 				$retval = ( isset( $attachment) ) ? $attachment[0] : -1;
@@ -653,11 +590,6 @@
 		} //End: find_attachment_id_from_url( )
 		
 		function create_team_taxonomy_term( $data, $options, $imported ) {
-			//mstw_log_msg( 'in create_team_taxonomy_term ... ' );
-			//mstw_log_msg( 'CSV Data:' );
-			//mstw_log_msg( $data );
-			//mstw_log_msg( '$options' );
-			//mstw_log_msg( $options );
 			
 			$retval = 0;
 			
@@ -669,7 +601,6 @@
 			
 			//check if team name & team slug is specified
 			if( $team_slug != '' && $team_name != '' ) {
-				//mstw_log_msg( 'team name & slug both exist ... creating term for ' . $team_name );
 				//sanitize slug - JIC
 				$team_slug = sanitize_title( $team_slug );
 				
@@ -681,7 +612,6 @@
 			
 			//team slug not specified, try to create it from team name
 			else if ( $team_name != '' ) {
-				//mstw_log_msg( 'team name exists ... creating term for ' . $team_name );
 				//create slug
 				$team_slug = sanitize_title( $team_name );
 				
@@ -693,7 +623,6 @@
 			}
 			
 			else if ( $team_slug != '' ) {
-				//mstw_log_msg( 'team slug exists ... creating term for ' . $team_slug );
 				//sanitize slug - JIC
 				$team_slug = sanitize_title( $team_slug );
 				
@@ -706,7 +635,6 @@
 			
 			//no slug and no name so bag it
 			else {
-				//mstw_log_msg('No team name or slug ... bag it' );
 				$result = new WP_Error( 'oops', __( 'No team name or slug found.', 'mstw-team-rosters' ) );
 				
 			}
@@ -726,16 +654,10 @@
 					
 					//$team_slug is the team taxomony term, $team_link is the S&S team slug
 					$link_pair = array( $team_slug => $team_link ); 
-		
-					//mstw_log_msg ( '$link_pair = ' );
-					//mstw_log_msg ( $link_pair );
-					
+				
 					$team_links = get_option( 'mstw_tr_ss_team_links' );
 				
 					$new_links = ( $team_links ) ? array_merge( $team_links, $link_pair ) : $link_pair;
-					
-					//mstw_log_msg ( '$new_links = ' );
-					//mstw_log_msg ( $new_links );
 					
 					update_option( 'mstw_tr_ss_team_links', $new_links );
 				}
