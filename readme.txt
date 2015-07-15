@@ -4,7 +4,7 @@ Donate link: http://shoalsummitsolutions.com
 Tags: sports,games,roster,sports teams,team roster,sports roster,sports team roster  
 Requires at least: 3.4.2
 Tested up to: 4.2.2
-Stable tag: 4.0
+Stable tag: 4.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,8 +12,9 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Manages multiple sports team rosters. Displays tabular rosters, a single player bios, and player galleries.
 
 == Description ==
+Version 4.0.1 patches three bugs. (See the change log for details.)
 
-VERSION 4.0 IS A MAJOR UPGRADE THAT CHANGES THE PLUGIN'S UNDERLYING DATA STRUCTURES. IF YOU ARE UPGRADING, YOU MUST MIGRATE YOUR EXISTING DATA VIA CSV FILES IF YOU WISH TO KEEP IT. READ THE INSTALLATION DOCUMENTATION AND UPGRADE NOTICE CAREFULLY BEFORE UPGRADING. 
+VERSION 4.0 IS A MAJOR UPGRADE THAT CHANGES THE PLUGIN'S UNDERLYING DATA STRUCTURES. IF YOU ARE UPGRADING, YOU MUST MIGRATE YOUR EXISTING DATA VIA CSV FILES IF YOU WISH TO KEEP IT. [READ THE INSTALLATION DOCUMENTATION](http://shoalsummitsolutions.com/tr_upgrading-to-4-0/) CAREFULLY BEFORE UPGRADING. 
 
 The MSTW Team Rosters plugin manages rosters for multiple sports teams. It provides roster tables with built-in formats for high school, college, and professional teams as well as custom roster formats for baseball. Admins can repurpose data fields by re-labeling them, so rosters can be used for Office Directories, for example. See the [MSTW Plugin Development Site](http://dev.shoalsummitsolutions.com) for examples.
 
@@ -79,6 +80,11 @@ The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are ava
 3. Sample Single Player Bio
 
 == Changelog ==
+
+= 4.0.1 =
+* Corrected a bug in display of 'B' hitters.
+* Corrected a bug in the CSV importer that prevented the bats and throws columns created by MSTW CSV Exporter to import correctly.
+* Removed a PHP warning from several front end displays.
 
 = 4.0 =
 * Access controls for MSTW Admin, MSTW Team Rosters Admin, and Team Admins.
@@ -159,13 +165,8 @@ The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are ava
 
 == Upgrade Notice ==
 
-3.1.1 Fixed bug that prevented links to single player profiles from working with CHILD THEMES. If you aren't using a CHILD THEME, you don't need this patch.
+VERSION 4.0 IS A MAJOR UPGRADE THAT CHANGES THE PLUGIN'S UNDERLYING DATA STRUCTURES. IF YOU ARE UPGRADING, YOU MUST MIGRATE YOUR EXISTING DATA VIA CSV FILES IF YOU WISH TO KEEP IT. [READ THE INSTALLATION DOCUMENTATION](http://shoalsummitsolutions.com/tr_upgrading-to-4-0/) CAREFULLY BEFORE UPGRADING.
 
-Significant new functionality has been added to version 3.0/3.1. Admins now have the ability to customize the visibility of and headings for data fields in roster tables, player bios, and player galleries. Admins can also control the display of roster tables in terms of colors and layout on a team-by-team basis in support of leagues and clubs. See the documentation [here](http://shoalsummitsolutions.com/tr-styling/] for more details.
 
-* Upgrades of the Team Rosters plugin are designed to *NOT* impact any existing players, rosters, or settings. (But backup your DB before you upgrade, just in case. :) )
-* Any changes to the plugin stylesheet (css/mstw-tr-style.css)*will* be overwritten, so if you have customized that file you will want to save it before upgrading.
-* To support the (significant) refactoring of the code in version 3.0, some shortcode arguments and default Display Settings had to be changed. Therefore, it is possible that some customizations of existing Roster Tables via [shortcode arguments], default colors and other display settings, and so forth may have to be replaced. Existing arguments and parameters were preserved to the greatest extent possible, so mileage will vary depending on exactly what arguments and/or settings you were using. 
-
-Version 3.1 of Team Rosters has been developed and tested on WordPress 3.6. If you use older version of WordPress, good luck! If you are using a newer WP version, please let me know how the plugin works, especially if you encounter problems.
+Versions 4.0 & 4.0.1 of Team Rosters were developed and tested on WordPress 4.2.2. If you use older version of WordPress, good luck! If you are using a newer WP version, please let me know how the plugin works, especially if you encounter problems.
 
