@@ -21,7 +21,7 @@
  *-------------------------------------------------------------------------*/
  
  /*------------------------------------------------------------------------
- *	MSTW-SS-UTILITY-FUNCTIONS
+ *	MSTW-TR-UTILITY-FUNCTIONS
  *	These functions are included in both the front and back end.
  *
  * 1. mstw_tr_get_defaults() - returns the default mstw_tr_options[]
@@ -33,8 +33,8 @@
  *		for the table colors options (ONLY)
  * 5. mstw_tr_get_bio_gallery_defaults() - returns the defaults 
  *		for the player profile & team gallery (ONLY)
- * 6. mstw_tr_set_options_by_format() - Sets the options based on one 
- *		of the six built-in roster type
+ * 6. mstw_tr_set_fields_by_format: returns wp_parse_args( $settings, $defaults )
+ *		NEED TO RECONCILE THIS WITH #6 above
  * 7. mstw_tr_build_gallery() - Builds the player gallery on the front end.
  * 8. mstw_tr_build_player_photo - Constructs the html for the player profile 
  *		player photo.
@@ -43,8 +43,15 @@
  * 10. mstw_tr_build_profile_logo - Constructs the html for the player profile
  *		logo.
  * 11. mstw_tr_build_bats_throws - constructs the html for the 
- *		bats-throws field ('B/T') in all displays  
- *
+ *		bats-throws field ('B/T') in all displays 
+ * 13. mstw_tr_admin_notice: displays team rosters admin notices 
+ * 14. mstw_tr_build_colors_html - builds the HTML for team colors
+ *		when the 'use team colors' display option is set 
+ * 15. mstw_tr_build_hidden_fields: builds the hidden fields for the 
+ *		JavaScript to use when using the teams DB colors.
+ * 16. mstw_tr_find_team_in_ss - Determines if a team is linked to a team 
+ *		in the Schedules & Scoreboards plugin DB
+ * 17. mstw_tr_build_team_logo: Builds the HTML for a team logo 
  *--------------------------------------------------------------------------*/
  
  //-----------------------------------------------------------
@@ -70,17 +77,12 @@
  if ( !function_exists( 'mstw_tr_get_data_fields_columns_defaults' ) ) {
 	function mstw_tr_get_data_fields_columns_defaults( ) {
 		$defaults = array(	
-				'team'					=> 'no-team-specified',
-				//'show_title'			=> 1,
-				//'roster_type'			=> 'custom',
-				//'sort_order'			=> 'alpha',
-				//'name_format'			=> 'last-first',
 				'show_number'			=> 1,
 				'number_label'			=> __( 'Nbr', 'mstw-team-rosters' ),
 				//always show the name
 				'name_label'			=> __( 'Name', 'mstw-team-rosters' ),
-				//'show_photos'			=> 0,
-				//'photo_label'			=> __( 'Photo', 'mstw-team-rosters' ),
+				'show_photos'			=> 0,
+				'photo_label'			=>  __( 'Photo', 'mstw-team-rosters' ),
 				'show_position'			=> 1,
 				'position_label'		=> __( 'Pos', 'mstw-team-rosters' ),
 				'show_height'			=> 1,
@@ -120,9 +122,8 @@
 				'roster_type'			=> 'custom',
 				'links_to_profiles'		=> 1,
 				'sort_order'			=> 'alpha', //sort by last name
+				'sort_asc_desc'			=> 'asc',
 				'name_format'			=> 'last-first',
-				'show_photos'			=> 0,
-				'photo_label'			=>  __( 'Photo', 'mstw-team-rosters' ),
 				'table_photo_width'		=> '',
 				'table_photo_height'	=> '',
 				);
@@ -166,6 +167,8 @@
 				'sp_show_logo'			=> 0,
 				'sp_content_title'		=> __( 'Player Bio', 'mstw-team-rosters' ),
 				
+				'sp_use_team_colors'	=> 0,
+				
 				'sp_image_width'		=> 150,
 				'sp_image_height'		=> 150,
 		
@@ -182,137 +185,91 @@
 	} //End: mstw_tr_get_bio_gallery_defaults( )
  }
 
+
+ if ( !function_exists( 'mstw_tr_set_fields_by_format' ) ) {
+	function mstw_tr_set_fields_by_format( $format ) {
+		
+		return mstw_tr_get_fields_by_roster_type( $format );
+		
+	} //End: mstw_tr_set_fields_by_format()
+ }
+
  //-----------------------------------------------------------
- // 6. mstw_tr_set_fields_by_format: Sets the options based on the 
- //		format argument: custom, high-school, college, pro, 
+ // 6. mstw_tr_get_fields_by_roster_type - Sets the show/hide fields 
+ //		based on the 
+ //		roster_type argument: custom, high-school, college, pro, 
  //		baseball-high-school, baseball-college, or baseball-pro. 
  //		"custom" causes the Settings admin page defaults to be used
  //
- if ( !function_exists( 'mstw_tr_set_fields_by_format' ) ) {
-	function mstw_tr_set_fields_by_format( $format ) {
-		switch ( $format) {
-			case 'baseball-high-school':
-			case 'baseball-college':
-			case 'baseball-pro':
-				$show_bats_throws = 1;
-			break;
-			default:
-				$show_bats_throws = 0;
-				break;
-		}
+ if ( !function_exists( 'mstw_tr_get_fields_by_roster_type' ) ) {
+	function mstw_tr_get_fields_by_roster_type( $roster_type ) {
+		
+		$show_bats_throws = ( false === strpos( $roster_type, 'baseball' ) ) ? 0 : 1;
 
-		switch ( $format ) {
+		switch ( $roster_type ) {
 			case 'baseball-high-school':
 			case 'high-school':
-				$settings = array(	
-					//'team'					=> 'no-team-specified',
-					'roster_type'			=> $format,
-					//'show_title'			=> 1,
-					//'sort_order'			=> 'alpha',
-					//'name_format'			=> 'last-first',
-					//'name_label'			=> __( 'Name', 'mstw-team-rosters' ),
-					'show_number'			=> 1,
-					//'number_label'			=> __( 'Number', 'mstw-team-rosters' ),
+				$settings = array(					
+					'roster_type'			=> $roster_type,					
+					'show_number'			=> 1,					
 					'show_position'			=> 1,
 					'show_height'			=> 1,
-					//'height_label'			=> __( 'Height', 'mstw-team-rosters' ),
-					//'show_weight'			=> 1,
-					//'weight_label'			=> __( 'Weight', 'mstw-team-rosters' ),
 					'show_year'				=> 1,
-					//'year_label'			=> __( 'Year', 'mstw-team-rosters' ),
 					'show_experience'		=> 0,
-					//'experience_label'		=> __( 'Exp', 'mstw-team-rosters' ),
 					'show_age'				=> 0,
-					//'age_label'				=> __( 'Age', 'mstw-team-rosters' ),
 					'show_home_town'		=> 0,
-					//'home_town_label'		=> __( 'Home Town', 'mstw-team-rosters' ),
 					'show_last_school'		=> 0,
-					//'last_school_label'		=> __( 'Last School', 'mstw-team-rosters' ),
 					'show_country'			=> 0,
-					//'country_label'			=> __( 'Country', 'mstw-team-rosters' ),
 					'show_bats_throws'		=> $show_bats_throws,
-					//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-team-rosters' ),
 					'show_other_info'		=> 0,
-					//'other_info_label'		=> __( 'Other', 'mstw-team-rosters' ),
 				);
 				break;
 				
 			case 'baseball-college':
 			case 'college':
 				$settings = array(	
-					//'team'					=> 'no-team-specified',
-					'roster_type'			=> $format,
-					//'show_title'			=> 1,
-					//'sort_order'			=> 'alpha',
-					//'name_format'			=> 'last-first',
-					//'name_label'			=> __( 'Name', 'mstw-team-rosters' ),
+					'roster_type'			=> $roster_type,
 					'show_number'			=> 1,
-					//'number_label'			=> __( 'Number', 'mstw-team-rosters' ),
 					'show_position'			=> 1,
 					'show_height'			=> 1,
-					//'height_label'			=> __( 'Height', 'mstw-team-rosters' ),
-					//'show_weight'			=> 1,
-					//'weight_label'			=> __( 'Weight', 'mstw-team-rosters' ),
 					'show_year'				=> 1,
-					//'year_label'			=> __( 'Year', 'mstw-team-rosters' ),
 					'show_experience'		=> 1,
-					//'experience_label'		=> __( 'Exp', 'mstw-team-rosters' ),
 					'show_age'				=> 0,
-					//'age_label'				=> __( 'Age', 'mstw-team-rosters' ),
 					'show_home_town'		=> 1,
-					//'home_town_label'		=> __( 'Home Town', 'mstw-team-rosters' ),
+					//this is shown in Home Town(Last School) column
 					'show_last_school'		=> 1,
-					//'last_school_label'		=> __( 'Last School', 'mstw-team-rosters' ),
 					'show_country'			=> 0,
-					//'country_label'			=> __( 'Country', 'mstw-team-rosters' ),
 					'show_bats_throws'		=> $show_bats_throws,
-					//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-team-rosters' ),
 					'show_other_info'		=> 0,
-					//'other_info_label'		=> __( 'Other', 'mstw-team-rosters' ),
 				);		
 				break;
 			
 			case 'pro':
 			case 'baseball-pro':
 				$settings = array(	
-					//'team'					=> 'no-team-specified',
-					'roster_type'			=> $format,
-					//'show_title'			=> 1,
-					//'sort_order'			=> 'alpha',
-					//'name_format'			=> 'last-first',
-					//'name_label'			=> __( 'Name', 'mstw-team-rosters' ),
+					'roster_type'			=> $roster_type,
 					'show_number'			=> 1,
-					//'number_label'			=> __( 'Number', 'mstw-team-rosters' ),
 					'show_position'			=> 1,
 					'show_height'			=> 1,
-					//'height_label'			=> __( 'Height', 'mstw-team-rosters' ),
-					//'show_weight'			=> 1,
-					//'weight_label'			=> __( 'Weight', 'mstw-team-rosters' ),
 					'show_year'				=> 0,
-					//'year_label'			=> __( 'Year', 'mstw-team-rosters' ),
 					'show_experience'		=> 1,
-					//'experience_label'		=> __( 'Exp', 'mstw-team-rosters' ),
 					'show_age'				=> 1,
-					//'age_label'				=> __( 'Age', 'mstw-team-rosters' ),
 					'show_home_town'		=> 0,
-					//'home_town_label'		=> __( 'Home Town', 'mstw-team-rosters' ),
 					'show_last_school'		=> 1,
-					//'last_school_label'		=> __( 'Last School', 'mstw-team-rosters' ),
+					//show the country as part of the last_school(country) column
+					//so don't need to set here
 					'show_country'			=> 1,
-					//'country_label'			=> __( 'Country', 'mstw-team-rosters' ),
 					'show_bats_throws'		=> $show_bats_throws,
-					//'bats_throws_label'		=> __( 'Bat/Thw', 'mstw-team-rosters' ),
 					'show_other_info'		=> 0,
-					//'other_info_label'		=> __( 'Other', 'mstw-team-rosters' ),
 				);
 				break;
 				
-			default:  // custom roster format
+			default:  // custom roster type
 				$settings = get_option( 'mstw_tr_options' );
 				break;
 		}
 		return $settings;
-	} //End: mstw_tr_set_fields_by_format()
+	} //End: mstw_tr_get_fields_by_roster_type()
 }
 
  //-----------------------------------------------------------
@@ -321,21 +278,59 @@
  //		page template.
  //
  if ( !function_exists( 'mstw_tr_build_gallery' ) ) {
-	function mstw_tr_build_gallery( $team_slug, $posts, $options, $format ) {	
-		if( !empty( $posts ) ) {
+	function mstw_tr_build_gallery( $team_slug, $roster_type, $options ) {
+		//mstw_log_msg( 'in mstw_tr_build_gallery ... ' );
+		//mstw_log_msg( $options );
+
+		// Set the sort field	
+		switch ( $options['sort_order'] ) {
+			case 'numeric':
+				$sort_key = 'player_number';
+				$order_by = 'meta_value_num';
+				break;
+			case 'alpha-first':
+				$sort_key = 'player_first_name';
+				$order_by = 'meta_value';
+				break;
+			default: // alpha by last
+				$sort_key = 'player_last_name';
+				$order_by = 'meta_value';
+				break;
+		}
+		
+		// Set sort order
+		switch ( $options['sort_asc_desc'] ) {
+			case 'desc':
+				$sort_order = 'DESC';
+				break;
+			default:
+				$sort_order = 'ASC';
+				break;	
+		}
 			
-			$output = '';
+		// Get the team roster		
+		$posts = get_posts( array( 'numberposts' => -1,
+								   'post_type' => 'mstw_tr_player',
+								   'mstw_tr_team' => $team_slug, 
+								   'orderby' => $order_by, 
+								   'meta_key' => $sort_key,
+								   'order' => $sort_order 
+								));	
+	
+		if( $posts ) {
+			// Set up the hidden fields for jScript CSS 
+			$output = mstw_tr_build_team_colors_html( $team_slug, $options, 'gallery' );
 			
 			foreach( $posts as $post ) { // ( have_posts( ) ) : the_post();
 				
-				$output .= "<div class='player-tile player-tile-" . $team_slug . "'>\n";
+				$output .= "<div class='player-tile player-tile_" . $team_slug . "'>\n";
 		
 				$output .= "<div class = 'player-photo' >\n";
 					$output .= mstw_tr_build_player_photo( $post, $team_slug, $options, 'gallery' );
 				$output .= "</div> <!-- .player-photo -->\n";
 				
 				$output .= "<div class = 'player-info-container'>\n";
-					$output .= "<div class='player-name-number'>\n"; 
+					$output .= "<div class='player-name-number player-name-number_$team_slug'>\n"; 
 						if ( $options['show_number'] ) {
 							$player_number = get_post_meta($post->ID, 'player_number', true );
 							$output .= "<div class='player-number'>$player_number</div>";
@@ -344,7 +339,7 @@
 						$output .= "<div class='player-name'>$player_name</div>";
 					$output .= "</div> <!-- .player-name-number -->\n";
 					
-					$output .= "<table class='player-info'>\n";
+					$output .= "<table class='player-info player-info_$team_slug'>\n";
 					  $output .= "<tbody>\n";
 						$row_start = '<tr><td class="lf-col">';
 						$new_cell = ':</td><td class="rt-col">'; //colon is for the end of the title
@@ -414,7 +409,7 @@
 												  . get_post_meta($post->ID, 'player_country', true ) . $row_end;
 						}
 						
-						//OTHER
+						//OTHER INFO
 						if( $options['show_other_info'] ) {
 							$output .= $row_start . $options['other_info_label'] . $new_cell 
 												  . get_post_meta($post->ID, 'player_other', true ) . $row_end;
@@ -428,8 +423,7 @@
 			} //end foreach( $posts as $post )
 		} //end if( have_posts( ) )
 		else {
-			$so_sorry = sprintf( __( 'Sorry, no players were found for %s', 'mstw-team-rosters' ), $team_slug );
-			$output .= "<h1>$so_sorry</h1>";
+			$output = sprintf( __( "%sNo players found on team: '%s'%s", 'mstw-team-rosters' ), '<h1>', $team_slug, '</h1>' );
 		}
 
 		return $output;
@@ -444,40 +438,49 @@
  //
  if ( !function_exists( 'mstw_tr_build_player_photo' ) ) {
 	function mstw_tr_build_player_photo( $player, $team_slug, $options, $display = 'profile' ) {
-           
+		  
 		//1. Use the player photo (thumbnail) if available
-		//2. Else use the default-photo-team-slug.png from the plugin images dir
-		//3. Else use the team logo from the teams DB, if available,
-		//4. Else load the default-photo.png (mystery player) from the plugin images dir
+		//2. Else use the team logo from the teams DB, if available,
+		//3. Else use the team logo in the theme's /mstw-team-rosters-images/ dir
+		//3. Else use the default-photo-team-slug.png from the plugin images dir
+		//4. Else use the default-photo.png (mystery player) from the plugin images dir
 		
-		// $display - profile, gallery, table
+		//mstw_log_msg( 'in mstw_tr_build_player_photo ... ' );
+		//mstw_log_msg( '$team_slug= ' );
+		//mstw_log_msg( $team_slug );
 		
-		$default_img_dir = WP_PLUGIN_DIR . '/team-rosters/images/default-images/';
-		$default_img_url = plugins_url( ) . '/team-rosters/images/default-images/';
 		
-		//if( $thumbnail = get_the_post_thumbnail( $player->ID, 'full' ) ) {
+		// This is the default if nothing else can be found
+		$photo_file_url = '';
+		$photo_html = '';
+		$logo_html = '';
+
 		if ( has_post_thumbnail( $player->ID ) ) { 
+			// Use the player's thumbnail (featured image) if available
 			$photo_file_url = wp_get_attachment_thumb_url( get_post_thumbnail_id( $player->ID ) );
 			$first_name = get_post_meta($player->ID, 'player_first_name', true );
 			$last_name = get_post_meta($player->ID, 'player_last_name', true );
 			$alt = "$first_name $last_name";
-		} 
-		else {
-			// Default image can be tied to the team taxonomy 
-			// Try to load default-photo-team-slug.png, if it does not exist,
-			// load default-photo.png
-			$photo_file = $default_img_dir . 'default-photo-' . $team_slug . '.png';
-			if ( file_exists( $photo_file ) ) {
-				$photo_file_url = $default_img_url . 'default-photo-' . $team_slug . '.png';
-			}
-			else {
-				$photo_file_url = $default_img_url . 'default-photo.png';
-			}
-			$alt = 'No photo available';
+			$photo_html = "<img src='$photo_file_url' alt='$alt' />";
+			
+		} else {
+			// Try to build a team logo
+			$photo_html = mstw_tr_build_team_logo( $team_slug );
+		
 		}
+		//mstw_log_msg( '$photo_html = ' );
+		//mstw_log_msg( $photo_html );
 		
-		$photo_html = "<img src='$photo_file_url' alt='$alt' />";
-		
+		if( !$photo_html ) {
+			// Give up and use the "mystery man"
+			//$default_img_dir = plugin_dir_path( dirname( __FILE__ ) ) . 'images/default-images/';
+			//mstw_log_msg( '$default_img_dir = ' . $default_img_dir );
+			//$default_img_url = plugins_url( ) . '/team-rosters/images/default-images/';
+			$photo_file_url = plugins_url( ) . '/team-rosters/images/default-images/default-photo.png';
+			$alt = __( 'No player photo found.', 'mstw-team-rosters' );
+			$photo_html = "<img src='$photo_file_url' alt='$alt' />";
+		}
+			
 		//
 		// add the link to the player profile, if appropriate
 		//
@@ -540,53 +543,27 @@
  //		the single player profiles, roster galleries, and tables
  //
  if ( !function_exists( 'mstw_tr_build_profile_logo' ) ) {
-	function mstw_tr_build_profile_logo( $post, $team_slug, $options, $type ) {
-		$default_img_dir = WP_PLUGIN_DIR . '/team-rosters/images/default-images/';
-		$default_img_url = plugins_url( ) . '/team-rosters/images/default-images/';
-
-		$photo_file = $default_img_dir . 'default-photo-' . $team_slug . '.png';
-		$photo_file_url = $default_img_url . 'default-photo-cal-bears.png';
+	function mstw_tr_build_profile_logo( $team_slug ) {
+		//mstw_log_msg( 'in mstw_tr_build_profile_logo ...' );
 		
 		//this is the default return
-		$photo_html = "<img src='$photo_file_url' alt='No team logo found.' />";
+		$logo_html = '';
 		
-		$team_links = get_option( 'mstw_tr_ss_team_links' );
+		//mstw_log_msg( 'calling mstw_tr_build_team_logo( $team_slug )' );
+		//mstw_log_msg( $team_slug );
 		
-		mstw_log_msg( 'team links: ' );
-		mstw_log_msg( $team_links );
+		$logo_html = mstw_tr_build_team_logo( $team_slug );
+		//mstw_log_msg( '$logo_html: ' );
+		//mstw_log_msg( $logo_html );
 		
-		if ( array_key_exists( $team_slug, $team_links ) && $team_links[ $team_slug ] != -1 ) {
-			$link = $team_links[ $team_slug ];
-			mstw_log_msg( "link exists: $team_slug ===> $link " );
-			if( post_type_exists( 'mstw_ss_team' ) ) {
-				mstw_log_msg( 'mstw_ss_team exists' );
-			} else {
-				mstw_log_msg( 'mstw_ss_team does not exist' );
-			}
-			$team_obj = get_page_by_path( $team_links[ $team_slug ], OBJECT, 'mstw_ss_team' );
-			if( $team_obj ) {
-				//mstw_log_msg( 'found $team_obj ...' );
-				//mstw_log_msg( 'ID= ' . $team_obj->ID );
-				$team_logo = get_post_meta( $team_obj->ID, 'team_alt_logo', true );
-				//mstw_log_msg( '$team_logo= ' . $team_logo );
-				if( $team_logo ) {
-					$alt = get_the_title( $team_obj->ID );
-					$photo_html = "<img src='$team_logo' alt=$alt />";
-					$team_site_link = get_post_meta( $team_obj->ID, 'team_link', true );
-					if ( $team_site_link ) {
-						$photo_html = "<a href=$team_site_link target='_blank'> $photo_html </a>";
-					}
-				}						
-				//mstw_log_msg( '$team_site= ' . $team_site_link );
-			} else {
-				mstw_log_msg( "Problem with link for $team_slug " );
-			}
-		} else {
-			mstw_log_msg( 'No link found for team slug = ' . $team_slug );
+		if( !$logo_html ) {
+			$logo_file_url = plugins_url( ) . "/team-rosters/images/default-images/default-logo.png";
+			//mstw_log_msg( '$logo_file_url = ' . $logo_file_url );
 			
+			$logo_html = "<img src='$logo_file_url' alt='No team logo found.' />";
 		}
 		
-		return $photo_html;
+		return $logo_html;
 		
 	} //End: mstw_tr_build_profile_logo( )	 
  }
@@ -611,7 +588,10 @@
 			if ( 1 == $i ) {
 				$html .= '/';
 			}
+			//mstw_log_msg( "in mstw_tr_build_bats_throws ... " . $bats_throws[ $i ] );
+			
 			switch ( $bats_throws[ $i ] ) {
+				
 				case 1:
 				case __( 'R', 'mstw-team-rosters' ):
 					$html .= __( 'R', 'mstw-team-rosters' );
@@ -620,7 +600,7 @@
 				case __( 'L', 'mstw-team-rosters' ):
 					$html .= __( 'L', 'mstw-team-rosters' );
 					break;
-				case 2:
+				case 3:
 				case __( 'B', 'mstw-team-rosters' ):
 					$html .= __( 'B', 'mstw-team-rosters' );
 					break;
@@ -635,4 +615,236 @@
 		return $html;
 		
 	} //End: mstw_tr_build_bats_throws( ) 
+ }
+ 
+ //-----------------------------------------------------------
+ //	12. mstw_tr_is_valid_roster_type - checks if $roster_type  
+ //			is valid. Returns true or false
+ //
+ if( !function_exists( 'mstw_tr_is_valid_roster_type' ) ) {
+	function mstw_tr_is_valid_roster_type( $roster_type ) {
+		$valid_types = array( 'high-school',
+							  'baseball-high-school',
+							  'college',
+							  'baseball-college',
+							  'pro',
+							  'baseball-pro',
+							  'custom',
+							  );
+		
+		return in_array( $roster_type, $valid_types );
+ 
+	 } //End: mstw_tr_is_valid_roster_type( )
+ }
+ 
+ //-----------------------------------------------------------
+ //	13. mstw_tr_admin_notice: displays team rosters admin notices
+ //		Callback for admin_notices hook. Convenience function to 
+ //			call mstw_admin_notice with the right transient 
+ //			(so the right notices are displayed)
+ //
+ if( !function_exists( 'mstw_tr_admin_notice' ) ) {
+	function mstw_tr_admin_notice( ) {
+		//mstw_log_msg( 'in mstw_tr_admin_notice ...' );
+		mstw_admin_notice( 'mstw-tr-admin-notice' );
+	} //End: mstw_tr_admin_notice( )
+ }
+ 
+ //-----------------------------------------------------------
+ //	14. mstw_tr_build_team_colors_html: builds the HTML for team colors
+ //			when the 'use team colors' display option is set. Returns
+ //			non-empty HTML if the $team is linked to a team in the 
+ //			the Schedules & Scoreboards DB.
+ //	
+ if ( !function_exists( 'mstw_tr_build_team_colors_html' ) ) {
+	function mstw_tr_build_team_colors_html( $team = null, $options = null, $type = 'table' ) {
+		//mstw_log_msg( 'in mstw_tr_build_team_colors_html ...' );
+		//mstw_log_msg( 'mstw_ss_team post type exists: ' . post_type_exists( 'mstw_ss_team' ) );
+		//mstw_log_msg( '$team = ' . $team );
+		
+		$html = ''; // default return string
+		
+		// return if $team is not specified or mstw_ss_team doesn't exist
+		if( $team && post_type_exists( 'mstw_ss_team' ) ) {
+			
+			//Check that $team is linked to a team in the MSTW S&S DB
+			if( $team_obj = mstw_tr_find_team_in_ss( $team ) ) {
+				//mstw_log_msg( 'found $team_obj ...' );
+				//mstw_log_msg( 'ID= ' . $team_obj->ID );
+				
+				// check that 'use_team_colors' is set for tables or
+				//	'sp_use_team_colors' is set for profiles & galleries
+				if ( isset( $options ) ) {
+					if ( 'table' == $type ) {
+						if( array_key_exists( 'use_team_colors', $options ) && $options['use_team_colors'] ) {
+						  $html .= mstw_tr_build_hidden_fields( $team, $team_obj );
+						}
+					} 
+					else {
+						if( array_key_exists( 'sp_use_team_colors', $options ) && $options['sp_use_team_colors'] ) {
+						   $html .= mstw_tr_build_hidden_fields( $team, $team_obj );
+						}
+					}
+
+				} //End: if ( isset( $options ) )
+				
+			} //End: if( $team_obj = mstw_tr_find_team_in_ss( $team ) )
+				
+		} //End: if( $team && post_type_exists( 'mstw_ss_team' ) )
+				
+		return $html;
+		
+	} //End: mstw_tr_build_team_colors_html()
+ }
+
+ //-----------------------------------------------------------
+ //	15. mstw_tr_build_hidden_fields: builds the hidden fields for the 
+ //			JavaScript to use when using the teams DB colors. Called 
+ //			by mstw_tr_build_team_colors_html()
+ //	
+ if ( !function_exists( 'mstw_tr_build_hidden_fields' ) ) {
+	function mstw_tr_build_hidden_fields( $team, $team_obj ) {
+		//mstw_log_msg( 'in mstw_tr_build_hidden_fields ...' ); 
+					
+		// jQuery looks first for this element
+		$html = "<mstw-team-colors class='$team' id='$team' style='display: none'>\n";
+		
+		$bkgd_color = get_post_meta( $team_obj->ID, 'team_primary_bkgd_color', true );
+		if( $bkgd_color ) {
+			$html .= "<team-color id='bkgd-color' >$bkgd_color</team-color>\n";
+		}
+		
+		$text_color = get_post_meta( $team_obj->ID, 'team_primary_text_color', true );
+		if( $text_color ) {
+			$html .= "<team-color id='text-color' >$text_color</team-color>\n";
+		}
+		
+		$accent_1 = get_post_meta( $team_obj->ID, 'team_accent_color_1', true );
+		if( $accent_1 ) {
+			$html .= "<team-color id='accent-1' >$accent_1</team-color>\n";
+		}
+		
+		$accent_2 = get_post_meta( $team_obj->ID, 'team_accent_color_2', true );
+		if( $accent_2 ) {
+			$html .= "<team-color id='accent-2' >$accent_2</team-color>\n";
+		}
+		
+		$html .= "</mstw-team-colors>\n";
+				
+		return $html;
+		
+	} //End: mstw_tr_build_hidden_fields()
+ }
+
+ //-----------------------------------------------------------
+ //	16. mstw_tr_find_team_in_ss: Determines if the $team is linked 
+ //		to a team in the Schedules & Scoreboards plugin DB. 
+ //		ARGUMENTS:
+ //			$team = TEAM ROSTERS team slug
+ //		RETURNS:
+ //			null if team is not linked
+ //			team object FROM SCHEDULES & SCOREBOARDS if linked
+ //	
+ if ( !function_exists( 'mstw_tr_find_team_in_ss' ) ) {
+	function mstw_tr_find_team_in_ss( $team = null ) {
+		//mstw_log_msg( 'in  mstw_tr_find_team_in_ss ... ' );
+		//mstw_log_msg( '$team = ' . $team );
+		
+		$retval = null;
+		
+		//Check if $team is linked to a team in the MSTW S&S DB
+		$team_links = get_option( 'mstw_tr_ss_team_links' );
+		
+		if( is_array( $team_links ) ) {
+			if ( array_key_exists( $team, $team_links ) && $team_links[ $team ] != -1 ) {
+				$link = $team_links[ $team ];
+				//mstw_log_msg( "link exists: $team ===> $link " );
+						
+				$retval = get_page_by_path( $team_links[ $team ], OBJECT, 'mstw_ss_team' );	
+			}
+		}
+		
+		return $retval;	
+	} //End: mstw_tr_find_team_in_ss( )
+ }
+ 
+ //-----------------------------------------------------------
+ //	17. mstw_tr_build_team_logo: Builds the HTML for a team logo 
+ //		ARGUMENTS:
+ //			$team_slug - $slug for the team IN THE TR DB
+ //		RETURNS:
+ //			null if logo can't be found/built
+ //			logo html with alt, and with link to team site, if available
+ //	
+ if ( !function_exists( 'mstw_tr_build_team_logo' ) ) {
+	function mstw_tr_build_team_logo( $team_slug = null, $type='player' ) {
+		//1. Use the team logo from the teams DB, if available,
+		//2. Else use the team logo in the theme's /mstw-team-rosters-images/ dir
+		//3. Else use the default-logo-team-slug.png from the plugin images dir
+		//4. Else use the default-logo.png (mystery player) from the plugin images dir
+
+		//mstw_log_msg( 'in  mstw_tr_build_team_logo ... ' );
+		//mstw_log_msg( '$team = ' );
+		//mstw_log_msg( $team_slug );
+		
+		if( null === $team_slug ) {
+			return null; 
+		}
+		
+		// These are the defaults if nothing else can be found
+		$logo_html = '';
+		$alt = '';
+		
+		if( $team_obj = mstw_tr_find_team_in_ss( $team_slug ) ) { 
+			// Look for team logo in Schedules & Scoreboards team DB
+			$team_logo = get_post_meta( $team_obj->ID, 'team_alt_logo', true );
+			
+			if( $team_logo ) {
+				$logo_url = $team_logo;
+				$alt = get_the_title( $team_obj ) ;
+				$logo_html = "<img src='$team_logo' alt='$alt' />";
+				$team_site_link = get_post_meta( $team_obj->ID, 'team_link', true );
+				if ( $team_site_link ) {
+					$logo_html = "<a href=$team_site_link target='_blank'> $logo_html </a>";
+				}
+			}
+		}
+		
+		if ( empty( $logo_html ) ) {
+			// Struck out on the S&S DB, so look for plugin's custom images
+			$theme_image = get_stylesheet_directory( ) . '/mstw-team-rosters-images/default-logo-' . $team_slug . '.png';
+			//mstw_log_msg( '$theme_image = ' . $theme_image );
+			
+			// First in the theme/mstw-team-rosters-images directory
+			if ( file_exists( $theme_image ) ) {
+				// First look in /mstw-team-rosters-images/ directory in the 
+				// theme (or child theme) main directory
+				$logo_html = dirname( get_stylesheet_uri( ) ) . "/mstw-team-rosters-images/default-logo-$team_slug.png";
+				//mstw_log_msg( '$logo_html = ' . $logo_html );
+					
+			} else {
+				// Then in the plugin's /images/default-images/ directory
+				$default_img_file = plugin_dir_path( dirname( __FILE__ ) ) . "images/default-images/default-logo-$team_slug.png";
+				//mstw_log_msg( '$default_img_dir = ' . $default_img_dir );
+				 
+				if ( file_exists( $default_img_file ) ) {
+					// Then look in the plugin's /images/default-images/ directory
+					$logo_html = plugins_url( ) . "/team-rosters/images/default-images/default-logo-$team_slug.png";	
+				}
+			}
+			
+			if( !empty( $logo_html ) ) {
+				// If an image is found, try to add an alt
+				$term = get_term_by( 'slug', $team_slug, 'mstw_tr_team' );
+				if( $term ) {
+					// Lets alt disappear if there's no term
+					$alt = 'alt="'. $term->name . '"';
+				}
+				$logo_html = "<img src='$logo_html' $alt />";
+			}
+		} 
+		
+		return $logo_html;
+		
+	} //End: mstw_tr_build_team_logo( )
  }

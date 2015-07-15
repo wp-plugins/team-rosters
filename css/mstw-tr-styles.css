@@ -26,33 +26,41 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
  */
 
 /*-------------------------------------------------------	
- *	Custom post type "player" single page styles 
+ *	PLAYER PROFILE (CPT "player" single page template) 
  *------------------------------------------------------*/
+
+/* this is a patch for the 2012 theme */ 
+.nav-previous_single-player {
+	margin-bottom: 12px;
+	margin-bottom: 1.0rem;
+	}
  
 /* player-header contains player photo and information */
-div.player-header {
-	background-color: #dce6f1; 				/*MS default - very light blue*/
-	color: #000;							/*MS default - black*/
+.player-header {
+	background-color: #dce6f1; /* light blue */
+	color: #000;
 	width: 100%;
 	/*height: 162px;*/
 	float: left;
-	font-size: 12px;
+	/*font-size: 12px;
+	font-size: 1.0rem;*/
 	padding: 10px 0;
-}
+	}
 
 h1.player-head-title {
-	color: #000;						/*MS default */
+	color: #000;
 	font-size: 24px;
 	font-weight: bold;
-}
+	margin-bottom: 12px;
+	margin-bottom: 1.0rem;
+	}
 
 /* player-photo is coming from the featured image */
 #player-photo {
 	float: left;
 	padding-left: 20px;
-	/* display: inline; */
 	line-height: 0;
-}
+	}
 
 #player-photo img {
 	border: 1px solid #bbb;
@@ -60,12 +68,13 @@ h1.player-head-title {
 	background-color: #eee;
 	width: 150px;
 	height: 150px;
-}
+	}
+	
 div #team-logo {
 	padding-left: 20px;
 	padding-right: 20px;
 	float: right;
-}
+	}
 
 div#team-logo img {
 	border: 1px solid #bbb;
@@ -73,21 +82,21 @@ div#team-logo img {
 	background-color: #eee;
 	width: 150px;
 	height: 150px;
-}
+	}
 
 #player-name-nbr {
 	float: left;
-	/*position: absolute;*/
 	padding: 18px 0 20px 20px;
 	display: inline;
-}
+	color: #000;
+	}
 
 .player-header #player-name-nbr #number {
 	float: left;
 	font-size: 72px;
 	line-height: 1em;
 	display: inline;
-}
+	}
 
 .player-header #player-name-nbr #player-name {
 	float: left;
@@ -96,41 +105,42 @@ div#team-logo img {
 	padding-left: 10px;
 	display: inline;
 	margin-right: 20px;
-}
+	}
 			
 #player-info {
 	float: left;
 	font-size: 14px;
 	line-height: 16px;
-	border-left: 1px solid #fff;
-}
+	border-left: 2px solid #fff;
+	}
 
 #player-info p {
 	margin-bottom: 0px;
-}
+	}
 
 table#player-info {
 	width: auto;
 	font-size: 16px;
+	color: #111;
 	/*padding-left: 10px;*/
 	/*margin-left: 20px;*/
-}
+	}
 
 table#player-info td {
 	padding-top: 2px;
 	padding-bottom: 2px;
-}
+	}
 
 table#player-info td.lf-col {
 	text-align: right;
 	font-weight: bold; 
 	padding-left: 10px;
-}
+	}
 	
 table#player-info td.rt-col {
 	text-align: left;
 	padding-left: 6px;
-}
+	}
 
 
 /* 	
@@ -141,56 +151,71 @@ table#player-info td.rt-col {
 	clear: both;
 	border-style: solid;
 	border-width: 2px;
-	/*border-color: #ffc831; 			/*MC Football - yellow */
-	/*border-color: #5899E6; 			/*MCS Athletics - carolina blue */
-	border-color: #1982d1; 				/*Twentyeleven Default - lt blue */
-}
+	color: #333;
+	border-color: #1982d1; 	/*Twentyeleven Default - lt blue */
+	}
 
-.player-bio h1 {
-	padding: 0 15px;
+.player-bio h1, .player-bio h2, .player-bio h3 {
+	margin-bottom: 12px;
+	margin-bottom: 1.0rem;
+	margin-top: 6px;
+	margin-top: 1.0rem;
+	margin-left: 15px;
+	margin-left: 1.5rem;
 	font-size: 18px;
+	font-size: 1.5rem;
 	font-weight: bold;
-	/*color: #b8202e; 					/*MC Football - red */
-	/*color: #5899E6; 					/*MCS Athletics - carolina blue */
-	/*color: #000;						/*MS Default - black */
-	color: #1982d1;						/*Twentyeleven Default - lt blue */
-}
+	color: #1982d1;			/*Twentyeleven Default - lt blue */
+	}
 
 .player-bio h2 {
-	padding: 0 15px;
 	font-size: 15px;
-	/*color: #b8202e; 					/*MC Football - red */
-	/*color: #5899E6; 					/*MCS Athletics - carolina blue */
-	color: #000;						/*MS Default - black */
-}
+	font-size: 1.25rem;
+	}
 
 .player-bio h3 {
-	padding: 0 15px;
 	font-size: 13px;
+	font-size: 1.0rem;
 	text-transform: uppercase;
-	/*color: #b8202e; 					/*MC Football - red */
-	/*color: #5899E6; 					/*MCS Athletics - carolina blue */
-	color: #000;						/*MS Default - black */
-}
+	}
 
 .player-bio p {
 	padding: 0 15px;
+	padding: 0 1.5rem;
 	font-size: 12px;
-	margin-bottom: 1.0em;
-}
+	font-size: 1.0rem;
+	margin-bottom: 12px;
+	margin-bottom: 1.0rem;
+	line-height: 18px;
+	line-height: 1.5em;
+	}
 
 /*-------------------------------------------------------	
- *	Roster table settings
+ *	ROSTER TABLE
  *------------------------------------------------------*/
+ 
+ /* 
+  * This wrapper is an attempt to make the roster tables
+  * more responsive on small screens. Remark it out or
+  * modify it to suit your application.
+  */
+ .mstw-tr-scroll-wrapper {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
 
-h1.mstw_tr_roster_title {
+.mstw_tr_roster_title {
 	color: inherit;
 	font-size: 24px;
 	margin-top: 24px;
 	margin-bottom: 12px;
 	}
+	
+.mstw-tr-table {
+	table-layout: auto;
+	}
  
-table.mstw-tr-table thead tr  th {
+.mstw-tr-table thead tr  th {
 	background-color: #4e81db;		/*MS default */
 	color: #fff; 					/*MS default */
 	vertical-align: middle;
@@ -198,19 +223,19 @@ table.mstw-tr-table thead tr  th {
 	text-align: left;
 	}
 
-table.mstw-tr-table tr:nth-child(odd) {
+.mstw-tr-table tbody tr:nth-child(odd) {
 	background-color: #dce6f1;		/*MS default */
 	color: #000;					/*MS default */
 	vertical-align: middle;
 	}
 
-table.mstw-tr-table tr:nth-child(even) {
+.mstw-tr-table tbody tr:nth-child(even) {
 	vertical-align: middle;
-	background-color: fff; 			/*MS default */
-	color: 000; 					/*MS default */
+	background-color: #fff; 			/*MS default */
+	color: #000; 					/*MS default */
 	}
 	
-table.mstw-tr-table tbody tr td  {
+.mstw-tr-table tbody tr td  {
 	padding-left: 5px;
 	/* this is needed down this low in the stack to override twentyeleven defaults */
 	border-top: #95b3d7 solid 1px;  		/* MS default */
@@ -219,22 +244,22 @@ table.mstw-tr-table tbody tr td  {
 	text-align: left;
 	}
 
-table.mstw-tr-table tbody tr td a:link, table.mstw-tr-table tbody tr td a:visited {	
+.mstw-tr-table tbody tr td a:link, .mstw-tr-table tbody tr td a:visited {	
 	/* you have finer control here than you do with the admin settings */
 	color: #1982d1; 		
 	vertical-align: middle;
 	text-decoration: none;
 	}
 	
-table.mstw-tr-table tbody tr td a:hover {	
+.mstw-tr-table tbody tr td a:hover {	
 	text-decoration: underline;
 	}
 
-table.mstw-tr-table tbody tr td a:active {	
+.mstw-tr-table tbody tr td a:active {	
 	color: #1982d1;
 	}
 
-table.mstw-tr-table tbody tr td img {
+.mstw-tr-table tbody tr td img {
 	border: 1px solid #BBB;
 	padding: 5px;
 	background-color: #EEE;
@@ -244,12 +269,16 @@ table.mstw-tr-table tbody tr td img {
 	}
  
 /*-------------------------------------------------------	
- *	"Teams/team-slug" taxonomy page - creates 'gallery page' 
+ *	PLAYER GALLERY (Teams/team-slug" taxonomy page)
  *------------------------------------------------------*/
  
  #content-player-gallery {
 	margin: 0 7.6% 0 7.6%;
 	width: 84.8%;
+	}
+	
+#content-player-gallery header.page-header {
+	margin-bottom: 0;
 	}
 
 h1.team-head-title {
@@ -259,12 +288,10 @@ h1.team-head-title {
 
 .player-tile {
 	float: left;
-	margin: 15px;
+	margin: 0 15px 15px 15px;
 	width: 230px;
-	/*color: #00004F; 					/*MCS Athletics - sample */
-	color: #000;						/*MS default - black*/
-	/* background-color: #5899E6;		/*MCS Athletics - sample */
-	background-color: #dce6f1; 			/*MS default - very light blue*/
+	color: #000;
+	background-color: #dce6f1;
 	-moz-border-radius: 15px;
 	border-radius: 15px;
 	}
@@ -278,49 +305,51 @@ h1.team-head-title {
 	width:            125px;
 	height:           125px;
 	}
+	
+.player-info-container {
+	padding-bottom: 10px;
+	}
  
-.player-info-container .player-name-number {
+.player-name-number {
 	font-size:   16px;
 	font-weight: bold;
-	color:       #00004f;
+	color:       #000;
+	}
+	
+ .player-name-number {
+	padding: 0 0 5px 10px;
 	}
 
-div.player-name, div.player-number {
+.player-name, .player-number {
 	display: inline;
 	}
 	
-div.player-number {
+.player-number {
 	margin-right: 10px;
 	}
 
-div.player-name a:link, div.player-name a:visited {
-	color:           #1982d1;
-	text-decoration: none;
-	}
-	
-div.player-name a:hover {
+.player-name-number .player-name a:link, .player-name-number .player-name a:visited {
+	color:           #000;
 	text-decoration: underline;
 	}
- 
-div.player-name a:active {
+	
+.player-name-number .player-name a:hover, .player-name-number .player-name a:active {
 	text-decoration: none;
 	}
-	
+ 
 .player-info-container table.player-info {
-	padding: 0 5px 5px 5px;
+	padding: 0 5px 5px 10px;
 	margin: 0;
-	/*layout: fixed;*/
 	width: 100%;
 	font-size: 12px;
+	line-height: 16px;
+	/*font-size: 1.0rem;*/
 	border: 0 solid #fff;
 	color: #333;
-	}
- 
-.player-info-container .player-name-number {
-	padding: 0 5px 5px 5px;
+	/*line-height: 1.0rem;*/
 	}
 
 table.player-info tr td {
 	border: 0 solid blue;
-	padding: 0px 5px 5px 5px;
+	padding: 0px 5px 5px 10px;
 	}	

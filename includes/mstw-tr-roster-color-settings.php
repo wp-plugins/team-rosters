@@ -57,7 +57,7 @@
 					'title' => __( 'Use Team Colors:', 'mstw-team-rosters' ),
 					'page' => $display_on_page,
 					'section' => $page_section,
-					'desc' => __( 'Use the colors from the Teams table in MSTW Schedules & Scoreboards. IGNORED if the MSTW Schedules & Scoreboards plugin is not active.', '' ),
+					'desc' => __( 'Use the colors from the Teams table in MSTW Schedules & Scoreboards. IGNORED if the MSTW Schedules & Scoreboards version 4.0 or hire is not installed/activated. Note: There is a separate setting for player profiles and galleries.', 'mstw-team-rosters' ),
 				),
 				array( 	// ROSTER TITLE COLOR
 					'type' => 'text', 
