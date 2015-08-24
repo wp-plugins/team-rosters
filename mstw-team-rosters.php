@@ -3,7 +3,7 @@
 	Plugin Name: Team Rosters
 	Plugin URI: http://wordpress.org/extend/plugins/team-rosters/
 	Description: The Team Rosters Plugin defines a custom type - Player - for use in the MySportTeamWebite framework. It generates a roster table view and player bio view.
-	Version: 4.0.1
+	Version: 4.0.2
 	Author: Mark O'Donnell
 	Author URI: http://shoalsummitsolutions.com
 	Text Domain: mstw-team-rosters
@@ -616,7 +616,7 @@ function mstw_tr_plugin_action_links( $links, $file ) {
 	}
 	
 	// Enqueue the javascript for loading team colors on the front side
-	mstw_log_msg( 'enqueuing script: ' . plugins_url( 'team-rosters/js/tr-load-team-colors.js' ) );
+	//mstw_log_msg( 'enqueuing script: ' . plugins_url( 'team-rosters/js/tr-load-team-colors.js' ) );
 	if( !is_admin( ) ) {
 		wp_enqueue_script(  'tr-load-team-colors', 
 							plugins_url( 'team-rosters/js/tr-load-team-colors.js' ), 

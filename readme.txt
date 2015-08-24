@@ -3,7 +3,7 @@ Contributors: MarkODonnell
 Donate link: http://shoalsummitsolutions.com
 Tags: sports,games,roster,sports teams,team roster,sports roster,sports team roster  
 Requires at least: 3.4.2
-Tested up to: 4.2.2
+Tested up to: 4.3
 Stable tag: 4.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -12,6 +12,8 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Manages multiple sports team rosters. Displays tabular rosters, a single player bios, and player galleries.
 
 == Description ==
+Version 4.0.2 patches one bug. (See the change log for details.)
+
 Version 4.0.1 patches three bugs. (See the change log for details.)
 
 VERSION 4.0 IS A MAJOR UPGRADE THAT CHANGES THE PLUGIN'S UNDERLYING DATA STRUCTURES. IF YOU ARE UPGRADING, YOU MUST MIGRATE YOUR EXISTING DATA VIA CSV FILES IF YOU WISH TO KEEP IT. [READ THE INSTALLATION DOCUMENTATION](http://shoalsummitsolutions.com/tr_upgrading-to-4-0/) CAREFULLY BEFORE UPGRADING. 
@@ -80,6 +82,10 @@ The [Other Usage Notes](http://shoalsummitsolutions.com/tr-usage-notes/) are ava
 3. Sample Single Player Bio
 
 == Changelog ==
+
+= 4.0.2 =
+* Corrected a bug that caused local files to be copied into the Media Library when importing players from a CSV file and the Move Photos checkbox was not checked on the CSV Import screen.
+* Added a sample CSV file for Teams import to the /csv-examples directory.
 
 = 4.0.1 =
 * Corrected a bug in display of 'B' hitters.

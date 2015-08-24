@@ -313,10 +313,7 @@ if( !function_exists( 'mstw_build_admin_edit_screen' ) ) {
 //
 if( !function_exists( 'mstw_build_admin_edit_field' ) ) {
 	function mstw_build_admin_edit_field( $args ) {
-
-		//mstw_log_msg( 'In mstw_build_admin_edit_field ...' );
-		//mstw_log_msg( $args );
-		
+	
 		$defaults = array(
 				'type'		 => 'text',
 				'id'      	 => 'default_field', // the ID of the setting in our options array, and the ID of the HTML form element
@@ -337,9 +334,7 @@ if( !function_exists( 'mstw_build_admin_edit_field' ) ) {
 		
 		// "extract" to be able to use the array keys as variables in our function output below
 		$args = wp_parse_args( $args, $defaults );
-		//mstw_log_msg( 'new args ... ' );
-		//mstw_log_msg( $args );
-		
+	
 		extract( $args );
 		
 		// default name to id
@@ -373,11 +368,6 @@ if( !function_exists( 'mstw_build_admin_edit_field' ) ) {
 				//but without it you get an extra option with the 
 				//'option-name' displayed (huh??)
 				$options = $args['options'];
-				
-				//mstw_log_msg( 'in mstw_build_admin_edit_field $options = ' );
-				//mstw_log_msg( $options );
-				//mstw_log_msg( '$current_value= ' . $curr_value );
-				//mstw_log_msg( '$value= ' . $value );
 					
 				echo "<select id='$id' name='$name' $attrib_str >";
 					foreach( $options as $key=>$value ) {
@@ -397,6 +387,7 @@ if( !function_exists( 'mstw_build_admin_edit_field' ) ) {
 			// LABEL
 			case 'label':
 				echo "<span class='description'>" . $curr_value . "</span>";
+				echo ( '' != $desc ) ? "<br /><span class='description'>$desc</span>" : "";
 				break;
 				
 			// MEDIA UPLOADER
@@ -543,9 +534,6 @@ if( !function_exists( 'mstw_build_settings_field' ) ) {
 		
 		// "extract" to be able to use the array keys as variables in our function output below
 		extract( wp_parse_args( $args, $defaults ) );
-		
-		//mstw_log_msg( 'in build_settings_field ... $args= ' );
-		//mstw_log_msg( wp_parse_args( $args, $defaults ) );
 		
 		//Handle some MSTW custom field types; convert for generic select-option
 		switch ( $type ) {
@@ -717,10 +705,12 @@ if( !function_exists( 'mstw_validate_url' ) ) {
 			update_post_meta( $post_id, $key, esc_url( $url ) );
 		}
 		else { 
+			//mstw_log_msg( 'in mstw_validate_url ... got a bad URL: ' . $url );
 			// url is not valid, display an error message (dont' update DB)
 			$notice .= ' ' . $url;			
-			if ( function_exists( 'mstw_add_admin_notice' ) ) 
-				mstw_add_admin_notice( $notice_type, $notice );
+			if ( function_exists( 'mstw_add_admin_notice' ) ) {
+				mstw_add_admin_notice( 'mstw_admin_messages', $notice_type, $notice );
+			}
 		}
 	} //End: mstw_validate_url()
 }
@@ -839,9 +829,6 @@ if ( !function_exists( 'mstw_user_has_ss_rights' ) ) {
 //
 if ( !function_exists ( 'mstw_admin_notice' ) ) {
 	function mstw_admin_notice( $transient = 'mstw_admin_messages' ) {
-		//mstw_log_msg( 'in mstw_admin_notice ...' );
-		//mstw_log_msg( '$transient= ' . $transient );
-		
 		if ( get_transient( $transient ) !== false ) {
 			// get the types and messages
 			$messages = get_transient( $transient );
@@ -859,7 +846,7 @@ if ( !function_exists ( 'mstw_admin_notice' ) ) {
 			
 			<?php
 			}
-			//mstw_log_msg( 'deleting transient ... ' );
+
 			delete_transient( $transient );
 			
 		} //End: if ( get_transient( $transient ) )
@@ -877,30 +864,28 @@ if ( !function_exists ( 'mstw_admin_notice' ) ) {
 //
 if ( !function_exists ( 'mstw_add_admin_notice' ) ) {
 	function mstw_add_admin_notice( $transient = 'mstw_admin_messages', $type = 'updated', $notice ) {
-		//mstw_log_msg( 'in mstw_add_admin_notice ..' );
-		//mstw_log_msg( '$transient= ' . $transient . ' $notice= ' . $notice );
+		//default type to 'updated'
+		if ( !( $type == 'updated' or $type == 'error' or $type =='update-nag' or $type == 'warning' ) ) $type = 'updated';
 		
-		$valid_types = array( 'updated', 'error', 'update-nag', 'warning' );
-		
-		// change any invalid type to 'updated'
-		$type = ( in_array( $type, $valid_types ) ) ? $type : 'updated'; 
-		
-		// set the admin message
-		$new_msgs = array( array( 
+		//set the admin message
+		$new_msg = array( array(
 							'type'	=> $type,
-							'notice'	=> $notice,
-							),
+							'notice'	=> $notice
+							)
 						);
 
-		// create and/or add to the specified transient
+		//either create or add to the sss_admin transient
 		$existing_msgs = get_transient( $transient );
 		
-		// transient exists, append current message to it
-		if ( $existing_msgs !== false ) {
-			$new_msgs = array_merge( $existing_msgs, $new_msgs );
+		if ( $existing_msgs === false ) {
+			// no transient exists, create it with the current message
+			set_transient( $transient, $new_msg, HOUR_IN_SECONDS );
+		} 
+		else {
+			// transient exists, append current message to it
+			$new_msgs = array_merge( $existing_msgs, $new_msg );
+			set_transient ( $transient, $new_msgs, HOUR_IN_SECONDS );
 		}
-		set_transient ( $transient, $new_msgs, HOUR_IN_SECONDS );
-		
 	} //End: function mstw_add_admin_notice( )
 }
 
@@ -923,9 +908,6 @@ if ( !function_exists ( 'mstw_add_admin_notice' ) ) {
 //
 if( function_exists( 'mstw_add_role_caps' ) ) {
 	function mstw_add_role_caps( $role_obj = null, $role_name = null, $cpt, $cpt_s ) {
-		//if( function_exists( 'mstw_log_msg' ) ) {
-		//	mstw_log_msg( 'in mstw_add_role_caps ...' );
-		//}
 		
 		$cap = array( 'edit_', 'read_', 'delete_' );
 		$caps = array( 'edit_', 'edit_others_', 'publish_', 'read_private_', 'delete_', 'delete_published_', 'delete_others_', 'edit_private_', 'edit_published_' );

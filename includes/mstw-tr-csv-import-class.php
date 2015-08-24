@@ -38,56 +38,38 @@
 
 		var $log = array();
 
-		/**
-		 * Determine value of option $name from database, $default value or $params,
-		 * save it to the db if needed and return it.
-		 */
-		function process_option( $name, $default, $params ) {
+		//
+		// process_option checks/cleans up the $_POST values
+		//
+		function process_option( $name, $default, $params, $is_checkbox ) {
+			//checkboxes which if unchecked do not return values in $_POST
+			if ( $is_checkbox and !array_key_exists( $name, $params ) ) {
+				$params[ $name ] = $default;	
+			}
 			
 			if ( array_key_exists( $name, $params ) ) {
-				$value = stripslashes( $params[$name] );
-			} elseif ( array_key_exists( '_'.$name, $params ) ) {
-				// unchecked checkbox value
-				$value = stripslashes( $params['_'.$name] );
+				$value = stripslashes( $params[ $name ] );
+			} elseif ( $is_checkbox ) {
+				//deal with unchecked checkbox value
+			
 			} else {
 				$value = null;
 			}
 			
-			$stored_value = get_option( $name );
-			if ( $value == null ) {
-				if ( $stored_value === false ) {
-					if (is_callable($default) &&
-						method_exists($default[0], $default[1])) {
-						$value = call_user_func($default);
-					} else {
-						$value = $default;
-					}
-					add_option($name, $value);
-				} else {
-					$value = $stored_value;
-				}
-			} else {
-				if ( $stored_value === false ) {
-					add_option( $name, $value );
-				} elseif ( $stored_value != $value ) {
-					update_option( $name, $value );
-				}
-			}
 			return $value;
+			
 		} //End function process_option()
 
-		/**
-		 * Plugin's admin user interface
-		 *
-		 */
+		//
+		// The CSV Importer's admin screen
+		//
 		function form( ) {			
-			//
-			// THIS NEEDS STRAIGHTENING OUT
-			//
-			$submit_value = $this->process_option( 'submit', 0, $_POST );
-			$import_team = $this->process_option( 'csv_import_team', 0, $_POST );
-			$csv_teams_import = $this->process_option( 'csv_teams_import', 0, $_POST );
-			$move_photos = $this->process_option( 'csv_move_photos', 0, $_POST );
+			
+			// check & cleanup the returned $_POST values
+			$submit_value = $this->process_option( 'submit', 0, $_POST, false );
+			$import_team = $this->process_option( 'csv_import_team', 0, $_POST, false );
+			//$csv_teams_import = $this->process_option( 'csv_teams_import', 0, $_POST, false );
+			$move_photos = $this->process_option( 'csv_move_photos', 0, $_POST, true );
 			
 			if ( 'POST' == $_SERVER['REQUEST_METHOD'] ) {
 				$this->post( compact( 'submit_value', 'import_team', 'move_photos' ) );
@@ -218,12 +200,9 @@
 			} //End: if ( !empty( $this->log ) )
 		} //End print_messages( )
 
-		/**
-		 * Handle POST submission
-		 *
-		 * @param array $options
-		 * @return void
-		 */
+		//
+		// Handle post submission
+		//
 		function post( $options ) {
 			if ( !$options ) {
 				mstw_log_msg( 'Houston, we have a problem ... no $options' );
@@ -326,7 +305,10 @@
 			
 			$this->print_messages();
 		} //End: post( )
-
+		
+		//
+		// Create a new post (CPT) based on submit button pressed
+		//
 		function create_post( $data, $options ) {			
 			$data = array_merge( $this->defaults, $data );
 			
@@ -394,9 +376,9 @@
 			
 		} //End function create_post()
 		
-		/*-------------------------------------------------------------
-		 *	Add the fields from a row of CSV player data to a newly created post
-		 *-----------------------------------------------------------*/
+		//-------------------------------------------------------------
+		//	Add the fields from a row of CSV player data to a newly created post
+		//-------------------------------------------------------------
 		function create_player_fields( $post_id, $data, $options ) {
 			
 			$bats_list = array(  __( '----', 'mstw-team-rosters' )  => 0,
@@ -551,15 +533,15 @@
 			}
 		} //End of function create_player_fields()
 		
-		/*-------------------------------------------------------------
-		 *	find_attachment_id_from_url - returns an attachment ID given it's URL
-		 *
-		 *	ARGUMENTS:
-		 *		$url - a file URL
-		 *
-		 *	RETURN: attachment ID if one is found, -1 otherwise
-		 *
-		 *-----------------------------------------------------------*/
+		//-------------------------------------------------------------
+		//	find_attachment_id_from_url - returns an attachment ID given it's URL
+		//
+		//	ARGUMENTS:
+		//		$url - a file URL
+		//
+		//	RETURN: attachment ID if one is found, -1 otherwise
+		//
+		//-----------------------------------------------------------
 		function find_attachment_id_from_url( $url ) {
 			
 			// Split the $url into two pars with the wp-content directory as the separator
@@ -589,6 +571,9 @@
 			
 		} //End: find_attachment_id_from_url( )
 		
+		//
+		// Add a new term to the team (custom) taxonomy
+		//
 		function create_team_taxonomy_term( $data, $options, $imported ) {
 			
 			$retval = 0;
@@ -668,14 +653,11 @@
 			
 		} //End: create_team_taxonomy_term( )
 
-		/**
-		 * Delete BOM from UTF-8 file.
-		 *
-		 * @param string $fname
-		 * @return void
-		 */
-		function stripBOM($fname) {
-			$res = fopen($fname, 'rb');
+		//
+		// Delete BOM from UTF-8 file.
+		//
+		function stripBOM( $fname ) {
+			$res = fopen( $fname, 'rb' );
 			if (false !== $res) {
 				$bytes = fread($res, 3);
 				if ($bytes == pack('CCC', 0xef, 0xbb, 0xbf)) {

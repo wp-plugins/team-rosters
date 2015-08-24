@@ -1,0 +1,5 @@
+team_name,team_slug,team_link,team_description
+No Slug and No Link,,,CSV imported team with no slug and no S&S link.
+Slug and Link,slug-link,california-golden-bears,CSV imported team with a slug and an S&S link.
+Link and No Slug,,san-francisco-49ers,CSV imported team with no slug but an S&S link.
+Slug and No Link,slug-no-link,,CSV imported team with slug but no S&S link.
