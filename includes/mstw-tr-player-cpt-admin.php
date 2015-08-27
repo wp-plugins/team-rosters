@@ -532,7 +532,7 @@
  if( !function_exists( 'mstw_ss_players_column_order' ) ) {
 	function mstw_ss_players_column_order( $vars ) {
 		if ( isset( $vars['orderby'] ) ) {
-			mstw_log_msg( 'in ... mstw_ss_players_column_order' . $vars['orderby'] );
+			//mstw_log_msg( 'in ... mstw_ss_players_column_order' . $vars['orderby'] );
 			$custom = array();
 			switch( $vars['orderby'] ) {
 				case'player_number':
